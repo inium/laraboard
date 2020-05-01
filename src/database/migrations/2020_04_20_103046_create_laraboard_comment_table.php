@@ -55,7 +55,7 @@ class CreateLaraboardCommentTable extends Migration
                       ->comment('부모 댓글 ID');
                 $table->unsignedBigInteger('board_id')->comment('게시판 ID');
                 $table->unsignedBigInteger('post_id')->comment('게시글 ID');
-                $table->unsignedBigInteger('wrote_board_user_id')
+                $table->unsignedBigInteger('wrote_user_id')
                       ->comment('작성자 ID');
                 $table->timestamps();
                 $table->softDeletes();
@@ -70,7 +70,7 @@ class CreateLaraboardCommentTable extends Migration
                 $table->foreign('board_id') 
                       ->references('id')
                       ->on($boardTableName);
-                $table->foreign('wrote_board_user_id')
+                $table->foreign('wrote_user_id')
                       ->references('id')
                       ->on($userTableName);
             }

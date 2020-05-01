@@ -42,7 +42,7 @@ class CreateLaraboardBoardTable extends Migration
                 $table->unsignedBigInteger('min_comment_write_privilege_id')
                       ->comment('댓글 쓰기,수정,삭제 사용자 최소 권한 ID');
 
-                $table->unsignedBigInteger('create_board_user_id')
+                $table->unsignedBigInteger('create_user_id')
                       ->comment('게시판 생성한 게시판 사용자의 ID');
 
                 $table->timestamps();
@@ -65,7 +65,7 @@ class CreateLaraboardBoardTable extends Migration
                       ->references('id')
                       ->on($privilegeTableName);
 
-                $table->foreign('create_board_user_id')
+                $table->foreign('create_user_id')
                       ->references('id')
                       ->on($userTableName);
             }

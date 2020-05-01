@@ -52,7 +52,7 @@ class CreateLaraboardPostTable extends Migration
                 $table->integer('view_count')->comment('조회수');
                 $table->integer('point')->comment('게시글 부여 포인트');
                 $table->unsignedBigInteger('board_id')->comment('게시판 ID');
-                $table->unsignedBigInteger('wrote_board_user_id')
+                $table->unsignedBigInteger('wrote_user_id')
                       ->comment('작성자 ID');
                 $table->timestamps();
                 $table->softDeletes();
@@ -62,7 +62,7 @@ class CreateLaraboardPostTable extends Migration
                       ->references('id')
                       ->on($boardTableName);
 
-                $table->foreign('wrote_board_user_id')
+                $table->foreign('wrote_user_id')
                       ->references('id')
                       ->on($userTableName);
             }
