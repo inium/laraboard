@@ -16,7 +16,8 @@ class LaraboardServiceProvider extends ServiceProvider
     {
         // Load the config file and merge it with the user's
         // (should it get published)
-        $this->mergeConfigFrom(__DIR__.'/config/laraboard.php', 'laraboard');
+        $this->mergeConfigFrom(__DIR__ . '/Application/config/laraboard.php',
+                               'laraboard');
     }
 
     /**
@@ -27,27 +28,32 @@ class LaraboardServiceProvider extends ServiceProvider
     public function boot()
     {
         // Load routes
-        $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
+        $this->loadRoutesFrom(__DIR__ . '/Application/routes/web.php');
 
         $this->publishes([
             // 환경설정 파일
-            __DIR__ . '/config/laraboard.php' => config_path('laraboard.php'),
+            __DIR__ . '/Application/config/laraboard.php'
+                => config_path('laraboard.php'),
 
             // Models
-            __DIR__ . '/app/Http/Laraboard' => app_path('Laraboard'),
+            __DIR__ . '/Application/app/Http/Laraboard'
+                => app_path('Laraboard'),
 
             // // Controllers
-            // __DIR__ . '/app/Http/Controllers/Laraboard'
+            // __DIR__ . '/Application/app/Http/Controllers/Laraboard'
             //     => app_path('Http/Controllers/Laraboard'),
 
             // Database factories
-            __DIR__ . '/database/factories' => database_path('factories'),
+            __DIR__ . '/Application/database/factories'
+                => database_path('factories'),
 
             // Database migrations
-            __DIR__ . '/database/migrations' => database_path('migrations'),
+            __DIR__ . '/Application/database/migrations'
+                => database_path('migrations'),
 
             // Database seeds
-            __DIR__ . '/database/seeds' => database_path('seeds'),
+            __DIR__ . '/Application/database/seeds'
+                => database_path('seeds'),
 
         ], 'laraboard');
     }
