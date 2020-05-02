@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
-use Carbon\Carbon;
 
 class LaraboardSeeder extends Seeder
 {
