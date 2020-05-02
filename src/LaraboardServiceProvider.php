@@ -16,8 +16,8 @@ class LaraboardServiceProvider extends ServiceProvider
     {
         // Load the config file and merge it with the user's
         // (should it get published)
-        $this->mergeConfigFrom(__DIR__ . '/Application/config/laraboard.php',
-                               'laraboard');
+        $configPath = __DIR__ . '/Application/config/laraboard.php';
+        $this->mergeConfigFrom($configPath, 'laraboard');
     }
 
     /**
@@ -30,18 +30,21 @@ class LaraboardServiceProvider extends ServiceProvider
         // Load routes
         $this->loadRoutesFrom(__DIR__ . '/Application/routes/web.php');
 
+        // Set Publish files
         $this->publishes([
             // 환경설정 파일
             __DIR__ . '/Application/config/laraboard.php'
                 => config_path('laraboard.php'),
 
             // Models
-            __DIR__ . '/Application/app/Http/Laraboard'
+            __DIR__ . '/Application/app/Laraboard'
                 => app_path('Laraboard'),
 
             // // Controllers
             // __DIR__ . '/Application/app/Http/Controllers/Laraboard'
             //     => app_path('Http/Controllers/Laraboard'),
+
+            // Views
 
             // Database factories
             __DIR__ . '/Application/database/factories'
