@@ -56,9 +56,6 @@ class CreateLaraboardCommentTable extends Migration
                 $table->unsignedBigInteger('post_id')->comment('게시글 ID');
                 $table->unsignedBigInteger('wrote_user_id')
                       ->comment('작성자 ID');
-                $table->unsignedBigInteger('pinned_user_id')
-                      ->nullable()
-                      ->comment('댓글 고정 사용자(게시판 생성자 관리자)의 ID');
                 $table->timestamps();
                 $table->softDeletes();
                 
