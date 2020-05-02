@@ -34,10 +34,10 @@ class LaraboardServiceProvider extends ServiceProvider
             __DIR__ . '/config/laraboard.php' => config_path('laraboard.php'),
 
             // Models
-            __DIR__ . '/Http/Laraboard' => app_path('Laraboard'),
+            __DIR__ . '/app/Http/Laraboard' => app_path('Laraboard'),
 
             // // Controllers
-            // __DIR__ . '/Http/Controllers/Laraboard'
+            // __DIR__ . '/app/Http/Controllers/Laraboard'
             //     => app_path('Http/Controllers/Laraboard'),
 
             // Database factories
