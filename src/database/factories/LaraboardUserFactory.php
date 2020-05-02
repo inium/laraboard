@@ -1,0 +1,64 @@
+<?php
+
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
+
+use App\Laraboard\User as LaraboardUser;
+use App\Laraboard\Privilege as LaraboardPrivilege;
+use App\User as AuthUser;
+use Faker\Generator as Faker;
+use Illuminate\Support\Str;
+
+$factory->define(LaraboardUser::class, function (Faker $faker) {
+    // 사용자 생성
+    $user = factory(AuthUser::class)->create();
+
+    // 테스트용 닉네임 생성
+    $nickname = Str::slug($user->name, '_');
+    $hash = Str::random(5);
+
+    // 게시판 사용자 권한 정보
+    $count = LaraboardPrivilege::count();
+    $boardUserPrivilegeId = 0;
+
+    // 게시판 사용자 권한 정보가 존재하지 않는 경우
+    // 사용자 권한 생성 후 앞서 생성한 사용자에게 관리자 권한 추가
+    if ($count == 0) {
+        $collections = [
+            ['name' => 'admin', 'description' => '관리자', 'is_admin' => true],
+            ['name' => 'user',  'description' => '사용자', 'is_admin' => false],
+            ['name' => 'block', 'description' => '접근제한','is_admin' => false]
+        ];
+
+        $privileges = collect($collections)->map(function ($elem) {
+            return factory(LaraboardPrivilege::class)->create($elem);
+        });
+
+        foreach($privileges as $elem) {
+            if ($elem->is_admin == true) {
+                $boardUserPrivilegeId = $elem->id;
+                break;
+            }
+        }
+    }
+    // 사용자 권한 정보가 존재하는 경우
+    // 관리자를 제외한 나머지 사용자의 권한 중 하나를 사용자에게 추가
+    else {
+        $privilege = LaraboardPrivilege::where('is_admin', false)
+                                       ->inRandomOrder()
+                                       ->first();
+        $boardUserPrivilegeId = $privilege->id;
+    }
+
+    return [
+        'nickname' => "{$nickname}_{$hash}",
+        'introduce' => $faker->realText,
+
+        // faker의 image는 lorempixel을 이용하나 lorempixel이 Shutdown 되었음.
+        // 그래서 아래와 같이 loremflickr.com의 static 경로 사용.
+        // 'thumbnail_path' => $faker->imageUrl('storage/app/public'),
+        'thumbnail_path' => 'https://loremflickr.com/320/240',
+
+        'user_id' => $user->id,
+        'board_user_privilege_id' => $boardUserPrivilegeId
+    ];
+});
