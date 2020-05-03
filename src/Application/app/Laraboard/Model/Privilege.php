@@ -1,18 +1,18 @@
 <?php
 /**
- * 게시판 정보 모델
+ * 게시판 사용자 권한 정보 모델
  * 
  * @author inlee <einable@gmail.com>
  */
 
-namespace App\Laraboard;
+namespace App\Laraboard\Model;
 
 use Illuminate\Database\Eloquent\Model;
-use Inium\Laraboard\Component\BoardRelations;
+use Inium\Laraboard\Component\PrivilegeRelations;
 
-class Board extends Model
+class Privilege extends Model
 {
-    use BoardRelations;
+    use PrivilegeRelations;
 
     /**
      * The table associated with the model.
@@ -26,7 +26,7 @@ class Board extends Model
      */
     public function __construct(array $attributes = array())
     {
-        $this->table = config('laraboard.board.table_name.board');
+        $this->table = config('laraboard.board.table_name.privilege');
         parent::__construct($attributes);
     }
 }

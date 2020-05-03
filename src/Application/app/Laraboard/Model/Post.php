@@ -5,7 +5,7 @@
  * @author inlee <einable@gmail.com>
  */
 
-namespace App\Laraboard;
+namespace App\Laraboard\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Inium\Laraboard\Component\PostRelations;

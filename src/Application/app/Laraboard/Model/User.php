@@ -1,13 +1,18 @@
 <?php
+/**
+ * 게시판 사용자 정보 모델
+ * 
+ * @author inlee <einable@gmail.com>
+ */
 
-namespace App\Laraboard;
+namespace App\Laraboard\Model;
 
 use Illuminate\Database\Eloquent\Model;
-use Inium\Laraboard\Component\CommentRelations;
+use Inium\Laraboard\Component\UserRelations;
 
-class Comment extends Model
+class User extends Model
 {
-    use CommentRelations;
+    use UserRelations;
 
     /**
      * The table associated with the model.
@@ -21,7 +26,7 @@ class Comment extends Model
      */
     public function __construct(array $attributes = array())
     {
-        $this->table = config('laraboard.board.table_name.comment');
+        $this->table = config('laraboard.board.table_name.user');
         parent::__construct($attributes);
     }
 }
