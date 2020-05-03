@@ -24,9 +24,17 @@ $factory->define(LaraboardUser::class, function (Faker $faker) {
     // 사용자 권한 생성 후 앞서 생성한 사용자에게 관리자 권한 추가
     if ($count == 0) {
         $collections = [
-            ['name' => 'admin', 'description' => '관리자', 'is_admin' => true],
-            ['name' => 'user',  'description' => '사용자', 'is_admin' => false],
-            ['name' => 'block', 'description' => '접근제한','is_admin' => false]
+            ['name' => 'admin', 'description' => 'admin', 'is_admin' => true],
+            ['name' => 'lv10',  'description' => 'lv10',  'is_admin' => false],
+            ['name' => 'lv9',   'description' => 'lv9',   'is_admin' => false],
+            ['name' => 'lv8',   'description' => 'lv8',   'is_admin' => false],
+            ['name' => 'lv7',   'description' => 'lv7',   'is_admin' => false],
+            ['name' => 'lv6',   'description' => 'lv6',   'is_admin' => false],
+            ['name' => 'lv5',   'description' => 'lv5',   'is_admin' => false],
+            ['name' => 'lv4',   'description' => 'lv4',   'is_admin' => false],
+            ['name' => 'lv3',   'description' => 'lv3',   'is_admin' => false],
+            ['name' => 'lv2',   'description' => 'lv2',   'is_admin' => false],
+            ['name' => 'lv1',   'description' => 'lv1',   'is_admin' => false]
         ];
 
         $privileges = collect($collections)->map(function ($elem) {
