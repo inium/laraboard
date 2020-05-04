@@ -7,6 +7,7 @@ use App\Laraboard\Privilege as LaraboardPrivilege;
 use App\User as AuthUser;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
 
 $factory->define(LaraboardUser::class, function (Faker $faker) {
     // 사용자 생성
@@ -51,10 +52,14 @@ $factory->define(LaraboardUser::class, function (Faker $faker) {
     // 사용자 권한 정보가 존재하는 경우
     // 관리자를 제외한 나머지 사용자의 권한 중 하나를 사용자에게 추가
     else {
-        $privilege = LaraboardPrivilege::where('is_admin', false)
-                                       ->inRandomOrder()
-                                       ->first();
-        $boardUserPrivilegeId = $privilege->id;
+        $privileges = LaraboardPrivilege::where('is_admin', false)
+                                        ->orderBy('id', 'DESC')
+                                        ->take(3)
+                                        ->get();
+
+        $privilege = Arr::random($privileges->toArray());
+
+        $boardUserPrivilegeId = $privilege['id'];
     }
 
     return [
