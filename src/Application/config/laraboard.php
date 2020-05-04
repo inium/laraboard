@@ -49,19 +49,19 @@ return [
         'table_name' => [
 
             // 게시판 사용자 권한 테이블 이름
-            'privilege' => 'la_board_user_privileges',
+            'privilege' => 'lb_board_user_privileges',
 
             // 게시판 사용자 테이블 이름
-            'user' => 'la_board_user',
+            'user' => 'lb_board_user',
 
             // 게시판 테이블 이름
-            'board' => 'la_boards',
+            'board' => 'lb_boards',
 
             // 게시글 테이블 이름
-            'post' => 'la_board_posts',
+            'post' => 'lb_board_posts',
 
             // 댓글 테이블 이름
-            'comment' => 'la_board_post_comments'
+            'comment' => 'lb_board_post_comments'
 
         ]
     ]
