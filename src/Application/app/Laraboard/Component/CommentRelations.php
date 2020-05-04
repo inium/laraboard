@@ -5,7 +5,7 @@
  * @author inlee <einable@gmail.com>
  */
 
-namespace Inium\Laraboard\Component\Model;
+namespace App\Laraboard\Component;
 
 trait CommentRelations
 {
