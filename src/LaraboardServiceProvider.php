@@ -30,33 +30,27 @@ class LaraboardServiceProvider extends ServiceProvider
         // Load routes
         $this->loadRoutesFrom(__DIR__ . '/Application/routes/web.php');
 
+        // A base path of publish files
+        $basePath = __DIR__ . '/Application';
+
         // Set Publish files
         $this->publishes([
             // 환경설정 파일
-            __DIR__ . '/Application/config/laraboard.php'
-                => config_path('laraboard.php'),
+            "{$basePath}/config/laraboard.php" => config_path('laraboard.php'),
 
-            // Models
-            __DIR__ . '/Application/app/Laraboard'
-                => app_path('Laraboard'),
+            // 모델, 컴포넌트
+            "{$basePath}/app/Laraboard" => app_path('Laraboard'),
 
-            // // Controllers
-            // __DIR__ . '/Application/app/Http/Controllers/Laraboard'
+            // // 컨트롤러
+            // "{$basePath}/app/Http/Controllers/Laraboard"
             //     => app_path('Http/Controllers/Laraboard'),
 
             // Views
 
-            // Database factories
-            __DIR__ . '/Application/database/factories'
-                => database_path('factories'),
-
-            // Database migrations
-            __DIR__ . '/Application/database/migrations'
-                => database_path('migrations'),
-
-            // Database seeds
-            __DIR__ . '/Application/database/seeds'
-                => database_path('seeds'),
+            // 데이터베이스 factories, migrations, seeds
+            "{$basePath}/database/factories" => database_path('factories'),
+            "{$basePath}/database/migrations" => database_path('migrations'),
+            "{$basePath}/database/seeds" => database_path('seeds'),
 
         ], 'laraboard');
     }
