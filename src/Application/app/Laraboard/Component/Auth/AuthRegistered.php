@@ -5,7 +5,7 @@
  * @author inlee <einable@gmail.com>
  */
 
-namespace App\Laraboard\Component;
+namespace App\Laraboard\Component\Auth;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
