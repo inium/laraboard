@@ -27,7 +27,7 @@ trait AuthRegistered
     {
         // 닉네임 생성
         $nickname = Str::slug($user->name, '_');
-        if (config('larabord.board.nickname_unique')) {
+        if (config('laraboard.board.nickname_unique')) {
             $hash = Str::random(5);
             $nickname = "{$nickname}_{$hash}";
         }
