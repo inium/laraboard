@@ -14,7 +14,7 @@ trait UserRelations
      * 
      * @return App\User     php artisan make:auth로 생성된 Auth User 모델
      */
-    public function authUser()
+    public function user()
     {
         $authUserClass = config('laraboard.auth.model_name');
         return $this->belongsTo($authUserClass);
