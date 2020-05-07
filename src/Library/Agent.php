@@ -1,15 +1,8 @@
 <?php
-/**
- * User Agent Wrapper Class
- *
- * Jenssengers/agent wrapper
- *
- * @see https://github.com/jenssegers/agent
- */
 
 namespace Inium\Laraboard\Library;
 
-class Agent extends \Jenssegers\Agent\Agent
+class Agent
 {
     /**
      * User Agent를 분석한 결과를 반환한다.
@@ -30,25 +23,26 @@ class Agent extends \Jenssegers\Agent\Agent
      */
     public function parse(string $agent): array
     {
-        $this->setUserAgent($agent);
+        $ua = new \Jenssegers\Agent\Agent();
+        $ua->setUserAgent($agent);
 
-        $platform = $this->platform();
-        $browser = $this->browser();
+        $platform = $ua->platform();
+        $browser = $ua->browser();
 
         // User Agent로부터 사용자의 접속 기기 형태를 분석한다.
         $deviceType = 'others';
-        if      ($this->isDesktop())    {   $deviceType = 'desktop';    }
-        else if ($this->isTablet())     {   $deviceType = 'tablet';     }
-        else if ($this->isMobile())     {   $deviceType = 'mobile';     }
+        if      ($ua->isDesktop())    {   $deviceType = 'desktop';    }
+        else if ($ua->isTablet())     {   $deviceType = 'tablet';     }
+        else if ($ua->isMobile())     {   $deviceType = 'mobile';     }
         else                            {   $deviceType = 'others';     }
 
         return [
             'agent' => $agent,
             'device_type' => $deviceType,
             'os_name' => $platform ?: null,
-            'os_version' => $this->version($platform) ?: null,
+            'os_version' => $ua->version($platform) ?: null,
             'browser_name' => $browser ?: null,
-            'browser_version' => $this->version($browser) ?: null
+            'browser_version' => $ua->version($browser) ?: null
         ];
     }
 }
