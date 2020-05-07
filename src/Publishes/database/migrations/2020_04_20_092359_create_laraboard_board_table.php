@@ -32,15 +32,18 @@ class CreateLaraboardBoardTable extends Migration
                 $table->integer('page_comment_num')->comment('댓글 페이징 수');
 
                 $table->unsignedBigInteger('min_list_read_privilege_id')
+                      ->nullable()
                       ->comment('게시글 목록 보기 사용자 최소 권한 ID');
                 $table->unsignedBigInteger('min_post_read_privilege_id')
+                      ->nullable()
                       ->comment('게시글 읽기 사용자 권한 ID');
                 $table->unsignedBigInteger('min_post_write_privilege_id')
-                      ->comment('게시글 쓰기,수정,삭제 사용자 최소 권한 ID');
+                      ->comment('게시글 쓰기, 수정, 삭제 사용자 최소 권한 ID');
                 $table->unsignedBigInteger('min_comment_read_privilege_id')
+                      ->nullale()
                       ->comment('댓글 읽기 사용자 최소 권한 ID');
                 $table->unsignedBigInteger('min_comment_write_privilege_id')
-                      ->comment('댓글 쓰기,수정,삭제 사용자 최소 권한 ID');
+                      ->comment('댓글 쓰기, 수정, 삭제 사용자 최소 권한 ID');
 
                 $table->unsignedBigInteger('create_user_id')
                       ->comment('게시판 생성한 게시판 사용자의 ID');
