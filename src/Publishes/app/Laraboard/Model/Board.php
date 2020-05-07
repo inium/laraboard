@@ -5,10 +5,10 @@
  * @author inlee <einable@gmail.com>
  */
 
-namespace App\Laraboard;
+namespace App\Laraboard\Model;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Laraboard\Model\Component\BoardRelations;
+use App\Laraboard\Model\Relation\BoardRelations;
 
 class Board extends Model
 {
