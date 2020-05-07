@@ -2,9 +2,9 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Laraboard\Post as LaraboardPost;
-use App\Laraboard\Board as LaraboardBoard;
-use App\Laraboard\User as LaraboardUser;
+use App\Laraboard\Model\Post as LaraboardPost;
+use App\Laraboard\Model\Board as LaraboardBoard;
+use App\Laraboard\Model\User as LaraboardUser;
 use Inium\Laraboard\Facade\Random as LaraboardRandom;
 use Inium\Laraboard\Facade\Agent as LaraboardAgent;
 use Faker\Generator as Faker;

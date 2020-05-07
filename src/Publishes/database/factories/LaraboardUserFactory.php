@@ -2,8 +2,8 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Laraboard\User as LaraboardUser;
-use App\Laraboard\Privilege as LaraboardPrivilege;
+use App\Laraboard\Model\User as LaraboardUser;
+use App\Laraboard\Model\Privilege as LaraboardPrivilege;
 use App\User as AuthUser;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;

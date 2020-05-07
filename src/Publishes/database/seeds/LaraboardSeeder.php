@@ -12,7 +12,7 @@ class LaraboardSeeder extends Seeder
     public function run()
     {
         // 게시판 사용자, 게시판, 게시글, 댓글 생성
-        factory(App\Laraboard\Comment::class, 200)->create();
-        factory(App\Laraboard\Comment::class, 100)->create();
+        factory(App\Laraboard\Model\Comment::class, 200)->create();
+        factory(App\Laraboard\Model\Comment::class, 100)->create();
     }
 }
