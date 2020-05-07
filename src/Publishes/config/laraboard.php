@@ -3,7 +3,7 @@
 return [
 
     /*
-     | 라라벨 Auth 설정
+     * 라라벨 Auth 설정
      */
     'auth' => [
 
@@ -15,7 +15,7 @@ return [
     ],
 
     /*
-     | 게시판 라우트 설정
+     * 게시판 라우트 설정
      */
     'route' => [
 
@@ -25,26 +25,24 @@ return [
         ],
 
         /*
-         | 게시판 라우트 prefix.
-         | ex) prefix가 'im' 일 경우, 라우트는 /im/board/~~ 로 생성
+         * 게시판 라우트 prefix. prefix가 'im' 일 경우, /im/board 형태로 생성.
          */
         'prefix' => ''
 
     ],
 
     /*
-     | 게시판 설정
+     * 게시판 설정
      */
     'board' => [
 
         /*
-         | 사용자 닉네임 중복 방지 여부
-         | true일 경우 중복 방지, false일 경우 중복 허용.
+         * 사용자 닉네임 중복 여부. true (중복 방지), false (중복 허용).
          */
         'nickname_unique' => true,
 
         /*
-         | 테이블 이름
+         * 게시판 테이블 이름
          */
         'table_name' => [
 

@@ -8,7 +8,7 @@
 namespace App\Laraboard;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Laraboard\Component\PrivilegeRelations;
+use App\Laraboard\Model\Component\PrivilegeRelations;
 
 class Privilege extends Model
 {

@@ -1,6 +1,6 @@
 <?php
 /**
- * 게시판 정보 모델
+ * 게시판 사용자 정보 모델
  * 
  * @author inlee <einable@gmail.com>
  */
@@ -8,11 +8,11 @@
 namespace App\Laraboard;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Laraboard\Component\BoardRelations;
+use App\Laraboard\Model\Component\UserRelations;
 
-class Board extends Model
+class User extends Model
 {
-    use BoardRelations;
+    use UserRelations;
 
     /**
      * The table associated with the model.
@@ -26,7 +26,7 @@ class Board extends Model
      */
     public function __construct(array $attributes = array())
     {
-        $this->table = config('laraboard.board.table_name.board');
+        $this->table = config('laraboard.board.table_name.user');
         parent::__construct($attributes);
     }
 }

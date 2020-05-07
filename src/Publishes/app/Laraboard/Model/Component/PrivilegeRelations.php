@@ -5,7 +5,7 @@
  * @author inlee <einable@gmail.com>
  */
 
-namespace App\Laraboard\Component;
+namespace App\Laraboard\Model\Component;
 
 trait PrivilegeRelations
 {

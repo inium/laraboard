@@ -5,8 +5,8 @@
 use App\Laraboard\Post as LaraboardPost;
 use App\Laraboard\Board as LaraboardBoard;
 use App\Laraboard\User as LaraboardUser;
-use Inium\Laraboard\Library\Random as LaraboardRandom;
-use Inium\Laraboard\Library\Agent as LaraboardAgent;
+use Inium\Laraboard\Facade\Random as LaraboardRandom;
+use Inium\Laraboard\Facade\Agent as LaraboardAgent;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 
@@ -29,8 +29,7 @@ $factory->define(LaraboardPost::class, function (Faker $faker) {
     )->inRandomOrder()->first();
 
     // faker로 생성한 user agent 분석
-    $agent = new LaraboardAgent();
-    $ua = $agent->parse($faker->userAgent);
+    $ua = LaraboardAgent::parse($faker->userAgent);
 
     // faker를 이용해 생성한 파일 업로드 정보 생성
     $fileExt = $faker->fileExtension;
