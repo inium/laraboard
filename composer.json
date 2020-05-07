@@ -19,7 +19,11 @@
         "laravel": {
             "providers": [
                 "Inium\\Laraboard\\LaraboardServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "LaraboardAgent": "Inium\\Laraboard\\Facade\\Agent",
+                "LaraboardRandom": "Inium\\Laraboard\\Facade\\Random"
+            }
         },
         "branch-alias": {
             "dev-master": "0.1-dev"
