@@ -1,7 +1,4 @@
 <?php
-/**
- * Random 확률 계산 클래스
- */
 
 namespace Inium\Laraboard\Library;
 
@@ -15,7 +12,7 @@ class Random
      * @return boolean
      * @see https://stackoverflow.com/questions/21572363/generate-random-numbers-with-fix-probability
      */
-    public static function probability(float $probability = 0.1,
+    public function probability(float $probability = 0.1,
                                        int $length = 1000): bool
     {
         $test = mt_rand(1, $length);
@@ -30,7 +27,7 @@ class Random
      * @return string|bool          랜덤확정된 배열 key 혹은 계산실패(false)
      * @see https://gist.github.com/irazasyed/f41f8688a2b3b8f7b6df
      */
-    public static function weighted(array $weightedValues)
+    public function weighted(array $weightedValues)
     {
         $rand = mt_rand(1, (int)array_sum($weightedValues));
 
