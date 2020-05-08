@@ -93,7 +93,13 @@ class CreateLaraboardUserTable extends Migration
      */
     private function getAuthUserTableName()
     {
-        return config('laraboard.auth.user_table_name', 'users');
+        $authUser = config('auth.providers.users.model');
+
+        $class = new ReflectionClass($authUser);
+        $obj = $class->newInstance();
+        $method = $class->getMethod('getTable');
+
+        return $method->invoke($obj);
     }
 
     /**
