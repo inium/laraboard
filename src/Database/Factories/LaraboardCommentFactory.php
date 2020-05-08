@@ -2,11 +2,10 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Laraboard\Model\Comment as LaraboardComment;
-use App\Laraboard\Model\Post as LaraboardPost;
-use App\Laraboard\Model\Board as LaraboardBoard;
-use App\Laraboard\Model\User as LaraboardUser;
-use Inium\Laraboard\Facade\Random as LaraboardRandom;
+use Inium\Laraboard\Models\Comment as LaraboardComment;
+use Inium\Laraboard\Models\Post as LaraboardPost;
+use Inium\Laraboard\Models\Board as LaraboardBoard;
+use Inium\Laraboard\Models\User as LaraboardUser;
 use Inium\Laraboard\Facade\Agent as LaraboardAgent;
 use Faker\Generator as Faker;
 
@@ -25,7 +24,7 @@ $factory->define(LaraboardComment::class, function (Faker $faker) {
     $parentCommentId = null;
     if ($post->comments()->count() > 0) {
         // 자식 댓글 추가 여부를 랜덤 확률로 결정
-        if (LaraboardRandom::probability(0.1)) {
+        if ($faker->boolean(10)) {
             // 자식 댓글로 추가할 경우, 부모 댓글 결정
             $parentCommentId = $post->comments()->inRandomOrder()->first()->id;
         }

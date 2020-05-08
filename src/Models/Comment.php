@@ -5,10 +5,10 @@
  * @author inlee <einable@gmail.com>
  */
 
-namespace App\Laraboard\Model;
+namespace Inium\Laraboard\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Laraboard\Model\Relation\CommentRelations;
+use Inium\Laraboard\Traits\CommentRelations;
 
 class Comment extends Model
 {

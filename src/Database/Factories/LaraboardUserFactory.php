@@ -2,16 +2,17 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Laraboard\Model\User as LaraboardUser;
-use App\Laraboard\Model\Privilege as LaraboardPrivilege;
-use App\User as AuthUser;
+use Inium\Laraboard\Models\User as LaraboardUser;
+use Inium\Laraboard\Models\Privilege as LaraboardPrivilege;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 
 $factory->define(LaraboardUser::class, function (Faker $faker) {
+
     // 사용자 생성
-    $user = factory(AuthUser::class)->create();
+    $authUser = config('auth.providers.users.model');
+    $user = factory($authUser)->create();
 
     // 테스트용 닉네임 생성
     $nickname = Str::slug($user->name, '_');

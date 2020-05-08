@@ -5,14 +5,14 @@
  * @author inlee <einable@gmail.com>
  */
 
-namespace App\Laraboard\Auth;
+namespace Inium\Laraboard\Traits;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use App\Laraboard\User as LaraboardUser;
-use App\Laraboard\Privilege as LaraboardPrivilege;
+use Inium\Laraboard\Models\User as LaraboardUser;
+use Inium\Laraboard\Models\Privilege as LaraboardPrivilege;
 
 trait AuthRegistered
 {

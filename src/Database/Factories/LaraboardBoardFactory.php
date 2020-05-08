@@ -2,9 +2,9 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Laraboard\Model\Board as LaraboardBoard;
-use App\Laraboard\Model\User as LaraboardUser;
-use App\Laraboard\Model\Privilege as LaraboardPrivilege;
+use Inium\Laraboard\Models\Board as LaraboardBoard;
+use Inium\Laraboard\Models\User as LaraboardUser;
+use Inium\Laraboard\Models\Privilege as LaraboardPrivilege;
 use Faker\Generator as Faker;
 use Illuminate\Support\Arr;
 

@@ -3,18 +3,6 @@
 return [
 
     /*
-     * 라라벨 Auth 설정
-     */
-    'auth' => [
-
-        // 'php artisan make:auth' 명령어로 만들어지는 사용자 정보 저장 테이블
-        'user_table_name' => 'users',
-
-        // Auth User 모델 클래스명.
-        'model_name' => 'App\User'
-    ],
-
-    /*
      * 게시판 라우트 설정
      */
     'route' => [
@@ -40,6 +28,16 @@ return [
          * 사용자 닉네임 중복 여부. true (중복 방지), false (중복 허용).
          */
         'nickname_unique' => true,
+
+        'file' => [
+
+            // byte 단위 파일 업로드 사이즈.  0 이면 무한
+            'max_upload_size' => 0,
+
+            // 파일 업로드 허용 확장자
+            'upload_mime_types' => 'mimes:jpg,jpeg,png,gif,bmgp,svg,webp,txt,zip,hwp,xls,xlsx,ppt,pptx,doc,docx'
+
+        ],
 
         /*
          * 게시판 테이블 이름

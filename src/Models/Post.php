@@ -1,18 +1,18 @@
 <?php
 /**
- * 게시판 정보 모델
+ * 게시판 게시글 정보 모델
  * 
  * @author inlee <einable@gmail.com>
  */
 
-namespace App\Laraboard\Model;
+namespace Inium\Laraboard\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Laraboard\Model\Relation\BoardRelations;
+use Inium\Laraboard\Traits\PostRelations;
 
-class Board extends Model
+class Post extends Model
 {
-    use BoardRelations;
+    use PostRelations;
 
     /**
      * The table associated with the model.
@@ -26,7 +26,7 @@ class Board extends Model
      */
     public function __construct(array $attributes = array())
     {
-        $this->table = config('laraboard.board.table_name.board');
+        $this->table = config('laraboard.board.table_name.post');
         parent::__construct($attributes);
     }
 }

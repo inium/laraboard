@@ -5,7 +5,7 @@
  * @author inlee <einable@gmail.com>
  */
 
-namespace App\Laraboard\Model\Relation;
+namespace Inium\Laraboard\Traits;
 
 trait BoardRelations
 {
@@ -14,7 +14,7 @@ trait BoardRelations
      */
     public function user()
     {
-        return $this->belongsTo('App\Laraboard\Model\User');
+        return $this->belongsTo('Inium\Laraboard\Models\User');
     }
 
     /**
@@ -22,7 +22,7 @@ trait BoardRelations
      */
     public function posts()
     {
-        return $this->hasMany('App\Laraboard\Model\Post');
+        return $this->hasMany('Inium\Laraboard\Models\Post');
     }
 
     /**
@@ -30,7 +30,7 @@ trait BoardRelations
      */
     public function comments()
     {
-        return $this->hasMany('App\Laraboard\Model\Comment');
+        return $this->hasMany('Inium\Laraboard\Models\Comment');
     }
 
     /**
@@ -38,7 +38,7 @@ trait BoardRelations
      */
     public function minListReadPrivilege()
     {
-        return $this->belongsTo('App\Laraboard\Model\Privilege',
+        return $this->belongsTo('Inium\Laraboard\Models\Privilege',
                                 'min_list_read_privilege_id');
     }
 
@@ -47,7 +47,7 @@ trait BoardRelations
      */
     public function minPostReadPrivilege()
     {
-        return $this->belongsTo('App\Laraboard\Model\Privilege',
+        return $this->belongsTo('Inium\Laraboard\Models\Privilege',
                                 'min_post_read_privilege_id');
     }
 
@@ -56,7 +56,7 @@ trait BoardRelations
      */
     public function minPostWritePrivilege()
     {
-        return $this->belongsTo('App\Laraboard\Model\Privilege',
+        return $this->belongsTo('Inium\Laraboard\Models\Privilege',
                                 'min_post_write_privilege_id');
     }
 
@@ -65,7 +65,7 @@ trait BoardRelations
      */
     public function minCommentReadPrivilege()
     {
-        return $this->belongsTo('App\Laraboard\Model\Privilege',
+        return $this->belongsTo('Inium\Laraboard\Models\Privilege',
                                 'min_comment_read_privilege_id');
     }
 
@@ -74,7 +74,7 @@ trait BoardRelations
      */
     public function minCommentWritePrivilege()
     {
-        return $this->belongsTo('App\Laraboard\Model\Privilege',
+        return $this->belongsTo('Inium\Laraboard\Models\Privilege',
                                 'min_comment_write_privilege_id');
     }
 }

@@ -5,7 +5,7 @@
  * @author inlee <einable@gmail.com>
  */
 
-namespace App\Laraboard\Model\Relation;
+namespace Inium\Laraboard\Traits;
 
 trait PrivilegeRelations
 {
@@ -14,6 +14,6 @@ trait PrivilegeRelations
      */
     public function users()
     {
-        return $this->hasMany('App\Laraboard\Model\User');
+        return $this->hasMany('Inium\Laraboard\Models\User');
     }
 }

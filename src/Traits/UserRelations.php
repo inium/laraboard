@@ -5,7 +5,7 @@
  * @author inlee <einable@gmail.com>
  */
 
-namespace App\Laraboard\Model\Relation;
+namespace Inium\Laraboard\Traits;
 
 trait UserRelations
 {
@@ -16,7 +16,7 @@ trait UserRelations
      */
     public function user()
     {
-        $authUserClass = config('laraboard.auth.model_name');
+        $authUserClass = config('auth.providers.users.model');
         return $this->belongsTo($authUserClass);
     }
 
@@ -25,7 +25,7 @@ trait UserRelations
      */
     public function privilege()
     {
-        return $this->belongsTo('App\Laraboard\Model\Privilege',
+        return $this->belongsTo('Inium\Laraboard\Models\Privilege',
                                 'board_user_privilege_id');
     }
 
@@ -34,7 +34,7 @@ trait UserRelations
      */
     public function boards()
     {
-        return $this->hasMany('App\Laraboard\Model\Board');
+        return $this->hasMany('Inium\Laraboard\Models\Board');
     }
 
     /**
@@ -42,7 +42,7 @@ trait UserRelations
      */
     public function posts()
     {
-        return $this->hasMany('App\Laraboard\Model\Post');
+        return $this->hasMany('Inium\Laraboard\Models\Post');
     }
 
     /**
@@ -50,6 +50,6 @@ trait UserRelations
      */
     public function comments()
     {
-        return $this->hasMany('App\Laraboard\Model\Comment');
+        return $this->hasMany('Inium\Laraboard\Models\Comment');
     }
 }

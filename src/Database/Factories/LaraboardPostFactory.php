@@ -2,10 +2,9 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Laraboard\Model\Post as LaraboardPost;
-use App\Laraboard\Model\Board as LaraboardBoard;
-use App\Laraboard\Model\User as LaraboardUser;
-use Inium\Laraboard\Facade\Random as LaraboardRandom;
+use Inium\Laraboard\Models\Post as LaraboardPost;
+use Inium\Laraboard\Models\Board as LaraboardBoard;
+use Inium\Laraboard\Models\User as LaraboardUser;
 use Inium\Laraboard\Facade\Agent as LaraboardAgent;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
@@ -21,7 +20,7 @@ $factory->define(LaraboardPost::class, function (Faker $faker) {
     $board = LaraboardBoard::inRandomOrder()->first();
 
     // 공지글 여부를 위해 관리자 정보 가져올지 여부 설정 후 선택
-    $isAdmin = LaraboardRandom::probability(0.1);
+    $isAdmin = $faker->boolean(10);
     $boardUser = LaraboardUser::whereHas('privilege',
         function ($q) use ($isAdmin) {
             $q->where('is_admin', $isAdmin);
@@ -38,7 +37,7 @@ $factory->define(LaraboardPost::class, function (Faker $faker) {
 
     // 첨부파일 여부를 결정하여 첨부파일 정보 저장
     $attachmentJson = null;
-    if (LaraboardRandom::probability(0.3)) {
+    if ($faker->boolean(30)) {
         $attachmentJson = json_encode([
             'mime_type' => $faker->mimeType,
             'ext' => $fileExt,

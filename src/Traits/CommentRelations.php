@@ -5,7 +5,7 @@
  * @author inlee <einable@gmail.com>
  */
 
-namespace App\Laraboard\Model\Relation;
+namespace Inium\Laraboard\Traits;
 
 trait CommentRelations
 {
@@ -14,7 +14,7 @@ trait CommentRelations
      */
     public function board()
     {
-        return $this->belongsTo('App\Laraboard\Model\Board');
+        return $this->belongsTo('Inium\Laraboard\Models\Board');
     }
 
     /**
@@ -22,7 +22,7 @@ trait CommentRelations
      */
     public function user()
     {
-        return $this->belongsTo('App\Laraboard\Model\User');
+        return $this->belongsTo('Inium\Laraboard\Models\User');
     }
 
     /**
@@ -30,7 +30,7 @@ trait CommentRelations
      */
     public function post()
     {
-        return $this->belongsTo('App\Laraboard\Model\Post');
+        return $this->belongsTo('Inium\Laraboard\Models\Post');
     }
 
     /**
@@ -38,7 +38,7 @@ trait CommentRelations
      */
     public function parent()
     {
-        return $this->belongsTo('App\Laraboard\Model\Comment');
+        return $this->belongsTo('Inium\Laraboard\Models\Comment');
     }
 
     /**
@@ -46,6 +46,6 @@ trait CommentRelations
      */
     public function children()
     {
-        return $this->hasMany('App\Laraboard\Model\Comment');
+        return $this->hasMany('Inium\Laraboard\Models\Comment');
     }
 }

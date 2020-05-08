@@ -5,7 +5,7 @@
  * @author inlee <einable@gmail.com>
  */
 
-namespace App\Laraboard\Model\Relation;
+namespace Inium\Laraboard\Traits;
 
 trait PostRelations
 {
@@ -14,7 +14,7 @@ trait PostRelations
      */
     public function board()
     {
-        return $this->belongsTo('App\Laraboard\Model\Board');
+        return $this->belongsTo('Inium\Laraboard\Models\Board');
     }
 
     /**
@@ -22,7 +22,7 @@ trait PostRelations
      */
     public function user()
     {
-        return $this->belongsTo('App\Laraboard\Model\User');
+        return $this->belongsTo('Inium\Laraboard\Models\User');
     }
 
     /**
@@ -30,6 +30,6 @@ trait PostRelations
      */
     public function comments()
     {
-        return $this->hasMany('App\Laraboard\Model\Comment');
+        return $this->hasMany('Inium\Laraboard\Models\Comment');
     }
 }
