@@ -4,7 +4,8 @@ namespace Inium\Laraboard;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
-use Inium\Laraboard\Library\Random as LaraboardRandom;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Database\Eloquent\Factory as EloquentFactory;
 use Inium\Laraboard\Library\Agent as LaraboardAgent;
 
 class LaraboardServiceProvider extends ServiceProvider
@@ -17,12 +18,12 @@ class LaraboardServiceProvider extends ServiceProvider
     public function register()
     {
         // Load the config file and merge it (should it get published)
-        $configPath = __DIR__ . '/Publishes/config/laraboard.php';
-        $this->mergeConfigFrom($configPath, 'laraboard');
+        $this->mergeConfigFrom(
+            __DIR__ . '/Config/laraboard.php',
+            'laraboard');
 
         // Register Facade
-        $this->app->bind('laraboard_agent', LaraboardAgent::class);
-        $this->app->bind('laraboard_random', LaraboardRandom::class);
+        $this->app->bind('laraboard_agent', LaraboardAgent::class);   // Agent
     }
 
     /**
@@ -32,42 +33,68 @@ class LaraboardServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Load routes
-        $this->loadRoutesFrom(__DIR__ . '/Routes/web.php');
+        // Load routes, migrations, factories
+        $middleware = config('laraboard.route.middleware');
+        $prefix = config('laraboard.route.prefix');
+        $this->loadRoutes($middleware, $prefix);
+        // $this->loadRoutesFrom(__DIR__ . '/Routes/web.php');
 
-        // A base path of publish files
-        $basePath = __DIR__ . '/Publishes';
+        $this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');
+        $this->registerEloquentFactoriesFrom(__DIR__.'/Database/Factories');
 
-        // Set Publish files
-        $publishFiles = $this->getPublishFiles($basePath);
-        $this->publishes($publishFiles, 'laraboard');
+        // Set publish files
+        if ($this->app->runningInConsole()) {
+            $this->bootForConsole();
+        }
     }
 
     /**
-     * Publish 파일 목록을 반환한다.
+     * Set router
      *
-     * @param string $basePath      publish될 대상 파일이 존재하는 base path
-     * @return array
+     * @param array $middleware     Middleware array
+     * @param string $prefix        URL Prefix
+     * @return void
      */
-    private function getPublishFiles(string $basePath)
+    private function loadRoutes(array $middleware, string $prefix)
     {
-        return [
+        $this->app['router']
+            ->middleware($middleware)
+            ->prefix($prefix)
+            ->namespace('Inium\\Laraboard\\Controllers')
+            ->group(function () {
+                $this->loadRoutesFrom(__DIR__ . '/Routes/web.php');
+            });
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    private function bootForConsole()
+    {
+        $this->publishes([
             // 환경설정 파일
-            "{$basePath}/config/laraboard.php" => config_path('laraboard.php'),
-
-            // 모델, 모듈(컴포넌트)
-            "{$basePath}/app/Laraboard" => app_path('Laraboard'),
-
-            // 컨트롤러
-            "{$basePath}/app/Http/Controllers/Laraboard"
-                => app_path('Http/Controllers/Laraboard'),
+            __DIR__ . '/config/laraboard.php' => config_path('laraboard.php'),
 
             // Views
+            //  __DIR__.'/../resources/views' => base_path('resources/views/vendor/acme'),
 
-            // 데이터베이스 factories, migrations, seeds
-            "{$basePath}/database/factories" => database_path('factories'),
-            "{$basePath}/database/migrations" => database_path('migrations'),
-            "{$basePath}/database/seeds" => database_path('seeds'),
-        ];
+            // 데이터베이스 migrations
+            // __DIR__ . "/Models/Migrations" => database_path('migrations'),
+
+        ], 'laraboard');
+    }
+
+    /**
+     * Register factories.
+     *
+     * @param  string  $path
+     * @return mixed
+     * @see https://github.com/laravel/framework/issues/11881
+     */
+    protected function registerEloquentFactoriesFrom($path)
+    {
+        $this->app->make(EloquentFactory::class)->load($path);
     }
 }
