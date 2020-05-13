@@ -6,7 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Factory as EloquentFactory;
-use Inium\Laraboard\Library\Agent as LaraboardAgent;
+use Inium\Laraboard\Support\Detect\Agent as LaraboardAgent;
 
 class LaraboardServiceProvider extends ServiceProvider
 {
@@ -18,9 +18,7 @@ class LaraboardServiceProvider extends ServiceProvider
     public function register()
     {
         // Load the config file and merge it (should it get published)
-        $this->mergeConfigFrom(
-            __DIR__ . '/Config/laraboard.php',
-            'laraboard');
+        $this->mergeConfigFrom(__DIR__ . '/Config/laraboard.php', 'laraboard');
 
         // Register Facade
         $this->app->bind('laraboard_agent', LaraboardAgent::class);   // Agent
@@ -37,10 +35,9 @@ class LaraboardServiceProvider extends ServiceProvider
         $middleware = config('laraboard.route.middleware');
         $prefix = config('laraboard.route.prefix');
         $this->loadRoutes($middleware, $prefix);
-        // $this->loadRoutesFrom(__DIR__ . '/Routes/web.php');
 
         $this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');
-        $this->registerEloquentFactoriesFrom(__DIR__.'/Database/Factories');
+        $this->registerEloquentFactoriesFrom(__DIR__ . '/Database/Factories');
 
         // Set publish files
         if ($this->app->runningInConsole()) {
@@ -49,10 +46,12 @@ class LaraboardServiceProvider extends ServiceProvider
     }
 
     /**
-     * Set router
+     * 라우팅를 설정한다.
      *
-     * @param array $middleware     Middleware array
-     * @param string $prefix        URL Prefix
+     * @param array $middleware     사용할 Middleware 배열.
+     *                              /Application/config/laraboard.php 참조.
+     * @param string $prefix        URL Prefix.
+     *                              /Application/config/laraboard.php 참조.
      * @return void
      */
     private function loadRoutes(array $middleware, string $prefix)
@@ -60,14 +59,14 @@ class LaraboardServiceProvider extends ServiceProvider
         $this->app['router']
             ->middleware($middleware)
             ->prefix($prefix)
-            ->namespace('Inium\\Laraboard\\Controllers')
+            ->namespace('App\\Http\\Controllers\\Laraboard')
             ->group(function () {
                 $this->loadRoutesFrom(__DIR__ . '/Routes/web.php');
             });
     }
 
     /**
-     * Undocumented function
+     * Publish할 파일을 설정한다.
      *
      * @return void
      */
@@ -75,13 +74,17 @@ class LaraboardServiceProvider extends ServiceProvider
     {
         $this->publishes([
             // 환경설정 파일
-            __DIR__ . '/config/laraboard.php' => config_path('laraboard.php'),
+            __DIR__ . '/Config/laraboard.php' => config_path('laraboard.php'),
+
+            // Controllers
+            __DIR__ . '/Controllers/Laraboard'
+                => app_path('Http/Controllers/Laraboard'),
 
             // Views
             //  __DIR__.'/../resources/views' => base_path('resources/views/vendor/acme'),
 
             // 데이터베이스 migrations
-            // __DIR__ . "/Models/Migrations" => database_path('migrations'),
+            __DIR__ . '/Database/Migrations' => database_path('migrations')
 
         ], 'laraboard');
     }
