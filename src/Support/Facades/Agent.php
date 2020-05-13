@@ -1,6 +1,6 @@
 <?php
 
-namespace Inium\Laraboard\Facade;
+namespace Inium\Laraboard\Support\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

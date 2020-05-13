@@ -1,6 +1,6 @@
 <?php
 
-namespace Inium\Laraboard\Library;
+namespace Inium\Laraboard\Support\Detect;
 
 class Agent
 {
