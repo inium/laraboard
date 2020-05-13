@@ -21,8 +21,7 @@
                 "Inium\\Laraboard\\LaraboardServiceProvider"
             ],
             "aliases": {
-                "LaraboardAgent": "Inium\\Laraboard\\Facade\\Agent",
-                "LaraboardRandom": "Inium\\Laraboard\\Facade\\Random"
+                "LaraboardAgent": "Inium\\Laraboard\\Support\\Facades\\Agent"
             }
         },
         "branch-alias": {
