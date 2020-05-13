@@ -28,10 +28,12 @@ class CreateLaraboardBoardTable extends Migration
                 $table->integer('post_point')->comment('게시글 작성 포인트');
                 $table->integer('comment_point')->comment('댓글 작성 포인트');
 
-                $table->integer('page_post_num')->comment('게시글 페이징 수');
-                $table->integer('page_comment_num')->comment('댓글 페이징 수');
+                $table->integer('post_rows_per_page')
+                      ->comment('게시글 페이징 수');
+                $table->integer('comment_rows_per_page')
+                      ->comment('댓글 페이징 수');
 
-                $table->unsignedBigInteger('min_list_read_privilege_id')
+                $table->unsignedBigInteger('min_post_list_read_privilege_id')
                       ->nullable()
                       ->comment('게시글 목록 보기 사용자 최소 권한 ID');
                 $table->unsignedBigInteger('min_post_read_privilege_id')
@@ -52,7 +54,7 @@ class CreateLaraboardBoardTable extends Migration
                 $table->softDeletes();
 
                 // Foreign Key 생성
-                $table->foreign('min_list_read_privilege_id')
+                $table->foreign('min_post_list_read_privilege_id')
                       ->references('id')
                       ->on($privilegeTableName);
                 $table->foreign('min_post_read_privilege_id')

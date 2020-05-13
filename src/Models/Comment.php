@@ -8,11 +8,12 @@
 namespace Inium\Laraboard\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Inium\Laraboard\Traits\CommentRelations;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Inium\Laraboard\Core\Relations\CommentRelationsTrait;
 
 class Comment extends Model
 {
-    use CommentRelations;
+    use SoftDeletes, CommentRelationsTrait;
 
     /**
      * The table associated with the model.

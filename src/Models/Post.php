@@ -8,11 +8,12 @@
 namespace Inium\Laraboard\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Inium\Laraboard\Traits\PostRelations;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Inium\Laraboard\Core\Relations\PostRelationsTrait;
 
 class Post extends Model
 {
-    use PostRelations;
+    use SoftDeletes, PostRelationsTrait;
 
     /**
      * The table associated with the model.

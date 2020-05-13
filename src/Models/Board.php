@@ -8,11 +8,13 @@
 namespace Inium\Laraboard\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Inium\Laraboard\Traits\BoardRelations;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Inium\Laraboard\Core\Relations\BoardRelationsTrait;
 
 class Board extends Model
 {
-    use BoardRelations;
+    use SoftDeletes, BoardRelationsTrait;
 
     /**
      * The table associated with the model.
@@ -28,5 +30,16 @@ class Board extends Model
     {
         $this->table = config('laraboard.board.table_name.board');
         parent::__construct($attributes);
+    }
+
+    /**
+     * 게시판 영문 이름으로 게시판 정보를 가져온다.
+     *
+     * @param string $name  게시판 영문이름
+     * @return mixed
+     */
+    public static function findByName(string $name)
+    {
+        return (new static)::where('name', $name)->first();
     }
 }

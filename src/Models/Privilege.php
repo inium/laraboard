@@ -8,11 +8,11 @@
 namespace Inium\Laraboard\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Inium\Laraboard\Traits\PrivilegeRelations;
+use Inium\Laraboard\Core\Relations\PrivilegeRelationsTrait;
 
 class Privilege extends Model
 {
-    use PrivilegeRelations;
+    use PrivilegeRelationsTrait;
 
     /**
      * The table associated with the model.

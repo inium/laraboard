@@ -5,7 +5,7 @@
 use Inium\Laraboard\Models\Post as LaraboardPost;
 use Inium\Laraboard\Models\Board as LaraboardBoard;
 use Inium\Laraboard\Models\User as LaraboardUser;
-use Inium\Laraboard\Facade\Agent as LaraboardAgent;
+use Inium\Laraboard\Support\Facades\Agent as LaraboardAgent;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 
@@ -49,6 +49,8 @@ $factory->define(LaraboardPost::class, function (Faker $faker) {
     }
 
     $content = $faker->text;
+    $tags = $faker->words(rand() % 5);
+    $tags = count($tags) == 0 ? null : implode(',', $tags);
 
     return [
         'user_agent' => $ua['agent'],
@@ -62,6 +64,7 @@ $factory->define(LaraboardPost::class, function (Faker $faker) {
         'content' => htmlspecialchars($content),
         'content_pure' => strip_tags($content),
         'attachment_json' => $attachmentJson,
+        'tags' => $tags,
         'view_count' => $faker->numberBetween(1, 3000),
         'point' => $board->post_point,
         'board_id' => $board->id,

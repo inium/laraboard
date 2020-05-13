@@ -6,7 +6,7 @@ use Inium\Laraboard\Models\Comment as LaraboardComment;
 use Inium\Laraboard\Models\Post as LaraboardPost;
 use Inium\Laraboard\Models\Board as LaraboardBoard;
 use Inium\Laraboard\Models\User as LaraboardUser;
-use Inium\Laraboard\Facade\Agent as LaraboardAgent;
+use Inium\Laraboard\Support\Facades\Agent as LaraboardAgent;
 use Faker\Generator as Faker;
 
 $factory->define(LaraboardComment::class, function (Faker $faker) {
