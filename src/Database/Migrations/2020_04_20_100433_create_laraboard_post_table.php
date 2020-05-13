@@ -49,7 +49,9 @@ class CreateLaraboardPostTable extends Migration
                 $table->text('attachment_json')
                       ->nullable()
                       ->comment('JSON 형태의 첨부파일');
-                $table->text('tags')->nullable()->comment('게시글 태그');
+                $table->text('tag_json')
+                      ->nullable()
+                      ->comment('JSON 형태의 게시글 태그');
                 $table->integer('view_count')->comment('조회수');
                 $table->integer('point')->comment('게시글 부여 포인트');
                 $table->unsignedBigInteger('board_id')->comment('게시판 ID');

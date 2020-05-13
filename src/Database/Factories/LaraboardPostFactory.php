@@ -49,8 +49,8 @@ $factory->define(LaraboardPost::class, function (Faker $faker) {
     }
 
     $content = $faker->text;
-    $tags = $faker->words(rand() % 5);
-    $tags = count($tags) == 0 ? null : implode(',', $tags);
+    $tagWords = $faker->words(rand() % 5);
+    $tagJson = count($tagWords) == 0 ? null : json_encode($tagWords);
 
     return [
         'user_agent' => $ua['agent'],
@@ -64,7 +64,7 @@ $factory->define(LaraboardPost::class, function (Faker $faker) {
         'content' => htmlspecialchars($content),
         'content_pure' => strip_tags($content),
         'attachment_json' => $attachmentJson,
-        'tags' => $tags,
+        'tag_json' => $tagJson,
         'view_count' => $faker->numberBetween(1, 3000),
         'point' => $board->post_point,
         'board_id' => $board->id,
