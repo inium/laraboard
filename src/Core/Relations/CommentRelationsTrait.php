@@ -14,7 +14,7 @@ trait CommentRelationsTrait
      */
     public function board()
     {
-        return $this->belongsTo('Inium\Laraboard\Models\Board');
+        return $this->belongsTo('Inium\Laraboard\Models\Board', 'board_id');
     }
 
     /**
@@ -22,7 +22,7 @@ trait CommentRelationsTrait
      */
     public function user()
     {
-        return $this->belongsTo('Inium\Laraboard\Models\User');
+        return $this->belongsTo('Inium\Laraboard\Models\User', 'wrote_user_id');
     }
 
     /**
@@ -30,7 +30,7 @@ trait CommentRelationsTrait
      */
     public function post()
     {
-        return $this->belongsTo('Inium\Laraboard\Models\Post');
+        return $this->belongsTo('Inium\Laraboard\Models\Post', 'post_id');
     }
 
     /**
@@ -38,7 +38,8 @@ trait CommentRelationsTrait
      */
     public function parent()
     {
-        return $this->belongsTo('Inium\Laraboard\Models\Comment');
+        return $this->belongsTo('Inium\Laraboard\Models\Comment',
+                                'parent_comment_id');
     }
 
     /**
@@ -46,6 +47,8 @@ trait CommentRelationsTrait
      */
     public function children()
     {
-        return $this->hasMany('Inium\Laraboard\Models\Comment');
+        return $this->hasMany('Inium\Laraboard\Models\Comment',
+                              'parent_comment_id',
+                              'id');
     }
 }

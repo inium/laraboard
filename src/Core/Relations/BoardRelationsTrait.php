@@ -14,7 +14,8 @@ trait BoardRelationsTrait
      */
     public function user()
     {
-        return $this->belongsTo('Inium\Laraboard\Models\User');
+        return $this->belongsTo('Inium\Laraboard\Models\User',
+                                'create_user_id');
     }
 
     /**

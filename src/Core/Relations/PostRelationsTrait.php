@@ -14,7 +14,7 @@ trait PostRelationsTrait
      */
     public function board()
     {
-        return $this->belongsTo('Inium\Laraboard\Models\Board');
+        return $this->belongsTo('Inium\Laraboard\Models\Board', 'board_id');
     }
 
     /**
@@ -22,7 +22,7 @@ trait PostRelationsTrait
      */
     public function user()
     {
-        return $this->belongsTo('Inium\Laraboard\Models\User');
+        return $this->belongsTo('Inium\Laraboard\Models\User', 'wrote_user_id');
     }
 
     /**
