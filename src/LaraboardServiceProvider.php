@@ -2,9 +2,9 @@
 
 namespace Inium\Laraboard;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Foundation\AliasLoader;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factory as EloquentFactory;
 use Inium\Laraboard\Support\Detect\Agent as LaraboardAgent;
 
@@ -36,8 +36,12 @@ class LaraboardServiceProvider extends ServiceProvider
         $prefix = config('laraboard.route.prefix');
         $this->loadRoutes($middleware, $prefix);
 
+        $this->loadViewsFrom(__DIR__ . '/Resources/views', 'laraboard');
         $this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');
         $this->registerEloquentFactoriesFrom(__DIR__ . '/Database/Factories');
+
+        // 사용자 정의 컬렉션 등록
+        $this->setCustomCollections();
 
         // Set publish files
         if ($this->app->runningInConsole()) {
@@ -80,24 +84,56 @@ class LaraboardServiceProvider extends ServiceProvider
             __DIR__ . '/Controllers/Laraboard'
                 => app_path('Http/Controllers/Laraboard'),
 
-            // Views
-            //  __DIR__.'/../resources/views' => base_path('resources/views/vendor/acme'),
+            // // Views
+            // __DIR__.'/Resources/blade'
+            //     => base_path('resources/views/vendor/laraboard'),
+
+            // Assets
+            __DIR__ . '/Public' => public_path('vendor/laraboard'),
+            //     => base_path('resources/views/vendor/laraboard'),
 
             // 데이터베이스 migrations
             __DIR__ . '/Database/Migrations' => database_path('migrations')
 
         ], 'laraboard');
+
+
+        // Asset publish
+        $this->publishes([
+            __DIR__ . '/Public' => public_path('vendor/laraboard')
+        ], 'laraboard.assets');
     }
 
     /**
      * Register factories.
      *
      * @param  string  $path
-     * @return mixed
+     * @return void
      * @see https://github.com/laravel/framework/issues/11881
      */
-    protected function registerEloquentFactoriesFrom($path)
+    private function registerEloquentFactoriesFrom($path)
     {
         $this->app->make(EloquentFactory::class)->load($path);
+    }
+
+    /**
+     * 사용자 정의 컬렉션을 등록한다.
+     *
+     * @return void
+     * @see https://github.com/spatie/laravel-collection-macros/blob/master/src/CollectionMacroServiceProvider.php
+     */
+    private function setCustomCollections()
+    {
+        Collection::make(glob(__DIR__ . '/Support/Collection/*.php'))
+            ->mapWithKeys(function ($path) {
+                return [$path => pathinfo($path, PATHINFO_FILENAME)];
+            })
+            ->reject(function ($macro) {
+                return Collection::hasMacro($macro);
+            })
+            ->each(function ($macro, $path) {
+                $class = 'Inium\\Laraboard\\Support\\Collection\\' . $macro;
+                Collection::macro(Str::camel($macro), app($class)());
+            });
     }
 }
