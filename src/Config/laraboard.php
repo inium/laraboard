@@ -45,10 +45,10 @@ return [
         'table_name' => [
 
             // 게시판 사용자 권한 테이블 이름
-            'privilege' => 'lb_board_user_privileges',
+            'role' => 'lb_board_user_roles',
 
             // 게시판 사용자 테이블 이름
-            'user' => 'lb_board_user',
+            'user' => 'lb_board_users',
 
             // 게시판 테이블 이름
             'board' => 'lb_boards',

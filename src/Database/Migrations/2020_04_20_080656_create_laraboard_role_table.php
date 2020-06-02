@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLaraboardPrivilegeTable extends Migration
+class CreateLaraboardRoleTable extends Migration
 {
     /**
      * Run the migrations.
@@ -40,6 +40,6 @@ class CreateLaraboardPrivilegeTable extends Migration
      */
     private function getTableName()
     {
-        return config('laraboard.board.table_name.privilege');
+        return config('laraboard.board.table_name.role');
     }
 }

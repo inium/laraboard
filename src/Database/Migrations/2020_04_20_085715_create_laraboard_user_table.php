@@ -13,20 +13,20 @@ class CreateLaraboardUserTable extends Migration
      */
     public function up()
     {
-        $boardPrivilegeTableName = $this->getBoardPrivilegeTableName();
+        $roleTableName = $this->getBoardRoleTableName();
         $authUserTableName = $this->getAuthUserTableName();
         $nicknameUnique = $this->getNicknameUnique();
 
         // 사용자 게시판 권한 정보 저장 테이블
         Schema::create($this->getTableName(),
-            function (Blueprint $table) use ($boardPrivilegeTableName,
+            function (Blueprint $table) use ($roleTableName,
                                              $authUserTableName,
                                              $nicknameUnique) {
                 $table->id();
                 $table->unsignedBigInteger('user_id')
                       ->unique()
                       ->comment('사용자 ID');
-                $table->unsignedBigInteger('board_user_privilege_id')
+                $table->unsignedBigInteger('board_user_role_id')
                       ->comment('게시판 사용자 권한 ID');
 
                 // 닉네임 중복 방지 여부
@@ -48,9 +48,9 @@ class CreateLaraboardUserTable extends Migration
                       ->references('id')
                       ->on($authUserTableName);
 
-                $table->foreign('board_user_privilege_id')
+                $table->foreign('board_user_role_id')
                       ->references('id')
-                      ->on($boardPrivilegeTableName);
+                      ->on($roleTableName);
             }
         );
     }
@@ -80,9 +80,9 @@ class CreateLaraboardUserTable extends Migration
      *
      * @return string
      */
-    private function getBoardPrivilegeTableName()
+    private function getBoardRoleTableName()
     {
-        return config('laraboard.board.table_name.privilege');
+        return config('laraboard.board.table_name.role');
     }
 
     /**

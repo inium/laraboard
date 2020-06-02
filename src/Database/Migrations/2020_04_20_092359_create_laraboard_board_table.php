@@ -13,12 +13,12 @@ class CreateLaraboardBoardTable extends Migration
      */
     public function up()
     {
-        $privilegeTableName = $this->getPrivilegeTableName();
+        $roleTableName = $this->getRoleTableName();
         $userTableName = $this->getUserTableName();
 
         // 게시판 정보 저장 테이블
         Schema::create($this->getTableName(),
-            function (Blueprint $table) use ($privilegeTableName,
+            function (Blueprint $table) use ($roleTableName,
                                              $userTableName) {
                 $table->id();
                 $table->string('name')->unique()->comment('영문 이름');
@@ -33,18 +33,18 @@ class CreateLaraboardBoardTable extends Migration
                 $table->integer('comment_rows_per_page')
                       ->comment('댓글 페이징 수');
 
-                $table->unsignedBigInteger('min_post_list_read_privilege_id')
+                $table->unsignedBigInteger('min_post_list_read_role_id')
                       ->nullable()
                       ->comment('게시글 목록 보기 사용자 최소 권한 ID');
-                $table->unsignedBigInteger('min_post_read_privilege_id')
+                $table->unsignedBigInteger('min_post_read_role_id')
                       ->nullable()
                       ->comment('게시글 읽기 사용자 권한 ID');
-                $table->unsignedBigInteger('min_post_write_privilege_id')
+                $table->unsignedBigInteger('min_post_write_role_id')
                       ->comment('게시글 쓰기, 수정, 삭제 사용자 최소 권한 ID');
-                $table->unsignedBigInteger('min_comment_read_privilege_id')
+                $table->unsignedBigInteger('min_comment_read_role_id')
                       ->nullale()
                       ->comment('댓글 읽기 사용자 최소 권한 ID');
-                $table->unsignedBigInteger('min_comment_write_privilege_id')
+                $table->unsignedBigInteger('min_comment_write_role_id')
                       ->comment('댓글 쓰기, 수정, 삭제 사용자 최소 권한 ID');
 
                 $table->unsignedBigInteger('create_user_id')
@@ -54,21 +54,21 @@ class CreateLaraboardBoardTable extends Migration
                 $table->softDeletes();
 
                 // Foreign Key 생성
-                $table->foreign('min_post_list_read_privilege_id')
+                $table->foreign('min_post_list_read_role_id')
                       ->references('id')
-                      ->on($privilegeTableName);
-                $table->foreign('min_post_read_privilege_id')
+                      ->on($roleTableName);
+                $table->foreign('min_post_read_role_id')
                       ->references('id')
-                      ->on($privilegeTableName);
-                $table->foreign('min_post_write_privilege_id')
+                      ->on($roleTableName);
+                $table->foreign('min_post_write_role_id')
                       ->references('id')
-                      ->on($privilegeTableName);
-                $table->foreign('min_comment_read_privilege_id')
+                      ->on($roleTableName);
+                $table->foreign('min_comment_read_role_id')
                       ->references('id')
-                      ->on($privilegeTableName);
-                $table->foreign('min_comment_write_privilege_id')
+                      ->on($roleTableName);
+                $table->foreign('min_comment_write_role_id')
                       ->references('id')
-                      ->on($privilegeTableName);
+                      ->on($roleTableName);
 
                 $table->foreign('create_user_id')
                       ->references('id')
@@ -102,9 +102,9 @@ class CreateLaraboardBoardTable extends Migration
      *
      * @return string
      */
-    private function getPrivilegeTableName()
+    private function getRoleTableName()
     {
-        return config('laraboard.board.table_name.privilege');
+        return config('laraboard.board.table_name.role');
     }
 
     /**
