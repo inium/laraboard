@@ -19,7 +19,7 @@ $factory->define(Post::class, function (Faker $faker) {
 
     // 공지글 여부를 위해 관리자 정보 가져올지 여부 설정 후 선택
     $isAdmin = $faker->boolean(10);
-    $user = User::whereHas('privilege', function ($q) use ($isAdmin) {
+    $user = User::whereHas('role', function ($q) use ($isAdmin) {
         $q->where('is_admin', $isAdmin);
     })->inRandomOrder()->first();
 

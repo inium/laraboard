@@ -16,7 +16,7 @@ $factory->define(Board::class, function (Faker $faker) {
     }
 
     // 게시판을 생성할 관리자 정보를 가져온다.
-    $admin = User::whereHas('privilege', function($q) {
+    $admin = User::whereHas('role', function($q) {
         $q->where('is_admin', true);
     })->inRandomOrder()->first();
 
