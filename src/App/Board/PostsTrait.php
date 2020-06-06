@@ -16,7 +16,7 @@ trait PostsTrait
      * @param integer $page         페이지 번호
      * @return array
      */
-    protected function list(string $boardName, int $page = 1): array
+    protected function posts(string $boardName, int $page = 1): array
     {
         $board = Board::findByName($boardName);
         $notices = $board->getNotices();
