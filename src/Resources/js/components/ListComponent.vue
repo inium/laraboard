@@ -27,13 +27,24 @@
                             .col-1.text-truncate 작성일
 
                     //- 공지사항
-                    li.list-group-item(v-for="notice in notices")
-                        post-list-component(:post="notice")
+                    li.list-group-item(v-for="post in notices")
+                        list-row-component(:is-notice="post.notice"
+                                           :subject="post.subject"
+                                           :comments-count="post.comments_count"
+                                           :nickname="post.user.nickname"
+                                           :view-count="post.view_count"
+                                           :created-at="post.created_at",
+                                           :post-url="post.post_url")
 
                     //- 게시글 목록
                     li.list-group-item(v-for="post in posts")
-                        post-list-component(:post="post")
-
+                        list-row-component(:is-notice="post.notice"
+                                           :subject="post.subject"
+                                           :comments-count="post.comments_count"
+                                           :nickname="post.user.nickname"
+                                           :view-count="post.view_count"
+                                           :created-at="post.created_at",
+                                           :post-url="post.post_url")
 
             //- 콘텐츠가 존재하지 않는 경우
             div(v-else)
@@ -44,31 +55,50 @@
         .lb-list-footer
             div(v-if="hasContents")
                 .d-flex.justify-content-between
-                    div 목록
-                    div b
+                    div
+                        //- 글 목록 버튼
+                        a.btn.btn-primary(:href="routes.list"
+                                          v-if="routes && routes.list") 목록
 
-                    div 글쓰기
+                    div
+                        //- 페이지네이션
+                        pagination-component(
+                            :current-page="pagination.current_page"
+                            :last-page="pagination.last_page"
+                            :base-path="pagination.base_path"
+                        )
 
+                    div
+                        //- 글쓰기 버튼
+                        a.btn.btn-primary(:href="routes.write"
+                                          v-if="routes && routes.write") 글쓰기
+
+                .d-flex.justify-content-center.pt-3(v-if="searchForm")
+                    //- 검색 Form
+                    post-search-form-component(:search-types="searchForm.types"
+                                               :action="searchForm.action")
 </template>
 
 <script>
-
 import BreadcrumbComponent from './shared/BreadcrumbComponent';
-import PostListComponent from './shared/PostListComponent';
+import ListRowComponent from './shared/ListRowComponent';
 import PaginationComponent from './shared/PaginationComponent';
+import PostSearchFormComponent from './shared/PostSearchFormComponent';
 
 export default {
     components: {
         'breadcrumb-component': BreadcrumbComponent,
-        'post-list-component': PostListComponent
+        'list-row-component': ListRowComponent,
+        'pagination-component': PaginationComponent,
+        'post-search-form-component': PostSearchFormComponent
     },
     props: {
         board: Object,          // 게시판
         notices: Array,         // 공지사항
         posts: Array,           // 게시글
-        paginate: Object,       // 페이지네이션
-        searchTypes: Object,    // 검색 유형
-        query: Object           // Query String
+        pagination: Object,     // 페이지네이션
+        routes: Object,         // Route 정보
+        searchForm: Object      // 검색 Form 정보
     },
     data() {
         return {
@@ -119,9 +149,6 @@ export default {
             font-size: 1.5rem;
             text-align: center;
         }
-    }
-    .lb-list-footer {
-
     }
 }
 </style>
