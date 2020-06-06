@@ -8,10 +8,9 @@
         :board='@json($board)'
         :notices='@json($notices)'
         :posts='@json($posts)'
-        :paginate='@json($paginate)'
-        :search-types='@json($searchTypes)'
-        :query='@json($query)'
-        {{-- :authUser='@json(Auth::user())' --}}
+        :pagination='@json($pagination)'
+        :routes='@json($routes)'
+        :search-form='@json($searchForm)'
         ></list-component>
 
 </div>
