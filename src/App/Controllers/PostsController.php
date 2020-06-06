@@ -64,7 +64,7 @@ class PostsController extends Controller
         }
         // 그 외: 게시글 목록 반환
         else {
-            $viewName = 'list';
+            $viewName = 'posts';
             $params = $this->posts($boardName, $page);
         }
 
