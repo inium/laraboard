@@ -1,6 +1,6 @@
 <?php
 
-namespace Inium\Laraboard\Core\Templates;
+namespace Inium\Laraboard\App\Board;
 
 trait RenderTemplateTrait
 {
