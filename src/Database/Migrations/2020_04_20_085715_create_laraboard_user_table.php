@@ -37,9 +37,6 @@ class CreateLaraboardUserTable extends Migration
                     $table->string('nickname')->comment('닉네임');
                 }
                 $table->text('introduce')->nullable()->comment('자기소개');
-                $table->text('thumbnail_path')
-                      ->nullable()
-                      ->comment('썸네일 저장 경로');
                 $table->timestamps();
                 $table->softDeletes();
 

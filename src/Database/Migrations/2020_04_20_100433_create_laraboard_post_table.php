@@ -46,9 +46,6 @@ class CreateLaraboardPostTable extends Migration
                 $table->text('content')->comment('게시글 본문');
                 $table->text('content_pure')
                       ->comment('tag제외 게시글 본문. 검색용.');
-                $table->text('attachment_json')
-                      ->nullable()
-                      ->comment('JSON 형태의 첨부파일');
                 $table->text('tag_json')
                       ->nullable()
                       ->comment('JSON 형태의 게시글 태그');

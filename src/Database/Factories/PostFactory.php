@@ -59,7 +59,6 @@ $factory->define(Post::class, function (Faker $faker) {
         'subject'           => $faker->sentence(10),
         'content'           => htmlspecialchars($content),
         'content_pure'      => strip_tags($content),
-        'attachment_json'   => $attachmentJson,
         'tag_json'          => $tagJson,
         'view_count'        => $faker->numberBetween(1, 3000),
         'point'             => $board->post_point,

@@ -65,10 +65,6 @@ $factory->define(User::class, function (Faker $faker) {
     return [
         'nickname' => "{$nickname}_{$hash}",
         'introduce' => $faker->realText,
-        // faker의 image는 lorempixel을 이용하나 lorempixel이 Shutdown 되었음.
-        // 그래서 아래와 같이 loremflickr.com의 static 경로 사용.
-        // 'thumbnail_path' => $faker->imageUrl('storage/app/public'),
-        'thumbnail_path' => 'https://loremflickr.com/320/240',
         'user_id' => $user->id,
         'board_user_role_id' => $roleId
     ];
