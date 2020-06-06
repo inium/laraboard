@@ -11,8 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Inium\Laraboard\Models\User as LaraboardUser;
-use Inium\Laraboard\Models\Privilege as LaraboardPrivilege;
+use Inium\Laraboard\App\User;
+use Inium\Laraboard\App\Role;
 
 trait AuthRegisteredTrait
 {
@@ -57,16 +57,16 @@ trait AuthRegisteredTrait
     {
         // 사용자 권한 중 가장 마지막 권한 검색
         // 해당 권한을 게시판 사용자에게 부여
-        $privilege = LaraboardPrivilege::all()->last();
+        $privilege = Role::all()->last();
 
         // 게시판 사용자 정보 설정
-        $boardUser = new LaraboardUser();
+        $boardUser = new User();
 
         $boardUser->nickname = $nickname;
         $boardUser->introduce = null;
         $boardUser->thumbnail_path = null;
         $boardUser->user()->associate($user);
-        $boardUser->privilege()->associate($privilege);
+        $boardUser->role()->associate($privilege);
 
         //  게시판 사용자 정보 저장
         $ret = $boardUser->save();
