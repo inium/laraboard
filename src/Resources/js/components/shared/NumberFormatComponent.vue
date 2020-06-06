@@ -1,5 +1,5 @@
 <template lang="pug">
-    span {{ numberWithCommas() }}
+    span {{ numberFormat() }}
 </template>
 
 <script>
@@ -14,7 +14,7 @@ export default {
          * 
          * @return String
          */
-        numberWithCommas() {
+        numberFormat() {
             return this.number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
 
