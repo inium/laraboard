@@ -1,6 +1,6 @@
 <?php
 
-namespace Inium\Laraboard\Core\Pagination;
+namespace Inium\Laraboard\App\Database;
 
 use Illuminate\Pagination\Paginator;
 
