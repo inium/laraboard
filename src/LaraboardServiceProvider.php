@@ -40,9 +40,6 @@ class LaraboardServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');
         $this->registerEloquentFactoriesFrom(__DIR__ . '/Database/Factories');
 
-        // 사용자 정의 컬렉션 등록
-        $this->setCustomCollections();
-
         // Set publish files
         if ($this->app->runningInConsole()) {
             $this->bootForConsole();
@@ -63,7 +60,7 @@ class LaraboardServiceProvider extends ServiceProvider
         $this->app['router']
             ->middleware($middleware)
             ->prefix($prefix)
-            ->namespace('App\\Http\\Controllers\\Laraboard')
+            ->namespace('Inium\\Laraboard\\App\\Controllers')
             ->group(function () {
                 $this->loadRoutesFrom(__DIR__ . '/Routes/web.php');
             });
@@ -80,10 +77,6 @@ class LaraboardServiceProvider extends ServiceProvider
             // 환경설정 파일
             __DIR__ . '/Config/laraboard.php' => config_path('laraboard.php'),
 
-            // Controllers
-            __DIR__ . '/Controllers/Laraboard'
-                => app_path('Http/Controllers/Laraboard'),
-
             // // Views
             // __DIR__.'/Resources/blade'
             //     => base_path('resources/views/vendor/laraboard'),
@@ -95,7 +88,7 @@ class LaraboardServiceProvider extends ServiceProvider
             // 데이터베이스 migrations
             __DIR__ . '/Database/Migrations' => database_path('migrations')
 
-        ], 'laraboard');
+        ], 'laraboard.all');
 
 
         // Asset publish
@@ -114,26 +107,5 @@ class LaraboardServiceProvider extends ServiceProvider
     private function registerEloquentFactoriesFrom($path)
     {
         $this->app->make(EloquentFactory::class)->load($path);
-    }
-
-    /**
-     * 사용자 정의 컬렉션을 등록한다.
-     *
-     * @return void
-     * @see https://github.com/spatie/laravel-collection-macros/blob/master/src/CollectionMacroServiceProvider.php
-     */
-    private function setCustomCollections()
-    {
-        Collection::make(glob(__DIR__ . '/Support/Collection/*.php'))
-            ->mapWithKeys(function ($path) {
-                return [$path => pathinfo($path, PATHINFO_FILENAME)];
-            })
-            ->reject(function ($macro) {
-                return Collection::hasMacro($macro);
-            })
-            ->each(function ($macro, $path) {
-                $class = 'Inium\\Laraboard\\Support\\Collection\\' . $macro;
-                Collection::macro(Str::camel($macro), app($class)());
-            });
     }
 }
