@@ -5,7 +5,7 @@
  * @author inlee <einable@gmail.com>
  */
 
-namespace Inium\Laraboard\Models;
+namespace Inium\Laraboard\App;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -32,6 +32,6 @@ class Role extends Model
      */
     public function users()
     {
-        return $this->hasMany('Inium\Laraboard\Models\User');
+        return $this->hasMany('Inium\Laraboard\App\User');
     }
 }

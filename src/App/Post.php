@@ -5,11 +5,11 @@
  * @author inlee <einable@gmail.com>
  */
 
-namespace Inium\Laraboard\Models;
+namespace Inium\Laraboard\App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Inium\Laraboard\Traits\PaginationPageResolverTrait;
+use Inium\Laraboard\App\Database\PaginationPageResolverTrait;
 
 class Post extends Model
 {
@@ -62,7 +62,7 @@ class Post extends Model
      */
     public function board()
     {
-        return $this->belongsTo('Inium\Laraboard\Models\Board', 'board_id');
+        return $this->belongsTo('Inium\Laraboard\App\Board', 'board_id');
     }
 
     /**
@@ -70,7 +70,7 @@ class Post extends Model
      */
     public function user()
     {
-        return $this->belongsTo('Inium\Laraboard\Models\User', 'wrote_user_id');
+        return $this->belongsTo('Inium\Laraboard\App\User', 'wrote_user_id');
     }
 
     /**
@@ -78,6 +78,6 @@ class Post extends Model
      */
     public function comments()
     {
-        return $this->hasMany('Inium\Laraboard\Models\Comment');
+        return $this->hasMany('Inium\Laraboard\App\Comment');
     }
 }

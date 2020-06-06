@@ -5,17 +5,18 @@
  * @author inlee <einable@gmail.com>
  */
 
-namespace Inium\Laraboard\Models;
+namespace Inium\Laraboard\App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
-use Inium\Laraboard\Traits\PaginationPageResolverTrait;
+use Inium\Laraboard\App\Database\PaginationPageResolverTrait;
 
 class Board extends Model
 {
-    use SoftDeletes, PaginationPageResolverTrait;
+    use SoftDeletes;
+    use PaginationPageResolverTrait;
 
     /**
      * The table associated with the model.
@@ -96,7 +97,8 @@ class Board extends Model
     public static function getSearchType(string $type): ?array
     {
         if (static::validSearchType($type)) {
-            return $this->searchTypes[$type];
+            return [$type => static::$searchTypes[$type]];
+            // return static::$searchTypes[$type];
         }
         else {
             return null;
@@ -281,7 +283,7 @@ class Board extends Model
         $search = $this->posts()
                        ->with('user')
                        ->withCount('comments')
-                       ->where('tag', 'LIKE', "%{$query}%")
+                       ->where('tag_json', 'LIKE', "%{$query}%")
                        ->latest()
                        ->paginate($this->post_rows_per_page);
 
@@ -302,7 +304,6 @@ class Board extends Model
         $search = $this->posts()
                        ->with('user')
                        ->withCount('comments')
-                       ->where('tag', 'LIKE', "%{$query}%")
                        ->whereHas('comments',
                             function (Builder $q) use ($query) {
                                 $q->where('content_pure', 'LIKE', "%{$query}%");
@@ -328,7 +329,6 @@ class Board extends Model
         $search = $this->posts()
                        ->with('user')
                        ->withCount('comments')
-                       ->where('tag', 'LIKE', "%{$query}%")
                        ->whereHas('user', function (Builder $q) use ($query) {
                             $q->where('nickname', 'LIKE', "%{$query}%");
                        })
@@ -343,7 +343,7 @@ class Board extends Model
      */
     public function user()
     {
-        return $this->belongsTo('Inium\Laraboard\Models\User',
+        return $this->belongsTo('Inium\Laraboard\App\User',
                                 'create_user_id');
     }
 
@@ -352,7 +352,7 @@ class Board extends Model
      */
     public function posts()
     {
-        return $this->hasMany('Inium\Laraboard\Models\Post');
+        return $this->hasMany('Inium\Laraboard\App\Post');
     }
 
     /**
@@ -360,16 +360,7 @@ class Board extends Model
      */
     public function comments()
     {
-        return $this->hasMany('Inium\Laraboard\Models\Comment');
-    }
-
-    /**
-     * 최소 게시글 목록 읽기 권한 정보를 가져오기 위한 관계 정의
-     */
-    public function minPostListReadRole()
-    {
-        return $this->belongsTo('Inium\Laraboard\Models\Role',
-                                'min_post_list_read_role_id');
+        return $this->hasMany('Inium\Laraboard\App\Comment');
     }
 
     /**
@@ -377,8 +368,8 @@ class Board extends Model
      */
     public function minPostReadRole()
     {
-        return $this->belongsTo('Inium\Laraboard\Models\Role',
-                                'min_post_read_Role_id');
+        return $this->belongsTo('Inium\Laraboard\App\Role',
+                                'min_post_read_role_id');
     }
 
     /**
@@ -386,7 +377,7 @@ class Board extends Model
      */
     public function minPostWriteRole()
     {
-        return $this->belongsTo('Inium\Laraboard\Models\Role',
+        return $this->belongsTo('Inium\Laraboard\App\Role',
                                 'min_post_write_role_id');
     }
 
@@ -395,7 +386,7 @@ class Board extends Model
      */
     public function minCommentReadRole()
     {
-        return $this->belongsTo('Inium\Laraboard\Models\Role',
+        return $this->belongsTo('Inium\Laraboard\App\Role',
                                 'min_comment_read_role_id');
     }
 
@@ -404,7 +395,7 @@ class Board extends Model
      */
     public function minCommentWriteRole()
     {
-        return $this->belongsTo('Inium\Laraboard\Models\Role',
+        return $this->belongsTo('Inium\Laraboard\App\Role',
                                 'min_comment_write_role_id');
     }
 }

@@ -5,12 +5,12 @@
  * @author inlee <einable@gmail.com>
  */
 
-namespace Inium\Laraboard\Models;
+namespace Inium\Laraboard\App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Inium\Laraboard\Models\Board;
+use Inium\Laraboard\App\Board;
 
 class User extends Model
 {
@@ -43,6 +43,30 @@ class User extends Model
     }
 
     /**
+     * 사용자가 게시글 읽기 권한이 있는지 여부를 체크한다.
+     *
+     * @param Board $board      게시판
+     * @param User $user        사용자
+     * @return boolean
+     */
+    public function canReadPost(Board $board): bool
+    {
+        return ($board->minPostReadRole->id >= $this->role->id);
+    }
+
+    /**
+     * 사용자가 게시글 쓰기 권한이 있는지 여부를 체크한다.
+     *
+     * @param Board $board      게시판
+     * @param User $user        사용자
+     * @return boolean
+     */
+    public function canWritePost(Board $board): bool
+    {
+        return ($board->minPostWriteRole->id >= $this->role->id);
+    }
+
+    /**
      * 게시판 사용자의 Auth User 정보를 가져오기 위한 관계 정의
      * 
      * @return  php artisan make:auth로 생성된 Auth User 모델
@@ -58,7 +82,7 @@ class User extends Model
      */
     public function role()
     {
-        return $this->belongsTo('Inium\Laraboard\Models\Role',
+        return $this->belongsTo('Inium\Laraboard\App\Role',
                                 'board_user_role_id');
     }
 
@@ -67,7 +91,7 @@ class User extends Model
      */
     public function boards()
     {
-        return $this->hasMany('Inium\Laraboard\Models\Board');
+        return $this->hasMany('Inium\Laraboard\App\Board');
     }
 
     /**
@@ -75,7 +99,7 @@ class User extends Model
      */
     public function posts()
     {
-        return $this->hasMany('Inium\Laraboard\Models\Post');
+        return $this->hasMany('Inium\Laraboard\App\Post');
     }
 
     /**
@@ -83,6 +107,6 @@ class User extends Model
      */
     public function comments()
     {
-        return $this->hasMany('Inium\Laraboard\Models\Comment');
+        return $this->hasMany('Inium\Laraboard\App\Comment');
     }
 }
