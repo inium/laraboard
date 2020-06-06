@@ -33,16 +33,13 @@ class CreateLaraboardBoardTable extends Migration
                 $table->integer('comment_rows_per_page')
                       ->comment('댓글 페이징 수');
 
-                $table->unsignedBigInteger('min_post_list_read_role_id')
-                      ->nullable()
-                      ->comment('게시글 목록 보기 사용자 최소 권한 ID');
                 $table->unsignedBigInteger('min_post_read_role_id')
                       ->nullable()
                       ->comment('게시글 읽기 사용자 권한 ID');
                 $table->unsignedBigInteger('min_post_write_role_id')
                       ->comment('게시글 쓰기, 수정, 삭제 사용자 최소 권한 ID');
                 $table->unsignedBigInteger('min_comment_read_role_id')
-                      ->nullale()
+                      ->nullable()
                       ->comment('댓글 읽기 사용자 최소 권한 ID');
                 $table->unsignedBigInteger('min_comment_write_role_id')
                       ->comment('댓글 쓰기, 수정, 삭제 사용자 최소 권한 ID');
@@ -54,9 +51,6 @@ class CreateLaraboardBoardTable extends Migration
                 $table->softDeletes();
 
                 // Foreign Key 생성
-                $table->foreign('min_post_list_read_role_id')
-                      ->references('id')
-                      ->on($roleTableName);
                 $table->foreign('min_post_read_role_id')
                       ->references('id')
                       ->on($roleTableName);
