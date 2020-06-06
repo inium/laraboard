@@ -2,10 +2,10 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use Inium\Laraboard\Models\Comment;
-use Inium\Laraboard\Models\Post;
-use Inium\Laraboard\Models\Board;
-use Inium\Laraboard\Models\User;
+use Inium\Laraboard\App\Comment;
+use Inium\Laraboard\App\Post;
+use Inium\Laraboard\App\Board;
+use Inium\Laraboard\App\User;
 use Inium\Laraboard\Support\Facades\Agent;
 use Faker\Generator as Faker;
 

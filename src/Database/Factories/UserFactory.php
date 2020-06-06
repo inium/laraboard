@@ -2,8 +2,8 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use Inium\Laraboard\Models\User;
-use Inium\Laraboard\Models\Role;
+use Inium\Laraboard\App\User;
+use Inium\Laraboard\App\Role;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
