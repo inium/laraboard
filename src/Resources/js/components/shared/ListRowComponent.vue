@@ -65,7 +65,7 @@ export default {
 
             let check = new RegExp(query, "ig");
             return words.toString().replace(check, function (match, a, b) {
-                return `<span class="highlight">'${match}'</span>`;
+                return `<span class="highlight">${match}</span>`;
             });
         }
     }
