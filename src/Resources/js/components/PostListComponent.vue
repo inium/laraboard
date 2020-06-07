@@ -97,8 +97,14 @@ export default {
         notices: Array,         // 공지사항
         posts: Array,           // 게시글
         pagination: Object,     // 페이지네이션
-        routes: Object,         // Route 정보
-        searchForm: Object      // 검색 Form 정보
+        routes: {
+            type: Object,
+            default: null
+        },         // Route 정보
+        searchForm: {
+            type: Object,      // 검색 Form 정보
+            default: null
+        }
     },
     data() {
         return {
