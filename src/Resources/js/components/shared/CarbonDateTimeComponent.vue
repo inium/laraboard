@@ -1,5 +1,5 @@
 <template lang="pug">
-    div
+    span
         span(v-if="full") {{ ymdHis }}
         span(v-else)
             span(v-if="diffInTime <= 24") {{ hi }}
