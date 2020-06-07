@@ -156,31 +156,31 @@ class Board extends Model
         return $posts;
     }
 
-    // /**
-    //  * 게시글을 가져온다.
-    //  *
-    //  * @param integer $postId               게시글 ID
-    //  * @param boolean $incrementViewCount   조회수 1 증가 여부.
-    //  * @return Inium\Laraboard\Models\Post
-    //  */
-    // public function getPost(int $postId, bool $incrementViewCount = true)
-    // {
-    //     $post = $this->posts()
-    //                  ->with('user')
-    //                  ->withCount('comments')
-    //                  ->find($postId);
+    /**
+     * 게시글을 가져온다.
+     *
+     * @param integer $postId               게시글 ID
+     * @param boolean $incrementViewCount   조회수 1 증가 여부.
+     * @return Inium\Laraboard\Models\Post
+     */
+    public function getPost(int $postId, bool $incrementViewCount = true)
+    {
+        $post = $this->posts()
+                     ->with('user')
+                     ->withCount('comments')
+                     ->find($postId);
 
-    //     // 조회수 1 증가
-    //     if ($incrementViewCount) {
-    //         $post->view_count++;
-    //         $post->timestamps = false;  // 조회수 증가시 updated_at 추가 안함
-    //         $post->save();
+        // 조회수 1 증가
+        if ($incrementViewCount) {
+            $post->view_count++;
+            $post->timestamps = false;  // 조회수 증가시 updated_at 추가 안함
+            $post->save();
 
-    //         $post->timestamps = true;   // update_at 사용 복구
-    //     }
+            $post->timestamps = true;   // update_at 사용 복구
+        }
 
-    //     return $post;
-    // }
+        return $post;
+    }
 
     /**
      * 게시판 검색한 결과를 반환한다.
