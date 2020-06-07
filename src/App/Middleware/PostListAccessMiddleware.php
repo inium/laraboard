@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Inium\Laraboard\App\Board;
 use Inium\Laraboard\App\User;
 
-class PostsAccessMiddleware
+class PostListAccessMiddleware
 {
     /**
      * Handle an incoming request.
