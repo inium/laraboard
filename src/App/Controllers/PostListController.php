@@ -7,24 +7,22 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request as RequestFacade;
-use Inium\Laraboard\App\Middleware\PostsAccessMiddleware;
-use Inium\Laraboard\App\Board\PostsTrait;
-use Inium\Laraboard\App\Board\PostSearchTrait;
+use Inium\Laraboard\App\Board\PostListTrait;
+// use Inium\Laraboard\App\Board\PostSearchTrait;
 use Inium\Laraboard\App\Board\RenderTemplateTrait;
 use Inium\Laraboard\App\Board\SearchFormTrait;
+use Inium\Laraboard\App\Middleware\PostListAccessMiddleware;
 
-class PostsController extends Controller
+class PostListController extends Controller
 {
-    use PostsTrait, PostSearchTrait, RenderTemplateTrait, SearchFormTrait {
-        PostsTrait::fetchBoardInfo insteadof PostSearchTrait;
-    }
+    use PostListTrait, RenderTemplateTrait, SearchFormTrait;
 
     /**
      * Create a new controller instance.
      */
     public function __construct()
     {
-        $this->middleware(PostsAccessMiddleware::class);
+        $this->middleware(PostListAccessMiddleware::class);
     }
 
     /**
@@ -52,25 +50,21 @@ class PostsController extends Controller
         $query = $request->query('query', null); // 검색어
         $page = $request->query('page', 1); // 페이지 번호
 
-        $viewName = 'list';
         $params = null;
 
         // 검색어가 존재하는 경우: 검색결과 반환
         if ($query) {
-            $type = $request->query('type', $this->getSearchTypes());
-
-            $viewName = 'search';
+            $type = $request->query('type', $this->getDefaultSearchType());
             $params = $this->search($boardName, $query, $type, $page);
         }
         // 그 외: 게시글 목록 반환
         else {
-            $viewName = 'posts';
-            $params = $this->posts($boardName, $page);
+            $params = $this->list($boardName, $page);
         }
 
-        $viewParams = $this->getViewParams($request, $boardName);
+        $viewParams = $this->getViewParams($boardName);
 
-        return $this->render($viewName, array_merge($params, $viewParams));
+        return $this->render('postList', array_merge($params, $viewParams));
     }
 
     /**
@@ -80,11 +74,11 @@ class PostsController extends Controller
      * @param string $boardName     게시판 이름
      * @return array
      */
-    private function getViewParams(Request $request, string $boardName): array
+    private function getViewParams(string $boardName): array
     {
         // 미들웨어(Middleware)에서 저장한 사용자 역할(Role) 정보를 가져온다.
-        $canReadPost = $request->get('canReadPost');
-        $canWritePost = $request->get('canWritePost');
+        $canReadPost = RequestFacade::get('canReadPost');
+        $canWritePost = RequestFacade::get('canWritePost');
 
         // View에 추가로 표시할 정보
         return [
