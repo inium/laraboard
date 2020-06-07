@@ -18,13 +18,23 @@ trait SearchFormTrait
         if (Auth::check()) {
             $searchForm = [
                 'types' => $this->getSearchTypes(),
-                'action' => route('laraboard.list.view', [
+                'action' => route('laraboard.postList.view', [
                     'boardName' => $boardName
                 ])
             ];
         }
 
         return $searchForm;
+    }
+
+    /**
+     * 기본 검색 유형을 반환한다.
+     *
+     * @return string
+     */
+    private function getDefaultSearchType(): string
+    {
+        return Board::defaultSearchType();
     }
 
     /**
@@ -35,5 +45,16 @@ trait SearchFormTrait
     private function getSearchTypes(): array
     {
         return Board::searchTypes();
+    }
+
+    /**
+     * 사용자가 입력한 검색 유형이 유효한지 반환한다.
+     *
+     * @param string $type  검색 유형
+     * @return boolean
+     */
+    private function validSearchType(string $type): bool
+    {
+        return Board::validSearchType($type) ? true : false;
     }
 }
