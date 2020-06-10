@@ -6,9 +6,12 @@ use Inium\Laraboard\App\Board;
 use Inium\Laraboard\App\User;
 use Inium\Laraboard\App\Role;
 use Faker\Generator as Faker;
+use Faker\Factory as FakerFactory;
 use Illuminate\Support\Arr;
 
-$factory->define(Board::class, function (Faker $faker) {
+$fakerKo = FakerFactory::create('ko_KR');
+
+$factory->define(Board::class, function (Faker $faker) use ($fakerKo) {
     // 게시판 사용자가 존재하지 않는 경우, 생성 후 사용
     $count = User::count();
     if ($count == 0) {
@@ -24,9 +27,9 @@ $factory->define(Board::class, function (Faker $faker) {
     $role = Arr::random($r->toArray());
 
     return [
-        'name'                      => $faker->unique()->safeColorName,
-        'name_ko'                   => $faker->unique()->realText(20),
-        'description'               => $faker->realText,
+        'name'                      => 'free',
+        'name_ko'                   => '자유게시판',
+        'description'               => $fakerKo->realText,
         'post_point'                => $faker->randomElement(array(10, 15, 20)),
         'comment_point'             => $faker->randomElement(array(1, 5)),
         'post_rows_per_page'        => $faker->randomElement(array(20, 25, 30)),
