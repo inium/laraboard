@@ -7,9 +7,13 @@ use Inium\Laraboard\App\Post;
 use Inium\Laraboard\App\Board;
 use Inium\Laraboard\App\User;
 use Inium\Laraboard\Support\Facades\Agent;
+use Inium\Laraboard\Support\Faker\RandomWysiwygFragment;
 use Faker\Generator as Faker;
+use Faker\Factory as FakerFactory;
 
-$factory->define(Comment::class, function (Faker $faker) {
+$fakerKo = FakerFactory::create('ko_KR');
+
+$factory->define(Comment::class, function (Faker $faker) use ($fakerKo) {
     // 게시글 존재 여부 확인
     // 게시글 없을 경우, 게시글 생성 후 댓글을 저장할 게시글 랜덤 선택
     $postCount = Post::count();
@@ -36,7 +40,7 @@ $factory->define(Comment::class, function (Faker $faker) {
     // faker로 생성한 user agent 분석
     $ua = Agent::parse($faker->userAgent);
 
-    $content = $faker->text;
+    $content = RandomWysiwygFragment::generate($fakerKo, (rand() % 3) + 2);
 
     return [
         'user_agent'        => $ua->agent,

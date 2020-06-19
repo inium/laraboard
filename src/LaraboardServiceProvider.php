@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factory as EloquentFactory;
-use Inium\Laraboard\Support\Detect\Agent as LaraboardAgent;
+use Inium\Laraboard\Support\Detect\Agent;
 
 class LaraboardServiceProvider extends ServiceProvider
 {
@@ -21,7 +21,16 @@ class LaraboardServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/Config/laraboard.php', 'laraboard');
 
         // Register Facade
-        $this->app->bind('laraboard_agent', LaraboardAgent::class);   // Agent
+        $this->app->bind('board_agent', Agent::class);
+
+        // Register Collections
+        Collection::make($this->macros())
+            ->reject(function($class, $macro) {
+                return Collection::hasMacro($macro);
+            })
+            ->each(function($class, $macro) {
+                return Collection::macro($macro, app($class)());
+            });
     }
 
     /**
@@ -34,6 +43,7 @@ class LaraboardServiceProvider extends ServiceProvider
         // Load routes, migrations, factories
         $middleware = config('laraboard.route.middleware');
         $prefix = config('laraboard.route.prefix');
+
         $this->loadRoutes($middleware, $prefix);
 
         $this->loadViewsFrom(__DIR__ . '/Resources/views', 'laraboard');
@@ -107,5 +117,17 @@ class LaraboardServiceProvider extends ServiceProvider
     private function registerEloquentFactoriesFrom($path)
     {
         $this->app->make(EloquentFactory::class)->load($path);
+    }
+
+    /**
+     * 본 패키지에서 사용할 Colleciton Macro 정보를 반환한다.
+     *
+     * @return array
+     */
+    private function macros(): array
+    {
+        return [
+            'onlyOrAll' => \Inium\Laraboard\Support\Collection\OnlyOrAll::class,
+        ];
     }
 }

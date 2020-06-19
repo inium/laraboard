@@ -15,8 +15,7 @@ use Inium\Laraboard\App\Database\PaginationPageResolverTrait;
 
 class Board extends Model
 {
-    use SoftDeletes;
-    use PaginationPageResolverTrait;
+    use PaginationPageResolverTrait, SoftDeletes;
 
     /**
      * The table associated with the model.
@@ -24,29 +23,6 @@ class Board extends Model
      * @var string
      */
     protected $table = null;
-
-    /**
-     * 검색 유형.
-     * - {type => 설명} 으로 구성.
-     *
-     * @var array
-     */
-    private static $searchTypes = [
-        'subcon'   => '제목 + 본문',
-        'subject'  => '제목',
-        'content'  => '본문',
-        'tag'      => '태그',
-        'comment'  => '댓글',
-        'nickname' => '닉네임'
-    ];
-
-    /**
-     * 기본 검색 유형
-     *
-     * @var string
-     */
-    private static $defaultSearchType = 'subcon';
-
 
     /**
      * Constructor
@@ -58,64 +34,31 @@ class Board extends Model
     }
 
     /**
-     * 검색 유형을 반환한다.
-     *
-     * @return array
-     */
-    public static function searchTypes(): array
-    {
-        return static::$searchTypes;
-    }
-
-    /**
-     * 기본 검색 유형을 반환한다.
-     *
-     * @return string
-     */
-    public static function defaultSearchType(): string
-    {
-        return static::$defaultSearchType;
-    }
-
-    /**
-     * 검색 type이 검색 유형에 존재하는지 검사한 결과를 반환한다.
-     *
-     * @param string $type  검사 대상 검색 유형 type.
-     * @return boolean
-     */
-    public static function validSearchType(string $type): bool
-    {
-        return array_key_exists($type, static::searchTypes());
-    }
-
-    /**
-     * 검색 type에 따른 {type => 설명} 정보를 반환한다.
-     *
-     * @param string $type  검사 대상 검색 유형 type.
-     * @return array|null
-     */
-    public static function getSearchType(string $type): ?array
-    {
-        if (static::validSearchType($type)) {
-            return [$type => static::$searchTypes[$type]];
-            // return static::$searchTypes[$type];
-        }
-        else {
-            return null;
-        }
-    }
-
-    /**
      * 게시판 영문 이름으로 게시판 정보를 가져온다.
      *
-     * @param string $boardName     게시판 영문이름
-     * @param array $columns    검색대상 필드
+     * @param string|null $boardName     게시판 영문이름
      * @return Inium\Laraboard\Models\Board
      */
-    public static function findByName(string $boardName)
+    public static function findByName(?string $boardName)
     {
+        if (!$boardName) {
+            return null;
+        }
+
         // return static::with('posts')->where('name', $boardName)->first();
         return static::where('name', $boardName)->first();
+    }
+
+    /**
+     * attributes 값이 있을 경우 해당하는 값들을 반환
+     * 혹은 없을 경우 전체를 반환한다.
+     *
+     * @param array $attributes     가져올 attributes
+     * @return array
+     */
+    public function onlyOrAll(array $attributes = null): array {
+        return is_null($attributes) ? $this->toArray()
+                                    : $this->only($attributes);
     }
 
     /**
@@ -150,7 +93,8 @@ class Board extends Model
                       ->with('user')
                       ->withCount('comments')
                       ->where('notice', 0)
-                      ->latest()
+                    //   ->latest()
+                      ->orderBy('id', 'DESC')
                       ->paginate($this->post_rows_per_page);
 
         return $posts;
@@ -190,152 +134,26 @@ class Board extends Model
      * @param integer $page     페이지 번호.
      * @return Illuminate\Support\Collection
      */
-    public function search(string $query, string $type, int $page = 1)
-    {
-        $searchResult = null;
-
-        if (static::validSearchType($type)) {
-            $type = Str::title($type);
-            $searchResult = $this->{"searchBy{$type}"}($query, $page);
-        }
-        else {
-            $ret = $this->searchBySubcon($query, $page);
-        }
-
-        return $searchResult;
-    }
-
-    /**
-     * 제목 + 본문 검색한 결과를 반환한다.
-     *
-     * @param string $query     검색어.
-     * @param integer $page     페이지 번호.
-     * @return Illuminate\Support\Collection
-     */
-    public function searchBySubcon(string $query, int $page = 1)
+    public function search(string $query, int $page = 1)
     {
         $this->setPageNum($page);
 
-        $search = $this->posts()
-                       ->with('user')
-                       ->withCount('comments')
-                       ->where('subject', 'LIKE', "%{$query}%")
-                       ->orWhere('content_pure', 'LIKE', "%{$query}%")
-                       ->latest()
-                       ->paginate($this->post_rows_per_page);
+        $ret = $this->posts()
+                ->with('user')
+                ->withCount('comments')
+                ->where('subject', 'LIKE', "%{$query}%")
+                ->orWhere('content_pure', 'LIKE', "%{$query}%")
+                ->orWhereHas('comments', function (Builder $q) use ($query) {
+                    $q->where('content_pure', 'LIKE', "%{$query}%");
+                })
+                ->orWhereHas('user', function (Builder $q) use ($query) {
+                    $q->where('nickname', 'LIKE', "%{$query}%");
+                })
+                // ->latest()
+                ->orderBy('id', 'DESC')
+                ->paginate($this->post_rows_per_page);
 
-        return $search;
-    }
-
-    /**
-     * 제목 검색한 결과를 반환한다.
-     *
-     * @param string $query     검색어.
-     * @param integer $page     페이지 번호.
-     * @return Illuminate\Support\Collection
-     */
-    public function searchBySubject(string $query, int $page = 1)
-    {
-        $this->setPageNum($page);
-
-        $search = $this->posts()
-                       ->with('user')
-                       ->withCount('comments')
-                       ->where('subject', 'LIKE', "%{$query}%")
-                       ->latest()
-                       ->paginate($this->post_rows_per_page);
-
-        return $search;
-    }
-
-    /**
-     * 본문 검색한 결과를 반환한다.
-     *
-     * @param string $query     검색어.
-     * @param integer $page     페이지 번호.
-     * @return Illuminate\Support\Collection
-     */
-    public function searchByContent(string $query, int $page = 1)
-    {
-        $this->setPageNum($page);
-
-        $search = $this->posts()
-                       ->with('user')
-                       ->withCount('comments')
-                       ->where('content_pure', 'LIKE', "%{$query}%")
-                       ->latest()
-                       ->paginate($this->post_rows_per_page);
-
-        return $search;
-    }
-
-    /**
-     * 본문 검색한 결과를 반환한다.
-     *
-     * @param string $query     검색어.
-     * @param integer $page     페이지 번호.
-     * @return Illuminate\Support\Collection
-     */
-    public function searchByTag(string $query, int $page = 1)
-    {
-        $this->setPageNum($page);
-
-        $search = $this->posts()
-                       ->with('user')
-                       ->withCount('comments')
-                       ->where('tag_json', 'LIKE', "%{$query}%")
-                       ->latest()
-                       ->paginate($this->post_rows_per_page);
-
-        return $search;
-    }
-
-    /**
-     * 댓글 검색한 결과를 반환한다.
-     *
-     * @param string $query     검색어.
-     * @param integer $page     페이지 번호.
-     * @return Illuminate\Support\Collection
-     */
-    public function searchByComment(string $query, int $page = 1)
-    {
-        $this->setPageNum($page);
-
-        $search = $this->posts()
-                       ->with('user')
-                       ->withCount('comments')
-                       ->whereHas('comments',
-                            function (Builder $q) use ($query) {
-                                $q->where('content_pure', 'LIKE', "%{$query}%");
-                            }
-                       )
-                       ->latest()
-                       ->paginate($this->post_rows_per_page);
-
-        return $search;
-    }
-
-    /**
-     * 작성자 닉네임을 검색한 결과를 반환한다.
-     *
-     * @param string $query     검색어.
-     * @param integer $page     페이지 번호.
-     * @return Illuminate\Support\Collection
-     */
-    public function searchByNickname(string $query, int $page = 1)
-    {
-        $this->setPageNum($page);
-
-        $search = $this->posts()
-                       ->with('user')
-                       ->withCount('comments')
-                       ->whereHas('user', function (Builder $q) use ($query) {
-                            $q->where('nickname', 'LIKE', "%{$query}%");
-                       })
-                       ->latest()
-                       ->paginate($this->post_rows_per_page);
-
-        return $search;
+        return $ret;
     }
 
     /**

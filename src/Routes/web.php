@@ -1,22 +1,59 @@
 <?php
 
 /**
- * 게시글 목록, 검색
+ * 게시글 목록, 검색 페이지
+ *
  * -------------------------------------------------------------------------
- * GET [/{$prefix}]/board/{boardName}?page=1&search=lorem&category=subject
- * -------------------------------------------------------------------------
+ * GET [/{$prefix}]/board/{boardName}?query=lorem&page=1
+ * 
  * Route params
+ * @param Request $request  Request
  * @param string $prefix    Route Prefix. 환경설정(laraboard.php) 참조.
  * @param string boardName  게시판 영문 이름.
  * 
  * Query params (Optional)
+ * @param string query      검색어.
  * @param int    page       페이지 번호. 기본 1.
- * @param string search     검색어.
- * @param string category   검색 유형. 기본 total.
- *                          - total, subject, content, comment 중 1.
+ * -------------------------------------------------------------------------
  */
-Route::get('/board/{boardName}', 'ListController@index')
-        ->name('laraboard.list.page');
+Route::get('/board/{boardName}', 'PostsController@get')
+        ->name('laraboard.posts.view');
+
+/**
+ * 게시글 보기 페이지
+ *
+ * -----------------------------------------------------------------------------
+ * GET [/{$prefix}]/board/{boardName}/{id}?page=1&query=lorem
+ * 
+ * Route params
+ * @param string $prefix    Route Prefix. 환경설정(laraboard.php) 참조.
+ * @param string boardName  게시판 영문 이름.
+ * @param integer id        게시글 ID.
+ * 
+ * Query params (Optional)
+ * @param int    page       페이지 번호. 기본 1.
+ * @param string query      검색어.
+ * -----------------------------------------------------------------------------
+ */
+Route::get('/board/{boardName}/{id}', 'PostController@get')
+        ->where('id', '[0-9]+') // 게시글 ID는 숫자로 구성
+        ->name('laraboard.post.view');
+
+/**
+ * 게시글 삭제
+ * 
+ * -----------------------------------------------------------------------------
+ * DELETE [/{$prefix}]/board/{boardName}/{id}
+ * 
+ * Route params
+ * @param string $prefix    Route Prefix. 환경설정(laraboard.php) 참조.
+ * @param string boardName  게시판 영문 이름.
+ * @param integer id        게시글 ID.
+ * -----------------------------------------------------------------------------
+ */
+// Route::delete('/board/{boardName}/{id}', 'PostDeleteController@delete')
+//         ->where('id', '[0-9]+') // 게시글 ID는 숫자로 구성
+//         ->name('laraboard.post.delete');
 
 
 
@@ -45,12 +82,6 @@ Route::get('/board/{boardName}', 'ListController@index')
 // Route::put('/board/{boardName}/{id}',
 //            'App\Http\Controllers\Laraboard\ModifyController@put')
 //             ->name('laraboard.modify');
-
-// // 게시글 삭제
-// Route::delete('/board/{boardName}/{id}',
-//               'App\Http\Controllers\Laraboard\DeleteController@index')
-//             ->where('id', '[0-9]+') // 게시글 ID는 숫자로 구성
-//             ->name('laraboard.post.delete');
 
 // 댓글 추가
 

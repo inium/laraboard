@@ -2,13 +2,8 @@
     div
         form.form-inline(method="GET" :action="action" @submit="validateForm")
             .d-flex.align-items-start
-                .form-group
-                    select.custom-select(name="type")
-                        option(:value="key"
-                               v-for="(value, key) in searchTypes"
-                               :selected="key == userSearchType") {{ value }}
 
-                .form-group.mx-2
+                .form-group.mr-2
                     .form-input
                         input.form-control(type="text"
                                            name="query"
@@ -25,14 +20,7 @@
 <script>
 export default {
     props: {
-        searchTypes: Object,        // 검색 유형
         action: String,             // Form Action URL
-
-        // 사용자가 검색한 type.
-        userSearchType: {
-            type: String,
-            default: null
-        },
 
         // 사용자 검색어
         userQuery: {
@@ -67,7 +55,7 @@ export default {
          * @param event e   event
          * @return boolean  true: 검증완료, false: 검증 실패. query 값 없음.
          */
-        validateForm: function (e) {
+        validateForm(e) {
             if (this.query) {
                 this.invalidForm = false;
                 return false;

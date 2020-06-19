@@ -1,22 +1,26 @@
-@extends('laraboard::layouts.app')
+@extends('layouts.app')
 
 @section('content')
 
 <div class="container">
 
-    {{-- 검색 정보가 존재할 경우: 검색결과 출력 --}}
-    @if (isset($search))
 
-        <post-search-component
+
+
+
+    asdfasdf
+
+    {{-- @if (isset($searchBrief))
+
+        <search-component
             :board='@json($board)'
-            :search='@json($search)'
+            :search-brief='@json($searchBrief)'
             :posts='@json($posts)'
             :pagination='@json($pagination)'
             :routes='@json($routes)'
-            :search-form='@json($searchForm)'
-            ></post-search-component>
+            :form='@json($form)'
+            ></search-component>
 
-    {{-- 검색 정보가 존재하지 않을 경우: 글 목록 출력 --}}
     @else
 
         <post-list-component
@@ -25,10 +29,11 @@
             :posts='@json($posts)'
             :pagination='@json($pagination)'
             :routes='@json($routes)'
-            :search-form='@json($searchForm)'
+            :form='@json($form)'
             ></post-list-component>
 
-    @endif
+    @endif --}}
+
 </div>
 
 @endsection

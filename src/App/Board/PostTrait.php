@@ -2,24 +2,62 @@
 
 namespace Inium\Laraboard\App\Board;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inium\Laraboard\App\Board;
 use Inium\Laraboard\App\Post;
+use Inium\Laraboard\App\User;
+use Inium\Laraboard\App\Board\BoardRoute;
+// use Inium\Laraboard\App\Board\BoardUserRolesTrait;
+// use Inium\Laraboard\App\Board\RenderTemplateTrait;
+// use Inium\Laraboard\App\Board\RouteTrait;
 
 trait PostTrait
 {
     /**
-     * 게시글 정보를 가져온다.
+     * Undocumented function
      *
-     * @param string $boardName     게시판 이름
-     * @param integer $id           게시글 ID
+     * @param string $boardName
+     * @param integer $postId
+     * @param string $query
+     * @param integer $page
      * @return array
      */
-    protected function post(string $boardName, int $id): array
+    public function post(string $boardName,
+                         int $postId,
+                         string $query = null,
+                         int $page = 1): array
     {
         $board = Board::findByName($boardName);
         $post = $board->getPost($id);
 
         return [
+            'board' => $this->postBoard($board),
+            'post' => $this->postContents($post),
+            'route' => [
+                
+            ]
+        ];
+    }
+
+    /**
+     * 페이지에 표시할 게시판 정보를 반환한다.
+     *
+     * @param Board $board  게시판 정보
+     * @return array
+     */
+    private function postBoard(Board $board): array
+    {
+        return $board->only(['name', 'name_ko']);
+    }
+
+    private function postContents(Post $post): array
+    {
+        $user = User::findByUserId(Auth::id());
+        $postOwner = ($user->id == $post->user->id) ? true : false;
+
+        return [
+            'id' => $post->id,
             'notice' => $post->notice,
             'subject' => $post->subject,
             'content' => $post->content,
@@ -27,15 +65,16 @@ trait PostTrait
             'created_at' => $post->created_at,
             'updated_at' => $post->updated_at,
             'comments_count' => $post->comments_count,
-            'tags' => json_decode($post->tag_json),
             'user' => [
                 'nickname' => $post->user->nickname,
-                'introduce' => $post->user->introduce
+                'thumbnail_path' => $post->user->thumbnail_path
             ],
             'board' => [
                 'name' => $post->board->name,
                 'name_ko' => $post->board->name_ko
-            ]
+            ],
+            'modify_url' => $postOwner ? '#' : null,
+            'delete_url' => $postOwner ? '#' : null
         ];
     }
 }

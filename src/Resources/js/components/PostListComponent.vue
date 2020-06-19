@@ -31,9 +31,10 @@
                         list-row-component(:is-notice="post.notice"
                                            :subject="post.subject"
                                            :comments-count="post.comments_count"
-                                           :nickname="post.user.nickname"
+                                           :nickname="post['user.nickname']"
+                                           :thumbnail-path="post['user.thumbnail_path']"
                                            :view-count="post.view_count"
-                                           :created-at="post.created_at",
+                                           :created-at="post.created_at"
                                            :post-url="post.post_url")
 
                     //- 게시글 목록
@@ -41,9 +42,10 @@
                         list-row-component(:is-notice="post.notice"
                                            :subject="post.subject"
                                            :comments-count="post.comments_count"
-                                           :nickname="post.user.nickname"
+                                           :nickname="post['user.nickname']"
+                                           :thumbnail-path="post['user.thumbnail_path']"
                                            :view-count="post.view_count"
-                                           :created-at="post.created_at",
+                                           :created-at="post.created_at"
                                            :post-url="post.post_url")
 
             //- 콘텐츠가 존재하지 않는 경우
@@ -73,24 +75,23 @@
                         a.btn.btn-primary(:href="routes.write"
                                           v-if="routes && routes.write") 글쓰기
 
-                .d-flex.justify-content-center.pt-3(v-if="searchForm")
+                .d-flex.justify-content-center.pt-3(v-if="form && form.search")
                     //- 검색 Form
-                    post-search-form-component(:search-types="searchForm.types"
-                                               :action="searchForm.action")
+                    search-form-component(:action="form.search.action")
 </template>
 
 <script>
 import BreadcrumbComponent from './shared/BreadcrumbComponent';
 import ListRowComponent from './shared/ListRowComponent';
 import PaginationComponent from './shared/PaginationComponent';
-import PostSearchFormComponent from './shared/PostSearchFormComponent';
+import SearchFormComponent from './shared/SearchFormComponent';
 
 export default {
     components: {
         'breadcrumb-component': BreadcrumbComponent,
         'list-row-component': ListRowComponent,
         'pagination-component': PaginationComponent,
-        'post-search-form-component': PostSearchFormComponent
+        'search-form-component': SearchFormComponent
     },
     props: {
         board: Object,          // 게시판
@@ -101,7 +102,7 @@ export default {
             type: Object,
             default: null
         },         // Route 정보
-        searchForm: {
+        form: {
             type: Object,      // 검색 Form 정보
             default: null
         }

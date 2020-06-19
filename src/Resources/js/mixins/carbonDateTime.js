@@ -1,29 +1,15 @@
-<template lang="pug">
-    span
-        span(v-if="full") {{ ymdHis }}
-        span(v-else)
-            span(v-if="diffInTime <= 24") {{ hi }}
-            span(v-else) {{ md }}
+const mixins = {
 
-</template>
+    methods: {
 
-<script>
-export default {
-    props: {
-        carbon: String,
-        full: {
-            type: Boolean,
-            default: false
-        }
-    },
-    computed: {
         /**
-         * prop으로 입력된 carbon 시간을 Y-m-d H:i:s 시간으로 반환한다.
+         * 매개변수로 입력된 carbon 시간을 Y-m-d H:i:s 시간으로 반환한다.
          * 
+         * @param carbon    Carbon datetime
          * @return string
          */
-        ymdHis() {
-            const carbonDate = new Date(this.carbon);
+        ymdHis(carbon) {
+            const carbonDate = new Date(carbon);
 
             let y = carbonDate.getFullYear();
             let m = carbonDate.getMonth() + 1;  m = m > 9 ? m : '0' + m;
@@ -38,11 +24,12 @@ export default {
         /**
          * prop으로 입력된 carbon 시간을 m-d 시간으로 반환한다.
          * 
+         * @param carbon    Carbon datetime
          * @return string
          */
-        md()
+        md(carbon)
         {
-            const carbonDate = new Date(this.carbon);
+            const carbonDate = new Date(carbon);
 
             let m = carbonDate.getMonth() + 1;  m = m > 9 ? m : '0' + m;
             let d = carbonDate.getDate();       d = d > 9 ? d : '0' + d;
@@ -53,10 +40,11 @@ export default {
         /**
          * prop으로 입력된 carbon 시간을 H:i 시간으로 반환한다.
          * 
+         * @param carbon    Carbon datetime
          * @return string
          */
-        hi() {
-            const carbonDate = new Date(this.carbon);
+        hi(carbon) {
+            const carbonDate = new Date(carbon);
 
             let y = carbonDate.getFullYear();
             let m = carbonDate.getMonth() + 1;  m = m > 9 ? m : '0' + m;
@@ -67,11 +55,12 @@ export default {
         /**
          * 현재와 prop으로 입력된 시간 차이를 반환한다.
          * 
+         * @param carbon    Carbon datetime
          * @return integer
          */
-        diffInTime()
+        diffInTime(carbon)
         {
-            const carbonDate = new Date(this.carbon);
+            const carbonDate = new Date(carbon);
             const now = new Date();
 
             return now.getTime() - carbonDate.getTime();
@@ -80,13 +69,15 @@ export default {
         /**
          * 현재와 prop으로 입력된 날짜(day) 차이를 반환한다.
          * 
+         * @param carbon    Carbon datetime
          * @return integer
          */
-        diffInDays()
+        diffInDays(carbon)
         {
-            const diffInTime = this.diffInTime();
+            const diffInTime = this.diffInTime(carbon);
             return diffInTime / (1000 * 3600 * 24); 
         }
     }
 };
-</script>
+
+export default mixins;
