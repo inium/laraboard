@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Inium\Laraboard\App\Board;
+use Inium\Laraboard\App\Post;
 
 class User extends Model
 {
@@ -35,10 +36,13 @@ class User extends Model
     /**
      * 사용자 ID를 이용해 게시판 사용자 정보를 가져온다.
      *
-     * @param int $userId  사용자 ID
+     * @param integer|null $userId 사용자 ID
      */
-    public static function findByUserId(int $userId)
+    public static function findByUserId(?int $userId)
     {
+        if (!$userId) {
+            return null;
+        }
         return static::where('user_id', $userId)->first();
     }
 
@@ -64,6 +68,30 @@ class User extends Model
     public function canWritePost(Board $board): bool
     {
         return ($board->minPostWriteRole->id >= $this->role->id);
+    }
+
+    /**
+     * 사용자가 댓글 읽기 권한이 있는지 여부를 체크한다.
+     *
+     * @param Board $board      게시판
+     * @param User $user        사용자
+     * @return boolean
+     */
+    public function canReadComment(Board $board): bool
+    {
+        return ($board->minCommentReadRole->id >= $this->role->id);
+    }
+
+    /**
+     * 사용자가 댓글 쓰기 권한이 있는지 여부를 체크한다.
+     *
+     * @param Board $board      게시판
+     * @param User $user        사용자
+     * @return boolean
+     */
+    public function canWriteComment(Board $board): bool
+    {
+        return ($board->minCommentWriteRole->id >= $this->role->id);
     }
 
     /**
