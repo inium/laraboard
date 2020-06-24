@@ -16,8 +16,8 @@
  * @param int    page       페이지 번호. 기본 1.
  * -------------------------------------------------------------------------
  */
-Route::get('/board/{boardName}', 'PostsController@get')
-        ->name('laraboard.posts.view');
+Route::get('/board/{boardName}', 'PostListSearchController@view')
+        ->name('board.postListSearch.view');
 
 /**
  * 게시글 보기 페이지
@@ -35,9 +35,9 @@ Route::get('/board/{boardName}', 'PostsController@get')
  * @param string query      검색어.
  * -----------------------------------------------------------------------------
  */
-Route::get('/board/{boardName}/{id}', 'PostController@get')
+Route::get('/board/{boardName}/{id}', 'PostController@view')
         ->where('id', '[0-9]+') // 게시글 ID는 숫자로 구성
-        ->name('laraboard.post.view');
+        ->name('board.post.view');
 
 /**
  * 게시글 삭제
@@ -51,9 +51,9 @@ Route::get('/board/{boardName}/{id}', 'PostController@get')
  * @param integer id        게시글 ID.
  * -----------------------------------------------------------------------------
  */
-// Route::delete('/board/{boardName}/{id}', 'PostDeleteController@delete')
-//         ->where('id', '[0-9]+') // 게시글 ID는 숫자로 구성
-//         ->name('laraboard.post.delete');
+Route::delete('/board/{boardName}/{id}', 'PostController@delete')
+        ->where('id', '[0-9]+') // 게시글 ID는 숫자로 구성
+        ->name('board.post.delete');
 
 
 
