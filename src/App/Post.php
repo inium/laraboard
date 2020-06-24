@@ -23,7 +23,6 @@ class Post extends Model
      */
     protected $table = null;
 
-    // protected $commentsTable = null;
 
     /**
      * Constructor
@@ -33,6 +32,19 @@ class Post extends Model
         $this->table = config('laraboard.board.table_name.post');
         // $this->commentsTable = config('laraboard.board.table_name.comment');
         parent::__construct($attributes);
+    }
+
+    /**
+     * 조회수를 1 증가시킨다.
+     *
+     * @return void
+     */
+    public function incrementViewCount()
+    {
+        $this->view_count++;
+        $this->timestamps = false;  // 조회수 증가시 updated_at 추가 안함
+        $this->save();
+        $this->timestamps = true;   // update_at 사용 복구
     }
 
     /**

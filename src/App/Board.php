@@ -50,18 +50,6 @@ class Board extends Model
     }
 
     /**
-     * attributes 값이 있을 경우 해당하는 값들을 반환
-     * 혹은 없을 경우 전체를 반환한다.
-     *
-     * @param array $attributes     가져올 attributes
-     * @return array
-     */
-    public function onlyOrAll(array $attributes = null): array {
-        return is_null($attributes) ? $this->toArray()
-                                    : $this->only($attributes);
-    }
-
-    /**
      * 게시판의 공지글들을 가져온다.
      * - 공지글은 최신순으로 정렬
      *
@@ -104,24 +92,14 @@ class Board extends Model
      * 게시글을 가져온다.
      *
      * @param integer $postId               게시글 ID
-     * @param boolean $incrementViewCount   조회수 1 증가 여부.
      * @return Inium\Laraboard\Models\Post
      */
-    public function getPost(int $postId, bool $incrementViewCount = true)
+    public function getPost(int $postId)
     {
         $post = $this->posts()
                      ->with('user')
                      ->withCount('comments')
                      ->find($postId);
-
-        // 조회수 1 증가
-        if ($incrementViewCount) {
-            $post->view_count++;
-            $post->timestamps = false;  // 조회수 증가시 updated_at 추가 안함
-            $post->save();
-
-            $post->timestamps = true;   // update_at 사용 복구
-        }
 
         return $post;
     }
@@ -145,6 +123,12 @@ class Board extends Model
                 ->orWhere('content_pure', 'LIKE', "%{$query}%")
                 ->orWhereHas('comments', function (Builder $q) use ($query) {
                     $q->where('content_pure', 'LIKE', "%{$query}%");
+                        // // 댓글 작성자
+                        // ->orWhereHas('user',
+                        //     function (Builder $qq) use ($query) {
+                        //         $qq->where('nickname', 'LIKE', "%{$query}%");
+                        //     }
+                        // );
                 })
                 ->orWhereHas('user', function (Builder $q) use ($query) {
                     $q->where('nickname', 'LIKE', "%{$query}%");
