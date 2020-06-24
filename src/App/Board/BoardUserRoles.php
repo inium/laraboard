@@ -123,12 +123,6 @@ class BoardUserRoles
         ];
     }
 
-    // public static function postOwner(string $boardName, int $postId)
-    // {
-    //     // $post = Board::findByName($boardName)->getPost($postId);
-    //     // $post = Post::with('')
-    // }
-
     /**
      * A greater than or equal to B
      * 

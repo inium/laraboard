@@ -2,79 +2,73 @@
 
 namespace Inium\Laraboard\App\Board;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inium\Laraboard\App\Board;
 use Inium\Laraboard\App\Post;
-use Inium\Laraboard\App\User;
-use Inium\Laraboard\App\Board\BoardRoute;
-// use Inium\Laraboard\App\Board\BoardUserRolesTrait;
-// use Inium\Laraboard\App\Board\RenderTemplateTrait;
-// use Inium\Laraboard\App\Board\RouteTrait;
 
 trait PostTrait
 {
     /**
-     * Undocumented function
+     * 게시글 목록을 반환한다.
      *
-     * @param string $boardName
-     * @param integer $postId
-     * @param string $query
-     * @param integer $page
+     * @param string $boardName     게시판 이름
+     * @param integer $page         페이지 번호
      * @return array
      */
-    public function post(string $boardName,
-                         int $postId,
-                         string $query = null,
-                         int $page = 1): array
+    private function getPostList(string $boardName, int $page = 1): array
     {
         $board = Board::findByName($boardName);
-        $post = $board->getPost($id);
+        $notices = $board->getNotices();
+        $posts = $board->getPosts($page);
 
         return [
-            'board' => $this->postBoard($board),
-            'post' => $this->postContents($post),
-            'route' => [
-                
-            ]
+            'board' => $board,
+            'notices' => $notices,
+            'posts' => $posts
         ];
     }
 
     /**
-     * 페이지에 표시할 게시판 정보를 반환한다.
+     * 게시글을 가져온다.
      *
-     * @param Board $board  게시판 정보
-     * @return array
+     * @param string $boardName             게시판 이름
+     * @param integer $id                   게시글 ID
+     * @param boolean $incrementViewCount   조회수 증가여부.
+     * @return Post
      */
-    private function postBoard(Board $board): array
+    private function getPost(string $boardName,
+                             int $id,
+                             bool $incrementViewCount = true): Post
     {
-        return $board->only(['name', 'name_ko']);
+        $board = Board::findByName($boardName);
+        $post = $board->getPost($id);
+
+        // 조회수 1 증가
+        if ($incrementViewCount) {
+            $post->incrementViewCount();
+        }
+
+        return $post;
     }
 
-    private function postContents(Post $post): array
+    /**
+     * 게시글을 삭제한다.
+     *
+     * @param integer $id   게시글 ID
+     * @return boolean
+     */
+    private function deletePostById(int $id): bool
     {
-        $user = User::findByUserId(Auth::id());
-        $postOwner = ($user->id == $post->user->id) ? true : false;
+        return Post::destroy($id);
+    }
 
-        return [
-            'id' => $post->id,
-            'notice' => $post->notice,
-            'subject' => $post->subject,
-            'content' => $post->content,
-            'view_count' => $post->view_count,
-            'created_at' => $post->created_at,
-            'updated_at' => $post->updated_at,
-            'comments_count' => $post->comments_count,
-            'user' => [
-                'nickname' => $post->user->nickname,
-                'thumbnail_path' => $post->user->thumbnail_path
-            ],
-            'board' => [
-                'name' => $post->board->name,
-                'name_ko' => $post->board->name_ko
-            ],
-            'modify_url' => $postOwner ? '#' : null,
-            'delete_url' => $postOwner ? '#' : null
-        ];
+    private function writePost()
+    {
+
+    }
+
+    private function modifyPost()
+    {
+
     }
 }
