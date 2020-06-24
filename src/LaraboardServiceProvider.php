@@ -22,15 +22,6 @@ class LaraboardServiceProvider extends ServiceProvider
 
         // Register Facade
         $this->app->bind('board_agent', Agent::class);
-
-        // Register Collections
-        Collection::make($this->macros())
-            ->reject(function($class, $macro) {
-                return Collection::hasMacro($macro);
-            })
-            ->each(function($class, $macro) {
-                return Collection::macro($macro, app($class)());
-            });
     }
 
     /**
@@ -87,24 +78,20 @@ class LaraboardServiceProvider extends ServiceProvider
             // 환경설정 파일
             __DIR__ . '/Config/laraboard.php' => config_path('laraboard.php'),
 
-            // // Views
-            // __DIR__.'/Resources/blade'
-            //     => base_path('resources/views/vendor/laraboard'),
-
-            // Assets
-            __DIR__ . '/Public' => public_path('vendor/laraboard'),
-            //     => base_path('resources/views/vendor/laraboard'),
-
             // 데이터베이스 migrations
             __DIR__ . '/Database/Migrations' => database_path('migrations')
 
-        ], 'laraboard.all');
+        ], 'laraboard.essentials');
 
 
         // Asset publish
         $this->publishes([
-            __DIR__ . '/Public' => public_path('vendor/laraboard')
-        ], 'laraboard.assets');
+
+            // Resources
+            __DIR__ . '/Resources' 
+                => base_path('resources/views/vendor/laraboard'),
+
+        ], 'laraboard.resources');
     }
 
     /**
@@ -117,17 +104,5 @@ class LaraboardServiceProvider extends ServiceProvider
     private function registerEloquentFactoriesFrom($path)
     {
         $this->app->make(EloquentFactory::class)->load($path);
-    }
-
-    /**
-     * 본 패키지에서 사용할 Colleciton Macro 정보를 반환한다.
-     *
-     * @return array
-     */
-    private function macros(): array
-    {
-        return [
-            'onlyOrAll' => \Inium\Laraboard\Support\Collection\OnlyOrAll::class,
-        ];
     }
 }
