@@ -46,53 +46,53 @@ class User extends Model
         return static::where('user_id', $userId)->first();
     }
 
-    /**
-     * 사용자가 게시글 읽기 권한이 있는지 여부를 체크한다.
-     *
-     * @param Board $board      게시판
-     * @param User $user        사용자
-     * @return boolean
-     */
-    public function canReadPost(Board $board): bool
-    {
-        return ($board->minPostReadRole->id >= $this->role->id);
-    }
+    // /**
+    //  * 사용자가 게시글 읽기 권한이 있는지 여부를 체크한다.
+    //  *
+    //  * @param Board $board      게시판
+    //  * @param User $user        사용자
+    //  * @return boolean
+    //  */
+    // public function canReadPost(Board $board): bool
+    // {
+    //     return ($board->minPostReadRole->id >= $this->role->id);
+    // }
 
-    /**
-     * 사용자가 게시글 쓰기 권한이 있는지 여부를 체크한다.
-     *
-     * @param Board $board      게시판
-     * @param User $user        사용자
-     * @return boolean
-     */
-    public function canWritePost(Board $board): bool
-    {
-        return ($board->minPostWriteRole->id >= $this->role->id);
-    }
+    // /**
+    //  * 사용자가 게시글 쓰기 권한이 있는지 여부를 체크한다.
+    //  *
+    //  * @param Board $board      게시판
+    //  * @param User $user        사용자
+    //  * @return boolean
+    //  */
+    // public function canWritePost(Board $board): bool
+    // {
+    //     return ($board->minPostWriteRole->id >= $this->role->id);
+    // }
 
-    /**
-     * 사용자가 댓글 읽기 권한이 있는지 여부를 체크한다.
-     *
-     * @param Board $board      게시판
-     * @param User $user        사용자
-     * @return boolean
-     */
-    public function canReadComment(Board $board): bool
-    {
-        return ($board->minCommentReadRole->id >= $this->role->id);
-    }
+    // /**
+    //  * 사용자가 댓글 읽기 권한이 있는지 여부를 체크한다.
+    //  *
+    //  * @param Board $board      게시판
+    //  * @param User $user        사용자
+    //  * @return boolean
+    //  */
+    // public function canReadComment(Board $board): bool
+    // {
+    //     return ($board->minCommentReadRole->id >= $this->role->id);
+    // }
 
-    /**
-     * 사용자가 댓글 쓰기 권한이 있는지 여부를 체크한다.
-     *
-     * @param Board $board      게시판
-     * @param User $user        사용자
-     * @return boolean
-     */
-    public function canWriteComment(Board $board): bool
-    {
-        return ($board->minCommentWriteRole->id >= $this->role->id);
-    }
+    // /**
+    //  * 사용자가 댓글 쓰기 권한이 있는지 여부를 체크한다.
+    //  *
+    //  * @param Board $board      게시판
+    //  * @param User $user        사용자
+    //  * @return boolean
+    //  */
+    // public function canWriteComment(Board $board): bool
+    // {
+    //     return ($board->minCommentWriteRole->id >= $this->role->id);
+    // }
 
     /**
      * 게시판 사용자의 Auth User 정보를 가져오기 위한 관계 정의
