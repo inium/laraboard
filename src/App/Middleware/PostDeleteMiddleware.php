@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use Inium\Laraboard\App\Board\BoardUserRoles;
+// use Inium\Laraboard\App\Board\BoardUserRoles;
 use Inium\Laraboard\App\Board\PostTrait;
 
 class PostDeleteMiddleware

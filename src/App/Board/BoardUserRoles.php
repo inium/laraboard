@@ -28,8 +28,9 @@ class BoardUserRoles
             $user = User::findByUserId(Auth::id());
 
             $roles = [
-                'post' => self::postUserRoles($board, $user),
-                'comment' => self::commentUserRoles($board, $user)
+                'admin' => $user->is_admin ? true : false,      // 관리자 여부
+                'post' => self::postUserRoles($board, $user),   // 게시글 권한
+                'comment' => self::commentUserRoles($board, $user)  // 댓글 권한
             ];
 
             return (object)$roles;

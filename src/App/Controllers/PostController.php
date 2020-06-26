@@ -1,4 +1,5 @@
 <?php
+
 namespace Inium\Laraboard\App\Controllers;
 
 use Illuminate\Http\Request;

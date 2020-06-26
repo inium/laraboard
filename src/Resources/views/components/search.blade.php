@@ -96,7 +96,11 @@
             {{-- 글 쓰기 --}}
             <div>
                 @if ($role->post->canWrite)
-                    write
+                    <a href="{{ route('board.post.write.view', [
+                                    'boardName' => $board['name']
+                                ]) }}" class="btn btn-primary">
+                        글쓰기
+                    </a>
                 @endif
             </div>
 

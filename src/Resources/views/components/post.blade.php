@@ -1,14 +1,20 @@
 @push('stylesheets')
 
-<style>
+<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.css">
 
+<style>
 .lb-post .thumbnail {
     width: 48px;
     height: 48px;
 }
+/* Override default Toast UI Viewer font size */
+.tui-editor-contents {
+    font-size: initial; 
+}
 </style>
 
 @endpush
+
 
 {{-- 게시글 정보 --}}
 <div class="lb-post">
@@ -114,8 +120,14 @@
 
                         <ul class="list-inline mb-0">
 
+                            {{-- 게시글 수정 --}}
                             <li class="list-inline-item mr-0">
-                                <a href="#" class="btn btn-primary">수정</a>
+                                <a href="{{ route('board.post.modify.view', [
+                                                'boardName' => $post['board']['name'],
+                                                'id' => $post['id']
+                                            ]) }}" class="btn btn-primary">
+                                    수정
+                                </a>
                             </li>
 
                             {{-- 댓글이 없을 경우에만 게시글 삭제 --}}
@@ -148,13 +160,10 @@
         </div>
 
         {{-- 게시글 본문 --}}
-        <div class="post-content-body pt-3 pb-3">
+        <div class="post-content-body py-3">
 
-            {{-- 검색어 mark. 없을 경우 일반 문자열 출력. --}}
-            @include('laraboard::components.shared.mark', [
-                'query' => $query,
-                'content' => $post['content']
-            ])
+            {{-- 게시글을 Toast UI Viewer로 출력 --}}
+            <div id="viewer"></div>
 
         </div>
 
@@ -163,30 +172,33 @@
     {{-- 게시글 Footer --}}
     <div class="lb-post-footer">
 
-        <div class="d-flex justify-content-between">
-
-            {{-- 목록 --}}
-            <div>
-                @if ($role->post->canRead)
-                    <a href="{{ route('board.postListSearch.view', [
-                                    'boardName' => $post['board']['name'],
-                                    'query' => $query,
-                                ]) }}" class="btn btn-primary">
-                        목록
-                    </a>
-                @endif
-            </div>
-
-        </div>
-
     </div>
+
 </div>
+
+@php
+
+// 게시글 본문 mark 표시 후 html 형태로 저장
+$postContent = str_replace($query, 
+                           "<mark>{$query}</mark>",
+                           htmlspecialchars_decode($post['content']));
+
+@endphp
 
 @push('scripts')
 
+<script src="https://uicdn.toast.com/editor/latest/toastui-jquery-editor-viewer.min.js"></script>
 <script>
 
 $(document).ready(function () {
+
+    // Toast UI Viewer 생성
+    const content = `{!! $postContent !!}`;
+    const viewer = new toastui.Editor({
+        el: document.querySelector('#viewer'),
+        viewer: true,
+        initialValue: content
+    });
 
     // 게시글 삭제 버튼 클릭
     $('#formDeletePost').on('submit', function (e) {

@@ -40,6 +40,80 @@ Route::get('/board/{boardName}/{id}', 'PostController@view')
         ->name('board.post.view');
 
 /**
+ * 게시글 쓰기 페이지
+ * 
+ * -----------------------------------------------------------------------------
+ * GET [/{$prefix}]/board/{boardName}/write
+ * 
+ * Route params
+ * @param string $prefix    Route Prefix. 환경설정(laraboard.php) 참조.
+ * @param string boardName  게시판 영문 이름.
+ * -----------------------------------------------------------------------------
+ */
+Route::get('/board/{boardName}/write', 'PostWriteController@view')
+        ->name('board.post.write.view');
+
+/**
+ * 게시글 저장
+ * 
+ * -----------------------------------------------------------------------------
+ * POST [/{$prefix}]/board/{boardName}/write
+ * 
+ * subject=lorem
+ * content=<p>dolor</p>
+ * 
+ * Route params
+ * @param string $prefix    Route Prefix. 환경설정(laraboard.php) 참조.
+ * @param string boardName  게시판 영문 이름.
+ * 
+ * Post params
+ * @param string subject 게시글 제목
+ * @param string content 게시글 내용 (HTML)
+ * -----------------------------------------------------------------------------
+ */
+Route::post('/board/{boardName}/write', 'PostWriteController@submit')
+        ->name('board.post.write.submit');
+
+/**
+ * 게시글 수정 페이지
+ * 
+ * -----------------------------------------------------------------------------
+ * GET [/{$prefix}]/board/{boardName}/modify/{id}
+ * 
+ * Route params
+ * @param string $prefix    Route Prefix. 환경설정(laraboard.php) 참조.
+ * @param string boardName  게시판 영문 이름.
+ * @param integer id        게시글 ID
+ * -----------------------------------------------------------------------------
+ */
+Route::get('/board/{boardName}/modify/{id}', 'PostModifyController@view')
+        ->where('id', '[0-9]+') // 게시글 ID는 숫자로 구성
+        ->name('board.post.modify.view');
+
+/**
+ * 게시글 수정
+ * 
+ * -----------------------------------------------------------------------------
+ * PUT [/{$prefix}]/board/{boardName}/modify/{id}
+ * 
+ * subject=lorem
+ * content=<p>ipsum</p>
+ * 
+ * Route params
+ * @param string $prefix    Route Prefix. 환경설정(laraboard.php) 참조.
+ * @param string boardName  게시판 영문 이름.
+ * @param integer id        게시글 ID
+ * 
+ * Put params
+ * @param string subject 게시글 제목
+ * @param string content 게시글 내용 (HTML)
+ * -----------------------------------------------------------------------------
+ */
+Route::put('/board/{boardName}/modify/{id}', 'PostModifyController@put')
+        ->where('id', '[0-9]+') // 게시글 ID는 숫자로 구성
+        ->name('board.post.modify.put');
+
+/**
  * 게시글 삭제
  * 
  * -----------------------------------------------------------------------------
@@ -57,31 +131,6 @@ Route::delete('/board/{boardName}/{id}', 'PostController@delete')
 
 
 
-// // 게시글 보기 페이지
-// Route::get('/board/{boardName}/{id}',
-//            'App\Http\Controllers\Laraboard\PostController@index')
-//             ->where('id', '[0-9]+') // 게시글 ID는 숫자로 구성
-//             ->name('laraboard.post.page');
-
-// // 게시글 쓰기 페이지
-// Route::get('/board/{boardName}/write',
-//            'App\Http\Controllers\Laraboard\WriteController@index')
-//             ->name('laraboard.write.page');
-
-// // 게시글 수정 페이지
-// Route::get('/board/{boardName}/modify',
-//            'App\Http\Controllers\Laraboard\ModifyController@index')
-//             ->name('laraboard.modify.page');
-
-// // 게시글 쓰기 Post
-// Route::post('/board/{boardName}',
-//             'App\Http\Controllers\Laraboard\WriteController@post')
-//             ->where('id', '[0-9]+') // 게시글 ID는 숫자로 구성
-//             ->name('laraboard.write');
-
-// Route::put('/board/{boardName}/{id}',
-//            'App\Http\Controllers\Laraboard\ModifyController@put')
-//             ->name('laraboard.modify');
 
 // 댓글 추가
 
@@ -99,7 +148,7 @@ Route::delete('/board/{boardName}/{id}', 'PostController@delete')
  * GET /board/{boardName}/{postId}?page=1&st=baseball&sc=content
  * 
  * GET /board/{boardName}/write
- * GET /board/{boardName}/modify
+ * GET /board/{boardName}/modify/{postId}
  * 
  * POST /board/{boardName}
  * PUT /board/{boardName}/{postId}
