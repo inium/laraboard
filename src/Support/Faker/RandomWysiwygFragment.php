@@ -19,7 +19,7 @@ class RandomWysiwygFragment
 
         for($i = 0; $i < $sentences; $i++) {
             $text = $fakerKo->realText();
-            array_push($ret, "<p>${text}</p>");
+            array_push($ret, "<p>${text}</p><p><br></p>");
         }
 
         return implode($ret);
