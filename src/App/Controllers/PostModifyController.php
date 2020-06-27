@@ -104,6 +104,16 @@ class PostModifyController extends Controller
                         ->withErrors($validator)
                         ->withInput();
         }
+        // 게시글 본문에 태그만 있을 경우, Validation 실패처리
+        // Quill Editor의 <p><br></p> 처리
+        if (strlen(strip_tags($request->content)) == 0) {
+            return redirect()->route('board.post.modify.view', [
+                            'boardName' => $boardName,
+                            'id' => $id
+                        ])
+                        ->withErrors(array($this->messages['content.required']))
+                        ->withInput();
+        }
 
         // 공지글 여부
         $notice = is_null($request->notice) ? false : true;
