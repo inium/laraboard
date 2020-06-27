@@ -1,19 +1,19 @@
+{{-- 게시글 본문 mark 표시 후 html 형태로 저장 --}}
+@php
+    $postContent = htmlspecialchars_decode($post['content']);
+@endphp
+
+{{-- Stylesheets --}}
 @push('stylesheets')
-
-<!-- Editor's Dependencies -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.33.0/codemirror.css"/>
-<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css">
-
-<style>
-/* Override default Toast UI Viewer font size */
-.tui-editor-contents {
-    font-size: initial; 
-}
-</style>
-
+    <style>
+        /* Override default Toast UI Viewer font size */
+        .tui-editor-contents {
+            font-size: initial; 
+        }
+    </style>
 @endpush
 
-
+{{-- 글수정 페이지 --}}
 <div>
 
     {{-- 게시글 Header --}}
@@ -97,40 +97,27 @@
 
 </div>
 
-
-@php
-
-// 게시글 본문 mark 표시 후 html 형태로 저장
-$postContent = htmlspecialchars_decode($post['content']);
-
-@endphp
-
-
+{{-- Scripts --}}
 @push('scripts')
+    <script>
+        $(document).ready(function () {
 
-<script src="https://uicdn.toast.com/editor/latest/toastui-jquery-editor.min.js"></script>
-<script>
+            // Toast UI Editor 생성
+            const content = `{!! old('content', $postContent) !!}`;
+            const editor = new toastui.Editor({
+                el: document.querySelector('#editor'),
+                height: '500px',
+                initialValue: content,
+                placeholder: '글을 입력하세요.',
+                initialEditType: 'wysiwyg'
+            });
 
-$(document).ready(function () {
+            // 게시글 쓰기 Submit. editor의 html을 hidden field에 설정.
+            $('#formPostModify').on('submit', function (e) {
+                const editorHtml = editor.getHtml();
+                $('#formInputContent').val(editorHtml);
+            });
 
-    // Toast UI Editor 생성
-    const content = `{!! old('content', $postContent) !!}`;
-    const editor = new toastui.Editor({
-        el: document.querySelector('#editor'),
-        height: '500px',
-        initialValue: content,
-        placeholder: '글을 입력하세요.',
-        initialEditType: 'wysiwyg'
-    });
-
-    // 게시글 쓰기 Submit. editor의 html을 hidden field에 설정.
-    $('#formPostModify').on('submit', function (e) {
-        const editorHtml = editor.getHtml();
-        $('#formInputContent').val(editorHtml);
-    });
-
-});
-
-</script>
-
+        });
+    </script>
 @endpush

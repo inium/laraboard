@@ -1,5 +1,10 @@
 @extends('laraboard::layouts.app')
 
+@push('stylesheets')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.33.0/codemirror.css"/>
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css">
+@endpush
+
 @section('content')
 
     <div class="container">
@@ -20,3 +25,8 @@
     </div>
 
 @endsection
+
+{{-- Toast UI Editor Script --}}
+@push('scripts')
+    <script src="https://uicdn.toast.com/editor/latest/toastui-jquery-editor.min.js"></script>
+@endpush

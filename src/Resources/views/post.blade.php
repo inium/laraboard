@@ -1,5 +1,6 @@
 @extends('laraboard::layouts.app')
 
+{{-- 페이지 콘텐츠 -----------------------------------------------------------}}
 @section('content')
 
     <div class="container">

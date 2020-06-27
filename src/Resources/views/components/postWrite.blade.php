@@ -1,15 +1,14 @@
+{{-- Stylesheets -------------------------------------------------------------}}
 @push('stylesheets')
-
-<style>
-    /* Override default Toast UI Viewer font size */
-    .tui-editor-contents {
-        font-size: initial; 
-    }
-</style>
-
+    <style>
+        /* Override default Toast UI Viewer font size */
+        .tui-editor-contents {
+            font-size: initial; 
+        }
+    </style>
 @endpush
 
-{{-- 글쓰기 페이지 --}}
+{{-- 글쓰기 페이지 -----------------------------------------------------------}}
 <div>
 
     {{-- 게시글 Header --}}
@@ -91,28 +90,26 @@
 
 </div>
 
-
+{{-- Scripts -----------------------------------------------------------------}}
 @push('scripts')
+    <script>
+        $(document).ready(function () {
 
-<script>
-$(document).ready(function () {
+            // Toast UI Editor 생성
+            const editor = new toastui.Editor({
+                el: document.querySelector('#editor'),
+                height: '500px',
+                initialValue: "{!! old('content') !!}",
+                placeholder: '글을 입력하세요.',
+                initialEditType: 'wysiwyg'
+            });
 
-    // Toast UI Editor 생성
-    const editor = new toastui.Editor({
-        el: document.querySelector('#editor'),
-        height: '500px',
-        initialValue: "{!! old('content') !!}",
-        placeholder: '글을 입력하세요.',
-        initialEditType: 'wysiwyg'
-    });
+            // 게시글 쓰기 Submit. editor의 html을 hidden field에 설정.
+            $('#formPostWrite').on('submit', function (e) {
+                const editorHtml = editor.getHtml();
+                $('#formInputContent').val(editorHtml);
+            });
 
-    // 게시글 쓰기 Submit. editor의 html을 hidden field에 설정.
-    $('#formPostWrite').on('submit', function (e) {
-        const editorHtml = editor.getHtml();
-        $('#formInputContent').val(editorHtml);
-    });
-
-});
-</script>
-
+        });
+    </script>
 @endpush
