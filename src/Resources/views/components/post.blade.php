@@ -1,10 +1,3 @@
-{{-- 게시글 본문 mark 표시 후 html 형태로 저장 -------------------------------}}
-@php
-    $postContent = str_replace($query,
-                               "<mark>{$query}</mark>",
-                               htmlspecialchars_decode($post['content']));
-@endphp
-
 {{-- Stylesheets -------------------------------------------------------------}}
 @push('stylesheets')
     <style>
@@ -176,7 +169,7 @@
 
             {{-- 게시글을 Toast UI Viewer로 출력 --}}
             <div id="viewer">
-                {!! $postContent !!}
+                {!! htmlspecialchars_decode($post['content']) !!}
             </div>
 
         </div>
