@@ -1,8 +1,3 @@
-{{-- 게시글 본문 mark 표시 후 html 형태로 저장 -------------------------------}}
-@php
-    $postContent = htmlspecialchars_decode($post['content']);
-@endphp
-
 {{-- Stylesheets -------------------------------------------------------------}}
 @push('stylesheets')
     <style>
@@ -81,14 +76,14 @@
                        id="formInputSubject"
                        placeholder="제목을 입력하세요."
                        value="{{ old('subject', $post['subject']) }}"
-                       >
+                       required>
             </div>
 
             {{-- 게시글 본문 --}}
             <div class="form-group">
                 <input id="formInputContent" type="hidden" name="content">
                 <div id="editor">
-                    {!! old('content', $postContent) !!}
+                    {!! old('content', htmlspecialchars_decode($post['content'])) !!}
                 </div>
             </div>
 
