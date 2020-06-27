@@ -74,7 +74,7 @@
                        id="formInputSubject"
                        placeholder="제목을 입력하세요."
                        value="{{ old('subject') }}"
-                       readonly>
+                       required>
             </div>
 
             {{-- 게시글 본문 --}}
