@@ -36,14 +36,21 @@ trait PostTrait
      * @param string $boardName             게시판 이름
      * @param integer $id                   게시글 ID
      * @param boolean $incrementViewCount   조회수 증가여부.
-     * @return Post
+     * @return Post|null
      */
     private function getPost(string $boardName,
                              int $id,
-                             bool $incrementViewCount = true): Post
+                             bool $incrementViewCount = true): ?Post
     {
         $board = Board::findByName($boardName);
+        if (!$board) {
+            return null;
+        }
+
         $post = $board->getPost($id);
+        if (!$post) {
+            return null;
+        }
 
         // 조회수 1 증가
         if ($incrementViewCount) {
@@ -70,6 +77,10 @@ trait PostTrait
                                 bool $notice): int
     {
         $board = Board::findByName($boardName);
+        if (!$board) {
+            return 0;
+        }
+
         $user = User::findByUserId(Auth::id());
         $ua = Agent::parse($userAgent); 
 
@@ -116,6 +127,9 @@ trait PostTrait
                              bool $notice): bool
     {
         $post = $this->getPost($boardName, $id);
+        if (!$post) {
+            return false;
+        }
         $user = User::findByUserId(Auth::id());
         $ua = Agent::parse($userAgent); 
 
