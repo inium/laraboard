@@ -2,7 +2,7 @@
 
 {{-- Stylesheets -------------------------------------------------------------}}
 @push('stylesheets')
-    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.css">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 @endpush
 
 {{-- 페이지 콘텐츠 -----------------------------------------------------------}}
@@ -73,5 +73,5 @@
 
 {{-- Scripts -----------------------------------------------------------------}}
 @push('scripts')
-    <script src="https://uicdn.toast.com/editor/latest/toastui-jquery-editor-viewer.min.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 @endpush

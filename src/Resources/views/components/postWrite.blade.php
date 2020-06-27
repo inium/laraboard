@@ -1,9 +1,10 @@
 {{-- Stylesheets -------------------------------------------------------------}}
 @push('stylesheets')
     <style>
-        /* Override default Toast UI Viewer font size */
-        .tui-editor-contents {
-            font-size: initial; 
+        /* Override default Quill Editor font size */
+        .ql-editor {
+            min-height: 500px;
+            font-size: initial;
         }
     </style>
 @endpush
@@ -73,7 +74,7 @@
                        id="formInputSubject"
                        placeholder="제목을 입력하세요."
                        value="{{ old('subject') }}"
-                       >
+                       readonly>
             </div>
 
             {{-- 게시글 본문 --}}
@@ -95,20 +96,34 @@
     <script>
         $(document).ready(function () {
 
-            // Toast UI Editor 생성
-            const editor = new toastui.Editor({
-                el: document.querySelector('#editor'),
-                height: '500px',
-                initialValue: "{!! old('content') !!}",
+            // Quill Editor Toolbar 정보
+            const toolbarOptions = [
+                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                ['bold', 'italic', 'underline', 'strike'],
+                ['blockquote', 'code-block'],
+                ['link', 'image', 'video'],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                [{ 'indent': '-1'}, { 'indent': '+1' }],
+                [{ 'align': [] }],
+                ['clean']
+            ];
+
+            // Quill Editor 생성
+            const quill = new Quill('#editor', {
+                modules: {
+                    toolbar: toolbarOptions
+                },
+                // readOnly: true,
                 placeholder: '글을 입력하세요.',
-                initialEditType: 'wysiwyg'
+                theme: 'snow'
             });
 
             // 게시글 쓰기 Submit. editor의 html을 hidden field에 설정.
             $('#formPostWrite').on('submit', function (e) {
-                const editorHtml = editor.getHtml();
+                const editorHtml = quill.root.innerHTML;
                 $('#formInputContent').val(editorHtml);
             });
+            
 
         });
     </script>

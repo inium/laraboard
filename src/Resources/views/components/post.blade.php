@@ -1,8 +1,8 @@
 {{-- 게시글 본문 mark 표시 후 html 형태로 저장 -------------------------------}}
 @php
     $postContent = str_replace($query,
-                            "<mark>{$query}</mark>",
-                            htmlspecialchars_decode($post['content']));
+                               "<mark>{$query}</mark>",
+                               htmlspecialchars_decode($post['content']));
 @endphp
 
 {{-- Stylesheets -------------------------------------------------------------}}
@@ -12,9 +12,17 @@
             width: 48px;
             height: 48px;
         }
-        /* Override default Toast UI Viewer font size */
-        .tui-editor-contents {
+
+        /* Quill Editor read-only */
+        .ql-container.ql-snow {
+            border: 0;
+        }
+        .ql-container .ql-editor{
             font-size: initial;
+            padding: 0;
+        }
+        .ql-toolbar {
+            display: none;
         }
     </style>
 @endpush
@@ -167,7 +175,9 @@
         <div class="post-content-body py-3">
 
             {{-- 게시글을 Toast UI Viewer로 출력 --}}
-            <div id="viewer"></div>
+            <div id="viewer">
+                {!! $postContent !!}
+            </div>
 
         </div>
 
@@ -186,12 +196,10 @@
     <script>
         $(document).ready(function () {
 
-            // Toast UI Viewer 생성
-            const content = `{!! $postContent !!}`;
-            const viewer = new toastui.Editor({
-                el: document.querySelector('#viewer'),
-                viewer: true,
-                initialValue: content
+            // Quill Editor Post viewer 생성
+            const quillPost = new Quill('#viewer', {
+                readOnly: true,
+                theme: 'snow'
             });
 
             // 게시글 삭제 버튼 클릭
@@ -204,6 +212,7 @@
 
                 $(this)[0].submit();
             });
+
         });
     </script>
 @endpush

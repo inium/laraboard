@@ -2,8 +2,7 @@
 
 {{-- Stylesheets -------------------------------------------------------------}}
 @push('stylesheets')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.33.0/codemirror.css"/>
-    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 @endpush
 
 @section('content')
@@ -29,5 +28,5 @@
 
 {{-- Scripts -----------------------------------------------------------------}}
 @push('scripts')
-    <script src="https://uicdn.toast.com/editor/latest/toastui-jquery-editor.min.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 @endpush

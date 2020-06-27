@@ -1,19 +1,19 @@
 {{-- Stylesheets -------------------------------------------------------------}}
 @push('stylesheets')
 
-<style>
-.lb-comments .media.child {
-    padding-left: 4rem !important;
-}
-.lb-comments .media .thumbnail {
-    width: 48px;
-    height: 48px;
-}
-.lb-comments .media.child .thumbnail {
-    width: 32px;
-    height: 32px;
-}
-</style>
+    <style>
+        .lb-comments .media.child {
+            padding-left: 4rem !important;
+        }
+        .lb-comments .media .thumbnail {
+            width: 48px;
+            height: 48px;
+        }
+        .lb-comments .media.child .thumbnail {
+            width: 32px;
+            height: 32px;
+        }
+    </style>
 
 @endpush
 
@@ -88,6 +88,15 @@
     {{-- 댓글 Footer --}}
     <div class="lb-comments-footer py-2">
 
+        {{-- 댓글 새로고침 버튼 --}}
+        <div class="d-flex justify-content-center mb-5">
+            <div>
+                <button id="btnCommentReload" class="btn btn-secondary btn-block">
+                    댓글 새로고침
+                </button>
+            </div>
+        </div>
+
         <div class="d-flex justify-content-between">
 
             {{-- 글 목록 --}}
@@ -118,3 +127,12 @@
     </div>
 
 </div>
+
+{{-- 댓글 목록 ---------------------------------------------------------------}}
+@push('scripts')
+    <script>
+        $(document).ready(function () {
+            
+        });
+    </script>
+@endpush
