@@ -58,6 +58,9 @@ class PostController extends Controller
         $isPostOwner = null;
 
         $post = $this->getPost($boardName, $id);
+        if (!$post) {
+            return abort(404, 'Post not found');
+        }
 
         $params = [
             'post'     => $post,
