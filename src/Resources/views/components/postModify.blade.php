@@ -1,9 +1,9 @@
-{{-- 게시글 본문 mark 표시 후 html 형태로 저장 --}}
+{{-- 게시글 본문 mark 표시 후 html 형태로 저장 -------------------------------}}
 @php
     $postContent = htmlspecialchars_decode($post['content']);
 @endphp
 
-{{-- Stylesheets --}}
+{{-- Stylesheets -------------------------------------------------------------}}
 @push('stylesheets')
     <style>
         /* Override default Toast UI Viewer font size */
@@ -13,7 +13,7 @@
     </style>
 @endpush
 
-{{-- 글수정 페이지 --}}
+{{-- 글수정 페이지 -----------------------------------------------------------}}
 <div>
 
     {{-- 게시글 Header --}}
@@ -97,7 +97,7 @@
 
 </div>
 
-{{-- Scripts --}}
+{{-- Scripts -----------------------------------------------------------------}}
 @push('scripts')
     <script>
         $(document).ready(function () {

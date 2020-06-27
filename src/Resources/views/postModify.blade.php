@@ -1,5 +1,6 @@
 @extends('laraboard::layouts.app')
 
+{{-- Stylesheets -------------------------------------------------------------}}
 @push('stylesheets')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.33.0/codemirror.css"/>
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css">
@@ -26,7 +27,7 @@
 
 @endsection
 
-{{-- Toast UI Editor Script --}}
+{{-- Scripts -----------------------------------------------------------------}}
 @push('scripts')
     <script src="https://uicdn.toast.com/editor/latest/toastui-jquery-editor.min.js"></script>
 @endpush

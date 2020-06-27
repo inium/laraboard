@@ -1,22 +1,26 @@
+{{-- 게시글 본문 mark 표시 후 html 형태로 저장 -------------------------------}}
+@php
+    $postContent = str_replace($query,
+                            "<mark>{$query}</mark>",
+                            htmlspecialchars_decode($post['content']));
+@endphp
+
+{{-- Stylesheets -------------------------------------------------------------}}
 @push('stylesheets')
-
-<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.css">
-
-<style>
-.lb-post .thumbnail {
-    width: 48px;
-    height: 48px;
-}
-/* Override default Toast UI Viewer font size */
-.tui-editor-contents {
-    font-size: initial;
-}
-</style>
-
+    <style>
+        .lb-post .thumbnail {
+            width: 48px;
+            height: 48px;
+        }
+        /* Override default Toast UI Viewer font size */
+        .tui-editor-contents {
+            font-size: initial;
+        }
+    </style>
 @endpush
 
 
-{{-- 게시글 정보 --}}
+{{-- 게시글 정보 -------------------------------------------------------------}}
 <div class="lb-post">
 
     {{-- 게시글 Header --}}
@@ -176,42 +180,30 @@
 
 </div>
 
-@php
 
-// 게시글 본문 mark 표시 후 html 형태로 저장
-$postContent = str_replace($query, 
-                           "<mark>{$query}</mark>",
-                           htmlspecialchars_decode($post['content']));
-
-@endphp
-
+{{-- Scripts -----------------------------------------------------------------}}
 @push('scripts')
+    <script>
+        $(document).ready(function () {
 
-<script src="https://uicdn.toast.com/editor/latest/toastui-jquery-editor-viewer.min.js"></script>
-<script>
+            // Toast UI Viewer 생성
+            const content = `{!! $postContent !!}`;
+            const viewer = new toastui.Editor({
+                el: document.querySelector('#viewer'),
+                viewer: true,
+                initialValue: content
+            });
 
-$(document).ready(function () {
+            // 게시글 삭제 버튼 클릭
+            $('#formDeletePost').on('submit', function (e) {
+                e.preventDefault();
 
-    // Toast UI Viewer 생성
-    const content = `{!! $postContent !!}`;
-    const viewer = new toastui.Editor({
-        el: document.querySelector('#viewer'),
-        viewer: true,
-        initialValue: content
-    });
+                if (!confirm('게시글을 삭제하시겠습니까?')) {
+                    return;
+                }
 
-    // 게시글 삭제 버튼 클릭
-    $('#formDeletePost').on('submit', function (e) {
-        e.preventDefault();
-
-        if (!confirm('게시글을 삭제하시겠습니까?')) {
-            return;
-        }
-
-        $(this)[0].submit();
-    });
-});
-
-</script>
-
+                $(this)[0].submit();
+            });
+        });
+    </script>
 @endpush

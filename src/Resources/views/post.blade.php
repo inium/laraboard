@@ -1,5 +1,10 @@
 @extends('laraboard::layouts.app')
 
+{{-- Stylesheets -------------------------------------------------------------}}
+@push('stylesheets')
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.css">
+@endpush
+
 {{-- 페이지 콘텐츠 -----------------------------------------------------------}}
 @section('content')
 
@@ -65,3 +70,8 @@
     </div>
 
 @endsection
+
+{{-- Scripts -----------------------------------------------------------------}}
+@push('scripts')
+    <script src="https://uicdn.toast.com/editor/latest/toastui-jquery-editor-viewer.min.js"></script>
+@endpush
