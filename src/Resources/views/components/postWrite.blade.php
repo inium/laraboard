@@ -1,19 +1,15 @@
 @push('stylesheets')
 
-<!-- Editor's Dependencies -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.33.0/codemirror.css"/>
-<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.css">
-
 <style>
-/* Override default Toast UI Viewer font size */
-.tui-editor-contents {
-    font-size: initial; 
-}
+    /* Override default Toast UI Viewer font size */
+    .tui-editor-contents {
+        font-size: initial; 
+    }
 </style>
 
 @endpush
 
-
+{{-- 글쓰기 페이지 --}}
 <div>
 
     {{-- 게시글 Header --}}
@@ -98,9 +94,7 @@
 
 @push('scripts')
 
-<script src="https://uicdn.toast.com/editor/latest/toastui-jquery-editor.min.js"></script>
 <script>
-
 $(document).ready(function () {
 
     // Toast UI Editor 생성
@@ -119,7 +113,6 @@ $(document).ready(function () {
     });
 
 });
-
 </script>
 
 @endpush

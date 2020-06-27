@@ -9,7 +9,7 @@
 }
 /* Override default Toast UI Viewer font size */
 .tui-editor-contents {
-    font-size: initial; 
+    font-size: initial;
 }
 </style>
 

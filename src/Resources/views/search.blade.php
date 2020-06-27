@@ -2,15 +2,15 @@
 
 @section('content')
 
-<div class="container">
+    <div class="container">
 
-    @include('laraboard::components.search', [
-        'board'  => $board,
-        'search' => $search,
-        'query'  => $query,
-        'page'   => $page
-    ])
+        @include('laraboard::components.search', [
+            'board'  => $board,
+            'search' => $search,
+            'query'  => $query,
+            'page'   => $page
+        ])
 
-</div>
+    </div>
 
 @endsection
