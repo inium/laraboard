@@ -18,26 +18,21 @@ class PostListSearchMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        try {
-            // 게시판 사용자 권한 Get
-            $boardUserRoles = BoardUserRoles::roles($request->boardName);
+        // 게시판 사용자 권한 Get
+        $boardUserRoles = BoardUserRoles::roles($request->boardName);
 
-            // 게시글을 읽을 수 없을 경우
-            if (!$boardUserRoles->post->canRead) {
+        // 게시글을 읽을 수 없을 경우
+        if (!$boardUserRoles->post->canRead) {
 
-                // 사용자가 로그인 하지 않았을 경우 로그인 페이지로 Redirect
-                if (!Auth::check()) {
-                    return redirect()->route('login');
-                }
-
-                // 그 외: 게시글 읽기 권한 없음.
-                throw new \Exception('Can\'t read board posts.', 401);
+            // 사용자가 로그인 하지 않았을 경우 로그인 페이지로 Redirect
+            if (!Auth::check()) {
+                return redirect()->route('login');
             }
 
-            return $next($request);
+            // 그 외: 게시글 읽기 권한 없음.
+            abort(401, 'Can\'t read board posts.');
         }
-        catch (\Exception $e) {
-            abort($e->getCode(), $e->getMessage());
-        }
+
+        return $next($request);
     }
 }
