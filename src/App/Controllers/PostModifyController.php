@@ -4,37 +4,19 @@ namespace Inium\Laraboard\App\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Validator;
 use Inium\Laraboard\App\Board\BoardUserRoles;
-use Inium\Laraboard\App\Board\PostTrait;
+use Inium\Laraboard\App\Post;
+use Inium\Laraboard\App\User;
 use Inium\Laraboard\App\Board\RenderTemplateTrait;
+use Inium\Laraboard\App\Board\Request\PostRequest;
 use Inium\Laraboard\App\Middleware\PostModifyMiddleware;
+use Inium\Laraboard\Support\Facades\Agent;
 
 class PostModifyController extends Controller
 {
-    use PostTrait, RenderTemplateTrait;
-
-    /**
-     * Form validation rules
-     *
-     * @var array
-     */
-    private $rules = [
-        'notice' => 'boolean',
-        'subject' => 'required',
-        'content' => 'required'
-    ];
-
-    /**
-     * Form validation messages
-     *
-     * @var array
-     */
-    private $messages = [
-        'subject.required' => '제목을 입력해주세요.',
-        'content.required' => '내용을 입력해주세요.'
-    ];
+    use RenderTemplateTrait;
 
     /**
      * Create a new controller instance.
@@ -62,7 +44,7 @@ class PostModifyController extends Controller
     public function view(Request $request, string $boardName, int $id)
     {
         $params = [
-            'post' => $this->getPost($boardName, $id),
+            'post' => Post::find($id),
             'roles' => BoardUserRoles::roles($boardName)
         ];
 
@@ -88,42 +70,10 @@ class PostModifyController extends Controller
      * @param string content 게시글 내용 (HTML)
      * -------------------------------------------------------------------------
      */
-    public function put(Request $request, string $boardName, int $id)
+    public function put(PostRequest $request, string $boardName, int $id)
     {
-        // $post = $this->getPost($boardName, $id);
-        $validator = Validator::make($request->all(),
-                                     $this->rules,
-                                     $this->messages);
-
-        // Validation 실패
-        if ($validator->fails()) {
-            return redirect()->route('board.post.modify.view', [
-                            'boardName' => $boardName,
-                            'id' => $id
-                        ])
-                        ->withErrors($validator)
-                        ->withInput();
-        }
-        // 게시글 본문에 태그만 있을 경우, Validation 실패처리
-        // Quill Editor의 <p><br></p> 처리
-        if (strlen(strip_tags($request->content)) == 0) {
-            return redirect()->route('board.post.modify.view', [
-                            'boardName' => $boardName,
-                            'id' => $id
-                        ])
-                        ->withErrors(array($this->messages['content.required']))
-                        ->withInput();
-        }
-
-        // 공지글 여부
-        $notice = is_null($request->notice) ? false : true;
-
-        $updated = $this->putPost($request->server('HTTP_USER_AGENT'),
-                                  $boardName,
-                                  $id,
-                                  $request->subject,
-                                  $request->content,
-                                  $notice);
+        // 게시글 갱신
+        $updated = $this->putPost($request, $id);
 
         // 게시글 저장에 성공한 경우
         if ($updated) {
@@ -146,5 +96,46 @@ class PostModifyController extends Controller
                         ->withErrors(array($errorMessage))
                         ->withInput();
         }
+    }
+
+    /**
+     * 게시글을 수정한다.
+     *
+     * @param PostRequest $request      Request
+     * @param integer $postId           게시글 ID
+     * @return boolean
+     */
+    private function putPost(PostRequest $request, int $postId): bool
+    {
+        $post = Post::find($postId);
+        $user = User::findByUserId(Auth::id());
+
+        // Get User Agent
+        $ua = Agent::parse($request->server('HTTP_USER_AGENT'));
+
+        // 공지 여부는 관리자만 적용
+        $notice = false;
+        if ($user->role->is_admin) {
+            $notice = $request->notice ? true : false;
+        }
+
+        $post->user_agent = $ua->agent;
+        $post->device_type = $ua->device_type;
+        $post->os_name = $ua->os_name;
+        $post->os_version = $ua->os_version;
+        $post->browser_name = $ua->browser_name;
+        $post->browser_version = $ua->browser_version;
+        $post->notice = $notice;
+        $post->subject = strip_tags($request->subject);
+        $post->content = htmlspecialchars($request->content);
+        $post->content_pure = strip_tags($request->content);
+        // $post->view_count = 0;
+        // $post->point = $board->post_point;
+        // $post->board()->associate($board);
+        // $post->user()->associate($user);
+
+        $updated = $post->save();
+
+        return $updated;
     }
 }
