@@ -5,6 +5,9 @@ namespace Inium\Laraboard\App\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Session;
+use Inium\Laraboard\App\Board;
+use Inium\Laraboard\App\Post;
+
 use Inium\Laraboard\App\Board\BoardUserRoles;
 use Inium\Laraboard\App\Board\CommentTrait;
 use Inium\Laraboard\App\Board\PostTrait;
@@ -55,12 +58,11 @@ class PostController extends Controller
         $query = $request->query('query', null); // 검색어
         $page = $request->query('page', 1);      // 페이지 번호
 
-        $isPostOwner = null;
+        // 게시글 Get
+        $post = Board::findByName($boardName)->getPost($id);
 
-        $post = $this->getPost($boardName, $id);
-        if (!$post) {
-            return abort(404, 'Post not found');
-        }
+        // 조회수 1 증가
+        $post->incrementViewCount();
 
         $params = [
             'post'     => $post,
@@ -92,13 +94,14 @@ class PostController extends Controller
      */
     public function delete(Request $request, string $boardName, int $id)
     {
-        $post = $this->getPost($boardName, $id);
-        $ret = $this->deletePostById($id);
+        // Get post
+        $post = Post::find($id);
+        $post->delete();
 
         // 게시글 삭제정보
         $flashMessage = "게시글 \"{$post->subject}\" 이(가) 삭제되었습니다.";
 
-        Session::flash('message', $flashMessage); 
+        Session::flash('message', $flashMessage);
         Session::flash('alert-class', 'alert-danger');
 
         return redirect()->route('board.postListSearch.view', [
