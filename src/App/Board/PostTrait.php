@@ -29,34 +29,4 @@ trait PostTrait
             'posts' => $posts
         ];
     }
-
-    /**
-     * 게시글을 가져온다.
-     *
-     * @param string $boardName             게시판 이름
-     * @param integer $id                   게시글 ID
-     * @param boolean $incrementViewCount   조회수 증가여부.
-     * @return Post|null
-     */
-    private function getPost(string $boardName,
-                             int $id,
-                             bool $incrementViewCount = true): ?Post
-    {
-        $board = Board::findByName($boardName);
-        if (!$board) {
-            return null;
-        }
-
-        $post = $board->getPost($id);
-        if (!$post) {
-            return null;
-        }
-
-        // 조회수 1 증가
-        if ($incrementViewCount) {
-            $post->incrementViewCount();
-        }
-
-        return $post;
-    }
 }
