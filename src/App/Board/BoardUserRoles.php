@@ -25,10 +25,15 @@ class BoardUserRoles
                 throw new \Exception('Board not found', 404);
             }
 
+            $isAdmin = false;
+
             $user = User::findByUserId(Auth::id());
+            if ($user) {
+                $isAdmin = $user->role->is_admin ? true : false;
+            }
 
             $roles = [
-                'admin' => $user->is_admin ? true : false,      // 관리자 여부
+                'admin' => $isAdmin,    // 관리자 여부
                 'post' => self::postUserRoles($board, $user),   // 게시글 권한
                 'comment' => self::commentUserRoles($board, $user)  // 댓글 권한
             ];
