@@ -71,7 +71,7 @@ Route::get('/board/{boardName}/write', 'PostWriteController@view')
  * @param string content 게시글 내용 (HTML)
  * -----------------------------------------------------------------------------
  */
-Route::post('/board/{boardName}/write', 'PostWriteController@submit')
+Route::post('/board/{boardName}/write', 'PostWriteController@store')
         ->name('board.post.write.submit');
 
 /**
