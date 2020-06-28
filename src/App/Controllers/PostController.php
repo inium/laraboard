@@ -7,9 +7,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Session;
 use Inium\Laraboard\App\Board;
 use Inium\Laraboard\App\Post;
-
 use Inium\Laraboard\App\Board\BoardUserRoles;
-use Inium\Laraboard\App\Board\CommentTrait;
 use Inium\Laraboard\App\Board\PostTrait;
 use Inium\Laraboard\App\Board\SearchTrait;
 use Inium\Laraboard\App\Board\RenderTemplateTrait;
@@ -18,7 +16,7 @@ use Inium\Laraboard\App\Middleware\PostDeleteMiddleware;
 
 class PostController extends Controller
 {
-    use CommentTrait, PostTrait, SearchTrait, RenderTemplateTrait;
+    use PostTrait, SearchTrait, RenderTemplateTrait;
 
     /**
      * Create a new controller instance.
@@ -66,7 +64,7 @@ class PostController extends Controller
 
         $params = [
             'post'     => $post,
-            'comments' => $this->getComments($boardName, $id),
+            'comments' => $post->getHierarchicalComments(),
             'list'     => $this->listOrSearch($boardName, $page, $query),
             'query'    => $query,
             'page'     => $page,
