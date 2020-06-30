@@ -95,7 +95,7 @@ class Post extends Model
         $this->setPageNum($page);
 
         $comments = $this->comments()
-                         ->with('user')
+                         ->with(['user', 'parent', 'children'])
                          ->select('*')
                          ->selectSub(function ($query) {
                              $query->selectRaw(
@@ -112,25 +112,25 @@ class Post extends Model
         return $comments;
     }
 
-    /**
-     * 게시글의 부모 댓글이 없는 댓글 목록을 가져온다.
-     *
-     * @param integer $page     페이지 번호
-     * @return LengthAwarePaginator
-     */
-    public function getComments(int $page = 1): LengthAwarePaginator
-    {
-        $this->setPageNum($page);
+    // /**
+    //  * 게시글의 부모 댓글이 없는 댓글 목록을 가져온다.
+    //  *
+    //  * @param integer $page     페이지 번호
+    //  * @return LengthAwarePaginator
+    //  */
+    // public function getComments(int $page = 1): LengthAwarePaginator
+    // {
+    //     $this->setPageNum($page);
 
-        $comments = $this->comments()
-                         ->with('user')
-                         ->withCount('children')
-                         ->doesntHave('parent')
-                         ->orderBy('id')
-                         ->paginate($this->board->comment_rows_per_page);
+    //     $comments = $this->comments()
+    //                      ->with('user')
+    //                      ->withCount('children')
+    //                      ->doesntHave('parent')
+    //                      ->orderBy('id')
+    //                      ->paginate($this->board->comment_rows_per_page);
 
-        return $comments;
-    }
+    //     return $comments;
+    // }
 
     /**
      * 게시판 정보를 가져오기 위한 관계 정의
