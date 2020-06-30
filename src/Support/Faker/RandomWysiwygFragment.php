@@ -19,7 +19,16 @@ class RandomWysiwygFragment
 
         for($i = 0; $i < $sentences; $i++) {
             $text = $fakerKo->realText();
-            array_push($ret, "<p>${text}</p><p><br></p>");
+
+            // Quill Editor 문단 삽입
+            $appendText = '<p><br></p>';
+
+            // 마지막 문단엔 $appendText 추가하지 않음
+            if ($i < ($sentences - 1)) {
+                $appendText = null;
+            }
+
+            array_push($ret, "<p>{$text}</p>{$appendText}");
         }
 
         return implode($ret);
