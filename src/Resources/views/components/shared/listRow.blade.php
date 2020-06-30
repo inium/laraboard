@@ -36,7 +36,7 @@
 $marked = false;
 
 if (isset($markPostId)) {
-    $marked = $post['id'] == $markPostId ? true : false;
+    $marked = ($post['id'] == $markPostId) ? true : false;
 }
 
 @endphp
@@ -68,13 +68,10 @@ if (isset($markPostId)) {
                             'id' => $postId,
                             'page' => $page == 1 ? null : $page,
                             'query' => $query
-                        ])}}"  @if ($marked)class="font-weight-bold"@endif>
+                        ])}}" @if ($marked)class="font-weight-bold"@endif>
 
-                {{-- 검색어 mark. 없을 경우 일반 문자열 출력. --}}
-                @include('laraboard::components.shared.mark', [
-                    'query' => $query,
-                    'content' => $subject
-                ])
+                {{ $subject }}
+
             </a>
 
             {{-- 댓글 수 --}}
@@ -94,11 +91,7 @@ if (isset($markPostId)) {
                 'class' => 'rounded-circle thumbnail align-self-start mr-1'
             ])
 
-            {{-- 검색어 mark. 없을 경우 일반 문자열 출력. --}}
-            @include('laraboard::components.shared.mark', [
-                'query' => $query,
-                'content' => $user['nickname']
-            ])
+            {{ $user['nickname'] }}
 
         </div>
 
