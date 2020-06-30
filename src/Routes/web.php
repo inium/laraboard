@@ -71,8 +71,8 @@ Route::get('/board/{boardName}/write', 'PostWriteController@view')
  * @param string content 게시글 내용 (HTML)
  * -----------------------------------------------------------------------------
  */
-Route::post('/board/{boardName}/write', 'PostWriteController@store')
-        ->name('board.post.write.submit');
+Route::post('/board/{boardName}', 'PostWriteController@post')
+        ->name('board.post.write.post');
 
 /**
  * 게시글 수정 페이지
@@ -109,7 +109,7 @@ Route::get('/board/{boardName}/modify/{id}', 'PostModifyController@view')
  * @param string content 게시글 내용 (HTML)
  * -----------------------------------------------------------------------------
  */
-Route::put('/board/{boardName}/modify/{id}', 'PostModifyController@put')
+Route::put('/board/{boardName}/{id}', 'PostModifyController@put')
         ->where('id', '[0-9]+') // 게시글 ID는 숫자로 구성
         ->name('board.post.modify.put');
 
@@ -129,14 +129,68 @@ Route::delete('/board/{boardName}/{id}', 'PostController@delete')
         ->where('id', '[0-9]+') // 게시글 ID는 숫자로 구성
         ->name('board.post.delete');
 
+/**
+ * 댓글 저장
+ * 
+ * -----------------------------------------------------------------------------
+ * POST [/{$prefix}]/board/{boardName}/{postId}
+ * 
+ * content=<p>dolor</p>
+ * 
+ * Route params
+ * @param string $prefix    Route Prefix. 환경설정(laraboard.php) 참조.
+ * @param string boardName  게시판 영문 이름.
+ * 
+ * Post params
+ * @param string content 댓글 내용 (HTML)
+ * -----------------------------------------------------------------------------
+ */
+Route::post('/board/{boardName}/{postId}', 'CommentController@post')
+        ->where('postId', '[0-9]+') // 게시글 ID는 숫자로 구성
+        ->name('board.comment.post');
+
+
+/**
+ * 댓글 수정
+ * 
+ * -----------------------------------------------------------------------------
+ * PUT [/{$prefix}]/board/{boardName}/{postId}/{commentId}
+ * 
+ * Route params
+ * @param string $prefix    Route Prefix. 환경설정(laraboard.php) 참조.
+ * @param string boardName  게시판 영문 이름.
+ * @param integer postId    게시글 ID.
+ * @param integer commentId 댓글 ID.
+ * -----------------------------------------------------------------------------
+ */
+Route::put('/board/{boardName}/{postId}/{commentId}', 'CommentController@put')
+        ->where('postId', '[0-9]+')     // 게시글 ID는 숫자로 구성
+        ->where('commentId', '[0-9]+')  // 댓글 ID는 숫자로 구성
+        ->name('board.comment.delete');
+
+
+/**
+ * 댓글 삭제
+ * 
+ * -----------------------------------------------------------------------------
+ * DELETE [/{$prefix}]/board/{boardName}/{postId}/{commentId}
+ * 
+ * Route params
+ * @param string $prefix    Route Prefix. 환경설정(laraboard.php) 참조.
+ * @param string boardName  게시판 영문 이름.
+ * @param integer postId    게시글 ID.
+ * @param integer commentId 댓글 ID.
+ * -----------------------------------------------------------------------------
+ */
+Route::delete('/board/{boardName}/{postId}/{commentId}',
+              'CommentController@delete')
+        ->where('postId', '[0-9]+')     // 게시글 ID는 숫자로 구성
+        ->where('commentId', '[0-9]+')  // 댓글 ID는 숫자로 구성
+        ->name('board.comment.delete');
 
 
 
-// 댓글 추가
 
-// 댓글 수정
-
-// 댓글 삭제
 
 // Route::get('/boardtest',
         // 'Inium\Laraboard\Http\Controllers\TestController@index');
@@ -153,6 +207,28 @@ Route::delete('/board/{boardName}/{id}', 'PostController@delete')
  * POST /board/{boardName}
  * PUT /board/{boardName}/{postId}
  * DELETE /board/{boardName}/{postId}
+ * 
+ * 
+ * 
+ * 
+ * 
+ * GET /board/{boardName}
+ * GET /board/{boardName}/{postId}
+ * GET /board/{boardName}/{postId}/write
+ * GET /board/{boardName}/{postId}/modify
+ * 
+ * POST     /board/{boardName}
+ * PUT      /board/{boardName}/{postId}
+ * DELETE   /board/{boardName}/{postId}
+ * 
+ * GET      /board/{boardName}/{postId}?page=1&query=lorem&comment_page=2
+ * GET      /board/{boardName}/{postId}/{commentId}
+ * POST     /board/{boardName}/{postId}
+ * PUT      /board/{boardName}/{postId}/{commentId}
+ * DELETE   /board/{boardName}/{postId}/{commentId}
+ * 
+ * // 댓글 수정 form 
+ * GET      /board/{boardName}/{postId}/{commentId}/form?
  */
 
 
