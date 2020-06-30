@@ -25,7 +25,7 @@ class PostDeleteMiddleware
         }
 
         // 게시글 확인. 없을 경우, 404 출력.
-        $post = Post::find($request->id);
+        $post = Post::find($request->postId);
         abort_if(!$post, 404, 'Post not found.');
 
         // 본인 확인. 게시글 작성자가 본인이 아닌 경우 401 출력.
@@ -38,7 +38,7 @@ class PostDeleteMiddleware
 
             return redirect()->route('board.post.view', [
                 'boardName' => $request->boardName,
-                'id' => $request->id,
+                'postId' => $request->postId,
                 'page' => $request->get('page', null)
             ]);
         }

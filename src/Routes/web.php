@@ -28,15 +28,15 @@ Route::get('/board/{boardName}', 'PostListSearchController@view')
  * Route params
  * @param string $prefix    Route Prefix. 환경설정(laraboard.php) 참조.
  * @param string boardName  게시판 영문 이름.
- * @param integer id        게시글 ID.
+ * @param integer postId    게시글 ID.
  * 
  * Query params (Optional)
  * @param int    page       페이지 번호. 기본 1.
  * @param string query      검색어.
  * -----------------------------------------------------------------------------
  */
-Route::get('/board/{boardName}/{id}', 'PostController@view')
-        ->where('id', '[0-9]+') // 게시글 ID는 숫자로 구성
+Route::get('/board/{boardName}/{postId}', 'PostController@view')
+        ->where('postId', '[0-9]+') // 게시글 ID는 숫자로 구성
         ->name('board.post.view');
 
 /**
@@ -78,23 +78,23 @@ Route::post('/board/{boardName}', 'PostWriteController@post')
  * 게시글 수정 페이지
  * 
  * -----------------------------------------------------------------------------
- * GET [/{$prefix}]/board/{boardName}/modify/{id}
+ * GET [/{$prefix}]/board/{boardName}/modify/{postId}
  * 
  * Route params
  * @param string $prefix    Route Prefix. 환경설정(laraboard.php) 참조.
  * @param string boardName  게시판 영문 이름.
- * @param integer id        게시글 ID
+ * @param integer postId    게시글 ID
  * -----------------------------------------------------------------------------
  */
-Route::get('/board/{boardName}/modify/{id}', 'PostModifyController@view')
-        ->where('id', '[0-9]+') // 게시글 ID는 숫자로 구성
+Route::get('/board/{boardName}/modify/{postId}', 'PostModifyController@view')
+        ->where('postId', '[0-9]+') // 게시글 ID는 숫자로 구성
         ->name('board.post.modify.view');
 
 /**
  * 게시글 수정
  * 
  * -----------------------------------------------------------------------------
- * PUT [/{$prefix}]/board/{boardName}/modify/{id}
+ * PUT [/{$prefix}]/board/{boardName}/modify/{postId}
  * 
  * subject=lorem
  * content=<p>ipsum</p>
@@ -102,33 +102,38 @@ Route::get('/board/{boardName}/modify/{id}', 'PostModifyController@view')
  * Route params
  * @param string $prefix    Route Prefix. 환경설정(laraboard.php) 참조.
  * @param string boardName  게시판 영문 이름.
- * @param integer id        게시글 ID
+ * @param integer postId    게시글 ID
  * 
  * Put params
- * @param string subject 게시글 제목
- * @param string content 게시글 내용 (HTML)
+ * @param string subject    게시글 제목
+ * @param string content    게시글 내용 (HTML)
  * -----------------------------------------------------------------------------
  */
-Route::put('/board/{boardName}/{id}', 'PostModifyController@put')
-        ->where('id', '[0-9]+') // 게시글 ID는 숫자로 구성
+Route::put('/board/{boardName}/{postId}', 'PostModifyController@put')
+        ->where('postId', '[0-9]+') // 게시글 ID는 숫자로 구성
         ->name('board.post.modify.put');
 
 /**
  * 게시글 삭제
  * 
  * -----------------------------------------------------------------------------
- * DELETE [/{$prefix}]/board/{boardName}/{id}
+ * DELETE [/{$prefix}]/board/{boardName}/{postId}
  * 
  * Route params
  * @param string $prefix    Route Prefix. 환경설정(laraboard.php) 참조.
  * @param string boardName  게시판 영문 이름.
- * @param integer id        게시글 ID.
+ * @param integer postId    게시글 ID.
  * -----------------------------------------------------------------------------
  */
-Route::delete('/board/{boardName}/{id}', 'PostController@delete')
-        ->where('id', '[0-9]+') // 게시글 ID는 숫자로 구성
+Route::delete('/board/{boardName}/{postId}', 'PostController@delete')
+        ->where('postId', '[0-9]+') // 게시글 ID는 숫자로 구성
         ->name('board.post.delete');
 
+
+
+
+
+        
 /**
  * 댓글 저장
  * 
@@ -149,7 +154,6 @@ Route::post('/board/{boardName}/{postId}', 'CommentController@post')
         ->where('postId', '[0-9]+') // 게시글 ID는 숫자로 구성
         ->name('board.comment.post');
 
-
 /**
  * 댓글 수정
  * 
@@ -167,7 +171,6 @@ Route::put('/board/{boardName}/{postId}/{commentId}', 'CommentController@put')
         ->where('postId', '[0-9]+')     // 게시글 ID는 숫자로 구성
         ->where('commentId', '[0-9]+')  // 댓글 ID는 숫자로 구성
         ->name('board.comment.delete');
-
 
 /**
  * 댓글 삭제
@@ -190,6 +193,16 @@ Route::delete('/board/{boardName}/{postId}/{commentId}',
 
 
 
+
+
+
+
+
+Route::get('/board/{boardName}/{postId}/{commentId}/modify/form',
+           'CommentController@modifyForm')
+        ->where('postId', '[0-9]+')     // 게시글 ID는 숫자로 구성
+        ->where('commentId', '[0-9]+')  // 댓글 ID는 숫자로 구성
+        ->name('board.comment.delete');
 
 
 // Route::get('/boardtest',
@@ -222,13 +235,14 @@ Route::delete('/board/{boardName}/{postId}/{commentId}',
  * DELETE   /board/{boardName}/{postId}
  * 
  * GET      /board/{boardName}/{postId}?page=1&query=lorem&comment_page=2
+ * 
  * GET      /board/{boardName}/{postId}/{commentId}
  * POST     /board/{boardName}/{postId}
  * PUT      /board/{boardName}/{postId}/{commentId}
  * DELETE   /board/{boardName}/{postId}/{commentId}
  * 
  * // 댓글 수정 form 
- * GET      /board/{boardName}/{postId}/{commentId}/form?
+ * GET      /board/{boardName}/{postId}/{commentId}/modify/form
  */
 
 

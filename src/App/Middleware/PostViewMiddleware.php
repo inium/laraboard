@@ -35,7 +35,7 @@ class PostViewMiddleware
         }
 
         // 게시글 확인. 없을 경우, 404 출력.
-        $post = Post::find($request->id);
+        $post = Post::find($request->postId);
         abort_if(!$post, 404, 'Post not found.');
         
         return $next($request);

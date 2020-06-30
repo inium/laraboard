@@ -77,7 +77,7 @@ class PostWriteController extends Controller
         if ($postId) {
             return redirect()->route('board.post.view', [
                             'boardName' => $boardName,
-                            'id' => $postId
+                            'postId' => $postId
                         ]);
         }
         // 게시글 저장에 실패한 경우, 게시글 쓰기 페이지로 이동

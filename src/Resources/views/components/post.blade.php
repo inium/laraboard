@@ -120,7 +120,7 @@
                             <li class="list-inline-item mr-0">
                                 <a href="{{ route('board.post.modify.view', [
                                                 'boardName' => $post['board']['name'],
-                                                'id' => $post['id']
+                                                'postId' => $post['id']
                                             ]) }}" class="btn btn-primary">
                                     수정
                                 </a>
@@ -136,7 +136,7 @@
                                           method="POST"
                                           action="{{ route('board.post.delete', [
                                                         'boardName' => $post['board']['name'],
-                                                        'id' => $post['id']
+                                                        'postId' => $post['id']
                                                     ]) }}">
                                         @csrf
                                         @method('DELETE')

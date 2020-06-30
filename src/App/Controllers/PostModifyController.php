@@ -33,18 +33,18 @@ class PostModifyController extends Controller
      * 게시글 수정 페이지
      * 
      * -------------------------------------------------------------------------
-     * GET [/{$prefix}]/board/{boardName}/modify/{id}
+     * GET [/{$prefix}]/board/{boardName}/modify/{postId}
      * 
      * Route params
      * @param string $prefix    Route Prefix. 환경설정(laraboard.php) 참조.
      * @param string boardName  게시판 영문 이름.
-     * @param integer id        게시글 ID
+     * @param integer postId    게시글 ID
      * -------------------------------------------------------------------------
      */
-    public function view(Request $request, string $boardName, int $id)
+    public function view(Request $request, string $boardName, int $postId)
     {
         $params = [
-            'post' => Post::find($id),
+            'post' => Post::find($postId),
             'roles' => BoardUserRoles::roles($boardName)
         ];
 
@@ -55,7 +55,7 @@ class PostModifyController extends Controller
      * 게시글 수정
      * 
      * -------------------------------------------------------------------------
-     * PUT [/{$prefix}]/board/{boardName}/modify/{id}
+     * PUT [/{$prefix}]/board/{boardName}/modify/{postId}
      * 
      * subject=lorem
      * content=<p>ipsum</p>
@@ -63,17 +63,17 @@ class PostModifyController extends Controller
      * Route params
      * @param string $prefix    Route Prefix. 환경설정(laraboard.php) 참조.
      * @param string boardName  게시판 영문 이름.
-     * @param integer id        게시글 ID
+     * @param integer postId    게시글 ID
      * 
      * Put params
      * @param string subject 게시글 제목
      * @param string content 게시글 내용 (HTML)
      * -------------------------------------------------------------------------
      */
-    public function put(PostRequest $request, string $boardName, int $id)
+    public function put(PostRequest $request, string $boardName, int $postId)
     {
         // 게시글 갱신
-        $updated = $this->putPost($request, $id);
+        $updated = $this->putPost($request, $postId);
 
         // 게시글 저장에 성공한 경우
         if ($updated) {
@@ -83,7 +83,7 @@ class PostModifyController extends Controller
 
             return redirect()->route('board.post.view', [
                             'boardName' => $boardName,
-                            'id' => $id
+                            'postId' => $id
                         ]);
         }
         // 게시글 저장에 실패한 경우
@@ -91,7 +91,7 @@ class PostModifyController extends Controller
             $errorMessage = '게시글 수정에 실패하였습니다. 다시 시도해주세요.';
             return redirect()->route('board.post.modify.view', [
                             'boardName' => $boardName,
-                            'id' => $id
+                            'postId' => $id
                         ])
                         ->withErrors(array($errorMessage))
                         ->withInput();

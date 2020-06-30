@@ -35,7 +35,7 @@ class PostController extends Controller
     /**
      * 게시글을 출력한다.
      * -------------------------------------------------------------------------
-     * GET [/{$prefix}]/board/{boardName}/{id}?page=1&query=lorem
+     * GET [/{$prefix}]/board/{boardName}/{postId}?page=1&query=lorem
      * 
      * Route params
      * @param string $prefix    Route Prefix. 환경설정(laraboard.php) 참조.
@@ -47,18 +47,18 @@ class PostController extends Controller
      * @param string query      검색어
      * -------------------------------------------------------------------------
      * 
-     * @param Request $request  Request
-     * @param string $boardName 게시판 이름
-     * @param integer $id       게시글 ID
+     * @param Request $request      Request
+     * @param string $boardName     게시판 이름
+     * @param integer $postId       게시글 ID
      */
-    public function view(Request $request, string $boardName, int $id)
+    public function view(Request $request, string $boardName, int $postId)
     {
         $query = $request->query('query', null); // 검색어
         $page = $request->query('page', 1);      // 페이지 번호
 
         // 게시글 Get
         $board = Board::findByName($boardName);
-        $post = $board->getPost($id);
+        $post = $board->getPost($postId);
 
         // 조회수 1 증가
         $post->incrementViewCount();
@@ -87,7 +87,7 @@ class PostController extends Controller
      * 게시글 삭제
      * 
      * -------------------------------------------------------------------------
-     * DELETE [/{$prefix}]/board/{boardName}/{id}
+     * DELETE [/{$prefix}]/board/{boardName}/{postId}
      * 
      * Route params
      * @param string $prefix    Route Prefix. 환경설정(laraboard.php) 참조.
@@ -95,14 +95,14 @@ class PostController extends Controller
      * @param integer id        게시글 ID.
      * -------------------------------------------------------------------------
      *
-     * @param Request $request  Request
-     * @param string boardName  게시판 이름
-     * @param integer id        게시글 ID
+     * @param Request $request      Request
+     * @param string boardName      게시판 이름
+     * @param integer postId        게시글 ID
      */
-    public function delete(Request $request, string $boardName, int $id)
+    public function delete(Request $request, string $boardName, int $postId)
     {
         // Get post
-        $post = Post::find($id);
+        $post = Post::find($postId);
         $post->delete();
 
         // 게시글 삭제정보
@@ -115,7 +115,6 @@ class PostController extends Controller
             'boardName' => $boardName
         ]);
     }
-
 
     /**
      * 게시글 목록 or 검색 결과 목록을 가져온다.

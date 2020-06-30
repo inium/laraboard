@@ -65,7 +65,7 @@ if (isset($markPostId)) {
             {{-- 게시글 보기 --}}
             <a href="{{ route('board.post.view', [
                             'boardName' => $boardName,
-                            'id' => $postId,
+                            'postId' => $postId,
                             'page' => $page == 1 ? null : $page,
                             'query' => $query
                         ])}}" @if ($marked)class="font-weight-bold"@endif>

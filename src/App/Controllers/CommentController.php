@@ -50,7 +50,7 @@ class CommentController extends Controller
          if ($commentId) {
             return redirect()->route('board.post.view', [
                             'boardName' => $boardName,
-                            'id' => $postId
+                            'postId' => $postId
                         ]);
         }
         // 댓글 저장에 실패한 경우, 게시글 쓰기 페이지로 이동
@@ -63,6 +63,11 @@ class CommentController extends Controller
                         ->withErrors(array($errorMessage))
                         ->withInput();
         }
+    }
+
+    public function modifyForm(Request $request, string $boardName, int $postId, int $commentId)
+    {
+
     }
 
     /**
@@ -105,7 +110,7 @@ class CommentController extends Controller
 
             return redirect()->route('board.post.view', [
                 'boardName' => $boardName,
-                'id' => $postId
+                'postId' => $postId
             ]);
         }
 
@@ -118,7 +123,7 @@ class CommentController extends Controller
 
         return redirect()->route('board.post.view', [
             'boardName' => $boardName,
-            'id' => $postId
+            'postId' => $postId
         ]);
     }
 

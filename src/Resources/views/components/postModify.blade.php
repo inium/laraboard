@@ -47,7 +47,7 @@
               method="POST"
               action="{{ route('board.post.modify.put', [
                     'boardName' => $post['board']['name'],
-                    'id' => $post['id']
+                    'postId' => $post['id']
                 ]) }}">
 
             @csrf
