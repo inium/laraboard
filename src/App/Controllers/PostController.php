@@ -57,18 +57,27 @@ class PostController extends Controller
         $page = $request->query('page', 1);      // 페이지 번호
 
         // 게시글 Get
-        $post = Board::findByName($boardName)->getPost($id);
+        $board = Board::findByName($boardName);
+        $post = $board->getPost($id);
 
         // 조회수 1 증가
         $post->incrementViewCount();
 
+        // 사용자 Role
+        $role = BoardUserRoles::roles($boardName);
+
+        $comments = null;
+        if ($role->comment->canRead) {
+            $comments = $post->getHierarchicalComments();
+        }
+
         $params = [
             'post'     => $post,
-            'comments' => $post->getHierarchicalComments(),
+            'comments' => $comments,
             'list'     => $this->listOrSearch($boardName, $page, $query),
             'query'    => $query,
             'page'     => $page,
-            'role'     => BoardUserRoles::roles($boardName),
+            'role'     => $role
         ];
 
         return $this->render('post', $params);
