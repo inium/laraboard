@@ -24,10 +24,6 @@ class PostModifyMiddleware
             return redirect()->route('login');
         }
 
-        // // 게시글을 수정 가능한지 사용자 역할 확인. 사용할 수 없으면 401 반환.
-        // $roles = BoardUserRoles::roles($request->boardName);
-        // abort_if(!$roles->post->canRead, 401, 'Can\'t write a post.');
-
         // 게시글 확인. 없을 경우, 404 출력.
         $post = Post::find($request->id);
         abort_if(!$post, 404, 'Post not found.');

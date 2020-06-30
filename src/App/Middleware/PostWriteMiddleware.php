@@ -25,13 +25,13 @@ class PostWriteMiddleware
             return redirect()->route('login');
         }
 
+        // 게시글을 작성 가능한지 사용자 역할 확인. 사용할 수 없으면 401 반환.
+        $roles = BoardUserRoles::roles($request->boardName);
+        abort_if(!$roles->post->canWrite, 401, 'Can\'t write a post.');
+
         // 게시판이 없을 경우 404 반환
         $board = Board::findByName($request->boardName);
         abort_if(!$board, 404, 'Board not found');
-
-        // 게시글을 작성 가능한지 사용자 역할 확인. 사용할 수 없으면 401 반환.
-        $roles = BoardUserRoles::roles($request->boardName);
-        abort_if(!$roles->post->canRead, 401, 'Can\'t write a post.');
 
         return $next($request);
     }
