@@ -87,7 +87,24 @@
                 </div>
             </div>
 
-            <button class="btn btn-primary" type="submit">글수정</button>
+
+            <div class="d-flex justify-content-between">
+
+                {{-- 목록 버튼 --}}
+                <div>
+                    <a href="{{ route('board.postlistsearch.view', [
+                                    'boardname' => $board['name'],
+                                ]) }}" class="btn btn-primary">
+                        목록
+                    </a>
+                </div>
+
+                {{-- 글 수정 버튼 --}}
+                <div>
+                    <button class="btn btn-primary" type="submit">글수정</button>
+                </div>
+
+            </div>
 
         </form>
 
