@@ -68,16 +68,16 @@ class PostWriteController extends Controller
      * @param string content 게시글 내용 (HTML)
      * -------------------------------------------------------------------------
      */
-    public function store(PostRequest $request, string $boardName)
+    public function post(PostRequest $request, string $boardName)
     {
         // 게시글 저장
-        $submitPostId = $this->storePost($request, $boardName);
+        $postId = $this->storePost($request, $boardName);
 
         // 게시글 저장에 성공한 경우, 게시글 보기 페이지로 이동
-        if ($submitPostId) {
+        if ($postId) {
             return redirect()->route('board.post.view', [
                             'boardName' => $boardName,
-                            'id' => $submitPostId
+                            'id' => $postId
                         ]);
         }
         // 게시글 저장에 실패한 경우, 게시글 쓰기 페이지로 이동
