@@ -45,7 +45,7 @@
 
         <form id="formPostWrite"
               method="POST"
-              action="{{ route('board.post.write.submit', [
+              action="{{ route('board.post.write.post', [
                     'boardName' => $board['name']
                 ]) }}">
 
@@ -83,7 +83,24 @@
                 <div id="editor"></div>
             </div>
 
-            <button class="btn btn-primary" type="submit">글쓰기</button>
+
+            <div class="d-flex justify-content-between">
+
+                {{-- 목록 버튼 --}}
+                <div>
+                    <a href="{{ route('board.postlistsearch.view', [
+                                    'boardname' => $board['name'],
+                                ]) }}" class="btn btn-primary">
+                        목록
+                    </a>
+                </div>
+
+                {{-- 글 쓰기 버튼 --}}
+                <div>
+                    <button class="btn btn-primary" type="submit">글쓰기</button>
+                </div>
+
+            </div>
 
         </form>
 
@@ -118,12 +135,15 @@
                 theme: 'snow'
             });
 
+            // 초기값 설정. form validation 실패할 경우 복구 실행.
+            quill.root.innerHTML
+                = `{!! htmlspecialchars_decode(old('content')) !!}`;
+
             // 게시글 쓰기 Submit. editor의 html을 hidden field에 설정.
             $('#formPostWrite').on('submit', function (e) {
                 const editorHtml = quill.root.innerHTML;
                 $('#formInputContent').val(editorHtml);
             });
-            
 
         });
     </script>
