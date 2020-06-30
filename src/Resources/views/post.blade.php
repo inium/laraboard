@@ -10,6 +10,13 @@
 
     <div class="container">
 
+         {{-- Form 오류가 있을 경우 (Form Validation 실패) --}}
+         @if ($errors->any())
+            @include ('laraboard::components.shared.alertValidationErrors', [
+                'errors' => $errors
+            ])
+        @endif
+
         {{-- 사용자에게 알릴 Alert 메시지가 있을 경우 --}}
         @if (Session::has('message'))
             @include('laraboard::components.shared.alert', [
@@ -20,22 +27,25 @@
 
         <div>
             {{-- 게시글 --}}
-            @include('laraboard::components.post', [
+            @include ('laraboard::components.post', [
                 'post'  => $post,
                 'role'  => $role,
                 'query' => $query,
             ])
         </div>
 
-        <div>
-            {{-- 댓글 목록 --}}
-            @include('laraboard::components.commentList', [
-                'board'    => $post['board'],
-                'comments' => $comments,
-                'role'     => $role,
-                'query'    => $query
-            ])
-        </div>
+        @if ($role->comment->canRead)
+            <div>
+                {{-- 댓글 목록 --}}
+                @include ('laraboard::components.commentList', [
+                    'board'    => $post['board'],
+                    'postId'   => $post['id'],
+                    'comments' => $comments,
+                    'role'     => $role,
+                    'query'    => $query
+                ])
+            </div>
+        @endif
 
         <div class="my-5">
 
