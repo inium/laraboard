@@ -1,20 +1,23 @@
 {{-- Stylesheets -------------------------------------------------------------}}
 @push('stylesheets')
     <style>
+        .post-content-body {
+            min-height: 500px;
+        }
         .lb-post .thumbnail {
             width: 48px;
             height: 48px;
         }
 
         /* Quill Editor read-only */
-        .ql-container.ql-snow {
+        .lb-post .ql-container.ql-snow {
             border: 0;
         }
-        .ql-container .ql-editor{
+        .lb-post .ql-container .ql-editor{
             font-size: initial;
             padding: 0;
         }
-        .ql-toolbar {
+        .lb-post .ql-toolbar {
             display: none;
         }
     </style>
@@ -60,13 +63,7 @@
             {{-- 게시글 제목 --}}
             <div class="header-title py-2">
 
-                <h5>
-                    {{-- 검색어 mark. 없을 경우 일반 문자열 출력. --}}
-                    @include('laraboard::components.shared.mark', [
-                        'query' => $query,
-                        'content' => $post['subject']
-                    ])
-                </h5>
+                <h5>{{ $post['subject'] }}</h5>
 
             </div>
 
@@ -87,13 +84,7 @@
                                 'class' => 'rounded-circle thumbnail align-self-start mr-1'
                             ])
 
-                            <strong>
-                                {{-- 검색어 mark. 없을 경우 일반 문자열 출력. --}}
-                                @include('laraboard::components.shared.mark', [
-                                    'query' => $query,
-                                    'content' => $post['user']['nickname']
-                                ])
-                            </strong>
+                            <strong> {{ $post['user']['nickname'] }}</strong>
 
                         </li>
 
@@ -141,10 +132,12 @@
                                 <li class="list-inline-item">
 
                                     {{-- 게시글 삭제는 DELETE에서 처리 --}}
-                                    <form id="formDeletePost" method="POST" action="{{ route('board.post.delete', [
-                                                                                            'boardName' => $post['board']['name'],
-                                                                                            'id' => $post['id']
-                                                                                        ]) }}">
+                                    <form id="formDeletePost"
+                                          method="POST"
+                                          action="{{ route('board.post.delete', [
+                                                        'boardName' => $post['board']['name'],
+                                                        'id' => $post['id']
+                                                    ]) }}">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger">삭제</button>
