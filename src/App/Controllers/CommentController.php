@@ -11,6 +11,7 @@ use Inium\Laraboard\App\Post;
 use Inium\Laraboard\App\Comment;
 use Inium\Laraboard\App\User;
 use Inium\Laraboard\App\Board\BoardUserRoles;
+use Inium\Laraboard\App\Board\RenderTemplateTrait;
 use Inium\Laraboard\App\Board\Request\CommentRequest;
 use Inium\Laraboard\App\Middleware\CommentWriteMiddleware;
 use Inium\Laraboard\App\Middleware\CommentModifyMiddleware;
@@ -19,6 +20,8 @@ use Inium\Laraboard\Support\Facades\Agent;
 
 class CommentController extends Controller
 {
+    use RenderTemplateTrait;
+
     /**
      * Create a new controller instance.
      *
@@ -27,9 +30,30 @@ class CommentController extends Controller
     public function __construct()
     {
         // 댓글 쓰기 미들웨어
-        $this->middleware(CommentWriteMiddleware::class)->only('post');
-        $this->middleware(CommentModifyMiddleware::class)->only('put');
+        $this->middleware(CommentWriteMiddleware::class)->only('store');
+        // $this->middleware(CommentModifyMiddleware::class)->only('update');
         $this->middleware(CommentDeleteMiddleware::class)->only('delete');
+    }
+
+    /**
+     * 댓글 목록을 가져온다.
+     *
+     * @param Request $request      Request
+     * @param string $boardName     게시판 이름
+     * @param integer $postId       게시글 ID
+     */
+    public function index(Request $request, string $boardName, int $postId)
+    {
+        $groupId = $request->query('group_id', null); // 댓글 그룹 ID
+
+        $post = Post::find($postId);
+        // $count = $post->comments()->count();
+        $nextComments = $post->getNextCommentsByGroupId($groupId);
+
+        return response()->view('laraboard::components.shared.commentChunk', [
+            'comments' => $nextComments,
+            'role' => BoardUserRoles::roles($boardName)
+        ]);
     }
 
     /**
@@ -38,12 +62,12 @@ class CommentController extends Controller
      * @param CommentRequest $request   Request
      * @param string $boardName         게시판 이름
      * @param integer $postId           게시글 ID
-     * @return 
      */
-    public function post(CommentRequest $request,
+    public function store(CommentRequest $request,
                          string $boardName,
                          int $postId)
     {
+        // 댓글 저장
         $commentId = $this->storeComment($request, $boardName, $postId);
 
          // 댓글 저장에 성공한 경우, 게시글 보기 페이지로 이동
@@ -65,25 +89,42 @@ class CommentController extends Controller
         }
     }
 
-    public function modifyForm(Request $request, string $boardName, int $postId, int $commentId)
-    {
-
-    }
-
     /**
      * 댓글을 수정한다.
      *
      * @param CommentRequest $request   Request
      * @param string $boardName         게시판 이름
      * @param integer $postId           게시글 ID
-     * @return 
+     * @param integer $commentId        댓글 ID
      */
-    public function put(CommentRequest $request,
-                        string $boardName,
-                        int $postId,
-                        int $commentId)
+    public function update(CommentRequest $request,
+                           string $boardName,
+                           int $postId,
+                           int $commentId)
     {
-        dd('put');
+        // 댓글 수정
+        $commentId = $this->updateComment($request,
+                                          $boardName,
+                                          $postId,
+                                          $commentId);
+
+         // 댓글 수정에 성공한 경우, 게시글 보기 페이지로 이동
+         if ($commentId) {
+            return redirect()->route('board.post.view', [
+                            'boardName' => $boardName,
+                            'postId' => $postId
+                        ]);
+        }
+        // 댓글 수정에 실패한 경우, 게시글 쓰기 페이지로 이동
+        else {
+            $errorMessage = '댓글 수정에 실패하였습니다. 다시 시도해주세요.';
+            return redirect()->route('board.post.view', [
+                            'boardName' => $boardName,
+                            'postId' => $postId
+                        ])
+                        ->withErrors(array($errorMessage))
+                        ->withInput();
+        }
     }
 
     /**
@@ -93,9 +134,8 @@ class CommentController extends Controller
      * @param string $boardName         게시판 이름
      * @param integer $postId           게시글 ID
      * @param integer $commentId        댓글 ID
-     * @return 
      */
-    public function delete(Request $request,
+    public function destroy(Request $request,
                            string $boardName,
                            int $postId,
                            int $commentId)
@@ -130,10 +170,10 @@ class CommentController extends Controller
     /**
      * 댓글을 저장한다.
      *
-     * @param CommentRequest $request       Request
-     * @param string $boardName             게시판 이름
-     * @param integer $postId               게시글 ID
-     * @return integer                      추가된 댓글 ID
+     * @param CommentRequest $request   Request
+     * @param string $boardName         게시판 이름
+     * @param integer $postId           게시글 ID
+     * @return integer                  추가된 댓글 ID
      */
     private function storeComment(CommentRequest $request,
                                   string $boardName,
@@ -157,7 +197,6 @@ class CommentController extends Controller
         $comment->content = htmlspecialchars($request->content);
         $comment->content_pure = strip_tags($request->content);
         $comment->point = $board->comment_point;
-        // $comment->parent()->associate($parentComment);
         $comment->board()->associate($board);
         $comment->post()->associate($post);
         $comment->user()->associate($user);
@@ -173,8 +212,36 @@ class CommentController extends Controller
         return $comment->id;
     }
 
-    // private function putComment(CommentRequest $request, string $boardName, int $postId, int $commentId)
-    // {
+    /**
+     * 댓글을 수정한다.
+     *
+     * @param CommentRequest $request   Request
+     * @param string $boardName         게시판 이름
+     * @param integer $postId           게시글 ID
+     * @param integer $commentId        댓글 ID
+     * @return boolean                  수정 여부
+     */
+    private function updateComment(CommentRequest $request,
+                                   string $boardName,
+                                   int $postId,
+                                   int $commentId): bool
+    {
+        // Get User Agent
+        $ua = Agent::parse($request->server('HTTP_USER_AGENT'));
 
-    // }
+        $comment = Comment::find($commentId);
+
+        $comment->user_agent = $ua->agent;
+        $comment->device_type = $ua->device_type;
+        $comment->os_name = $ua->os_name;
+        $comment->os_version = $ua->os_version;
+        $comment->browser_name = $ua->browser_name;
+        $comment->browser_version = $ua->browser_version;
+        $comment->content = htmlspecialchars($request->content);
+        $comment->content_pure = strip_tags($request->content);
+
+        $updated = $comment->save();
+
+        return $updated;
+    }
 }

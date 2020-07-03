@@ -7,6 +7,7 @@
 
 namespace Inium\Laraboard\App;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -112,25 +113,34 @@ class Post extends Model
         return $comments;
     }
 
-    // /**
-    //  * 게시글의 부모 댓글이 없는 댓글 목록을 가져온다.
-    //  *
-    //  * @param integer $page     페이지 번호
-    //  * @return LengthAwarePaginator
-    //  */
-    // public function getComments(int $page = 1): LengthAwarePaginator
-    // {
-    //     $this->setPageNum($page);
+    /**
+     * 댓글 그룹 ID 다음에 이어지는 댓글들을 반환한다.
+     *
+     * @param integer|null $groupId     댓글 그룹 ID
+     * @return Collection
+     */
+    public function getNextCommentsByGroupId(int $groupId = null): Collection
+    {
+        $comments = $this->comments()
+                         ->with(['user', 'parent', 'children'])
+                         ->select('*')
+                         ->selectSub(function ($query) {
+                             $query->selectRaw(
+                                'IF(parent_comment_id IS NULL,
+                                    id,
+                                    parent_comment_id)'
+                                );
+                         }, 'group_id')
+                         ->where('post_id', $this->id)
+                         ->orderBy('group_id')
+                         ->orderBy('id');
 
-    //     $comments = $this->comments()
-    //                      ->with('user')
-    //                      ->withCount('children')
-    //                      ->doesntHave('parent')
-    //                      ->orderBy('id')
-    //                      ->paginate($this->board->comment_rows_per_page);
+        if (!is_null($groupId)) {
+            $comments = $comments->having('group_id', '>', $groupId);
+        }
 
-    //     return $comments;
-    // }
+        return $comments->limit($this->board->comment_rows_per_page)->get();
+    }
 
     /**
      * 게시판 정보를 가져오기 위한 관계 정의

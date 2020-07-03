@@ -1,5 +1,6 @@
 <div class="media comment-row mb-4 @if($comment['parent_comment_id']) child @endif"
-    data-id="{{ $comment['id'] }}">
+    data-id="{{ $comment['id'] }}"
+    data-group-id="{{ $comment['group_id'] }}">
 
     {{-- 댓글 사용자 썸네일 --}}
     @include('laraboard::components.shared.thumbnail', [
@@ -40,16 +41,21 @@
 
                         {{-- 게시글 수정 버튼. --}}
                         <li class="list-inline-item mr-0">
-                            <button class="btn btn-link text-warning btn-sm px-0 btn-comment-modify">
+                            <a href="{{ route('board.comment.update', [
+                                                'boardName' => $board['name'],
+                                                'postId' => $comment['post']['id'],
+                                                'commentId' => $comment['id']
+                                            ]) }}"
+                                class="btn btn-link text-warning btn-sm px-0 btn-comment-modify">
                                 수정
-                            </button>
+                            </a>
                         </li>
 
                         {{-- 게시글 삭제 버튼 --}}
                         @if ($comment['children']->count() == 0)
 
                             <li class="list-inline-item">
-                                <form action="{{ route('board.comment.delete', [
+                                <form action="{{ route('board.comment.destroy', [
                                                     'boardName' => $board['name'],
                                                     'postId' => $comment['post']['id'],
                                                     'commentId' => $comment['id']

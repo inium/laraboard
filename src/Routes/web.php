@@ -133,7 +133,33 @@ Route::delete('/board/{boardName}/{postId}', 'PostController@delete')
 
 
 
-        
+
+
+
+
+
+
+
+
+/**
+ * 댓글 목록 가져오기
+ * 
+ * -----------------------------------------------------------------------------
+ * GET [/{$prefix}]/board/{boardName}/{postId}/comments?page=23
+ * 
+ * Route params
+ * @param string $prefix    Route Prefix. 환경설정(laraboard.php) 참조.
+ * @param string boardName  게시판 영문 이름.
+ * @param integer postId    게시글 ID.
+ * 
+ * Query params (Optional)
+ * @param int    page       페이지 번호. 기본 1.
+ * -----------------------------------------------------------------------------
+ */
+Route::get('/board/{boardName}/{postId}/comments', 'CommentController@index')
+        ->where('postId', '[0-9]+') // 게시글 ID는 숫자로 구성
+        ->name('board.comment.index');
+
 /**
  * 댓글 저장
  * 
@@ -150,9 +176,9 @@ Route::delete('/board/{boardName}/{postId}', 'PostController@delete')
  * @param string content 댓글 내용 (HTML)
  * -----------------------------------------------------------------------------
  */
-Route::post('/board/{boardName}/{postId}', 'CommentController@post')
+Route::post('/board/{boardName}/{postId}', 'CommentController@store')
         ->where('postId', '[0-9]+') // 게시글 ID는 숫자로 구성
-        ->name('board.comment.post');
+        ->name('board.comment.store');
 
 /**
  * 댓글 수정
@@ -167,10 +193,11 @@ Route::post('/board/{boardName}/{postId}', 'CommentController@post')
  * @param integer commentId 댓글 ID.
  * -----------------------------------------------------------------------------
  */
-Route::put('/board/{boardName}/{postId}/{commentId}', 'CommentController@put')
+Route::put('/board/{boardName}/{postId}/{commentId}',
+           'CommentController@update')
         ->where('postId', '[0-9]+')     // 게시글 ID는 숫자로 구성
         ->where('commentId', '[0-9]+')  // 댓글 ID는 숫자로 구성
-        ->name('board.comment.delete');
+        ->name('board.comment.update');
 
 /**
  * 댓글 삭제
@@ -186,29 +213,15 @@ Route::put('/board/{boardName}/{postId}/{commentId}', 'CommentController@put')
  * -----------------------------------------------------------------------------
  */
 Route::delete('/board/{boardName}/{postId}/{commentId}',
-              'CommentController@delete')
+              'CommentController@destroy')
         ->where('postId', '[0-9]+')     // 게시글 ID는 숫자로 구성
         ->where('commentId', '[0-9]+')  // 댓글 ID는 숫자로 구성
-        ->name('board.comment.delete');
+        ->name('board.comment.destroy');
 
 
 
 
 
-
-
-
-Route::get('/board/{boardName}/{postId}/{commentId}/modify/form',
-           'CommentController@modifyForm')
-        ->where('postId', '[0-9]+')     // 게시글 ID는 숫자로 구성
-        ->where('commentId', '[0-9]+')  // 댓글 ID는 숫자로 구성
-        ->name('board.comment.delete');
-
-
-// Route::get('/boardtest',
-        // 'Inium\Laraboard\Http\Controllers\TestController@index');
-
-// Route::get('/')
 
 /**
  * GET /board/{boardName}?page=1&st=baseball&sc=content
