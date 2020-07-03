@@ -11,17 +11,14 @@ use Inium\Laraboard\App\Post;
 use Inium\Laraboard\App\Comment;
 use Inium\Laraboard\App\User;
 use Inium\Laraboard\App\Board\BoardUserRoles;
-use Inium\Laraboard\App\Board\RenderTemplateTrait;
 use Inium\Laraboard\App\Board\Request\CommentRequest;
-use Inium\Laraboard\App\Middleware\CommentWriteMiddleware;
-use Inium\Laraboard\App\Middleware\CommentModifyMiddleware;
-use Inium\Laraboard\App\Middleware\CommentDeleteMiddleware;
+use Inium\Laraboard\App\Middleware\CommentAccessMiddleware;
+use Inium\Laraboard\App\Middleware\CommentStoreMiddleware;
+use Inium\Laraboard\App\Middleware\CommentOwnerMiddleware;
 use Inium\Laraboard\Support\Facades\Agent;
 
 class CommentController extends Controller
 {
-    use RenderTemplateTrait;
-
     /**
      * Create a new controller instance.
      *
@@ -29,10 +26,15 @@ class CommentController extends Controller
      */
     public function __construct()
     {
-        // 댓글 쓰기 미들웨어
-        $this->middleware(CommentWriteMiddleware::class)->only('store');
-        // $this->middleware(CommentModifyMiddleware::class)->only('update');
-        $this->middleware(CommentDeleteMiddleware::class)->only('delete');
+        // 댓글 읽기 가능한지 여부 체크
+        $this->middleware(CommentAccessMiddleware::class)->only('index');
+
+        // 댓글 쓰기 가능한지 여부 체크
+        $this->middleware(CommentStoreMiddleware::class)->only('store');
+
+        // 댓글 본인 소유 확인. 댓글 수정, 삭제용.
+        $this->middleware(CommentOwnerMiddleware::class)
+             ->only(['update', 'destroy']);
     }
 
     /**
@@ -47,10 +49,11 @@ class CommentController extends Controller
         $groupId = $request->query('group_id', null); // 댓글 그룹 ID
 
         $post = Post::find($postId);
-        // $count = $post->comments()->count();
         $nextComments = $post->getNextCommentsByGroupId($groupId);
 
-        return response()->view('laraboard::components.shared.commentChunk', [
+        $viewName = 'laraboard::components.shared.commentChunk';
+
+        return response()->view($viewName, [
             'comments' => $nextComments,
             'role' => BoardUserRoles::roles($boardName)
         ]);
@@ -197,6 +200,7 @@ class CommentController extends Controller
         $comment->content = htmlspecialchars($request->content);
         $comment->content_pure = strip_tags($request->content);
         $comment->point = $board->comment_point;
+        $comment->updated_at = null; // 글 추가 시 updated_at 무시
         $comment->board()->associate($board);
         $comment->post()->associate($post);
         $comment->user()->associate($user);

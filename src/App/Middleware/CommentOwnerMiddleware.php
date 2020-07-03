@@ -6,10 +6,9 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use Inium\Laraboard\App\Board;
-use Inium\Laraboard\App\Board\BoardUserRoles;
+use Inium\Laraboard\App\Comment;
 
-class BoardAccessMiddleware
+class CommentOwnerMiddleware
 {
     /**
      * Handle an incoming request.
@@ -20,10 +19,12 @@ class BoardAccessMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $board = Board::findByName($request->boardName);
-        abort_if(!$board, 404, 'Board not found');
+        // 댓글 존재 여부 확인
+        $comment = Comment::find($request->commentId);
+        abort_if(!$comment, 404, 'Comment not found');
 
-        // $roles = BoardUserRoles::roles($request->boardName);
+        // 댓글 작성자가 본인이 아닌 경우, 401 반환
+        abort_if($comment->user->user->id !== Auth::id(), 401, 'Unauthorized');
 
         return $next($request);
     }
