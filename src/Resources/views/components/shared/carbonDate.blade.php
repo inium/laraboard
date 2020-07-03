@@ -11,5 +11,7 @@
   --}}
 
 <span>
+    {{-- {{ $date->setTimezone('Asia/Seoul')->diffForHumans() }} --}}
+    {{-- {{ $date->locale(config('app.locale'))->diffForHumans() }} --}}
     {{ $date->locale('ko')->diffForHumans() }}
 </span>

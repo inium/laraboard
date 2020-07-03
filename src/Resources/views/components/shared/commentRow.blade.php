@@ -24,10 +24,25 @@
 
                     {{-- 댓글 작성날짜 --}}
                     <li class="list-inline-item">
-                        @include('laraboard::components.shared.carbonDate', [
-                            'date' => $comment['created_at']
-                        ])
+                        <span tabindex="0" data-toggle="tooltip" title="{{ $comment['created_at'] }}">
+                            @include('laraboard::components.shared.carbonDate', [
+                                'date' => $comment['created_at']
+                            ])
+                        </span>
+
+                        @if ($comment['updated_at'])
+                            <span tabindex="0" data-toggle="tooltip" title="{{ $comment['updated_at'] }}">
+                                (수정됨)
+                            </span>
+                        @endif
                     </li>
+
+                    {{-- 댓글 수정날짜 --}}
+                    {{-- @if ($comment['updated_at'])
+                        <li class="list-inline-item">
+                            (수정됨)
+                        </li>
+                    @endif --}}
                 </ul>
 
             </div>

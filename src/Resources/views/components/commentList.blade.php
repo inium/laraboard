@@ -247,19 +247,23 @@
 
         $(document).ready(function () {
 
-            // 글쓰기 Quill Editor 생성
-            quillCommentWrite = new Quill('#editor', {
-                modules: {
-                    toolbar: toolbarOptions
-                },
-                placeholder: '글을 입력하세요.',
-                theme: 'snow'
-            });
+            // 댓글 쓰기 form이 존재할 경우
+            if ($('#formCommentWrite').length) {
 
-            // 초기값 설정. form validation 실패할 경우 복구 실행.
-            quillCommentWrite.root.innerHTML
-                = `{!! htmlspecialchars_decode(old('content')) !!}`;
+                // 글쓰기 Quill Editor 생성
+                quillCommentWrite = new Quill('#editor', {
+                    modules: {
+                        toolbar: toolbarOptions
+                    },
+                    placeholder: '글을 입력하세요.',
+                    theme: 'snow'
+                });
 
+                // 초기값 설정. form validation 실패할 경우 복구 실행.
+                quillCommentWrite.root.innerHTML
+                    = `{!! htmlspecialchars_decode(old('content')) !!}`;
+
+            }
 
             // 초기 댓글 정보를 가져온다.
             $('#commentFormOriginArea').hide();     // 댓글 입력 form 숨김
@@ -298,7 +302,6 @@
 
             // 사용자가 클릭한 이전 수정 버튼
             let clickedModifyButton = null;
-
 
             /**
              * 댓글 쓰기를 취소한다.

@@ -32,13 +32,11 @@
   --}}
 
 @php
-
 $marked = false;
 
 if (isset($markPostId)) {
     $marked = ($post['id'] == $markPostId) ? true : false;
 }
-
 @endphp
 
 @push('stylesheets')
@@ -47,7 +45,6 @@ if (isset($markPostId)) {
     width: 21px;
     height: 21px;
 }
-
 </style>
 @endpush
 
