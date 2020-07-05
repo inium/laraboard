@@ -302,20 +302,21 @@ class PostController extends Controller
 
         $post = new Post();
 
-        $post->ip_address = encrypt($request->ip());
-        $post->user_agent = $ua->agent;
-        $post->device_type = $ua->device_type;
-        $post->os_name = $ua->os_name;
-        $post->os_version = $ua->os_version;
-        $post->browser_name = $ua->browser_name;
-        $post->browser_version = $ua->browser_version;
-        $post->notice = $notice;
-        $post->subject = strip_tags($request->subject);
-        $post->content = htmlspecialchars($request->content);
-        $post->content_pure = strip_tags($request->content);
-        $post->view_count = 0;
-        $post->point = $board->post_point;
-        $post->updated_at = null; // 글 추가 시 updated_at 무시
+        $post->ip_address       = encrypt($request->ip());
+        $post->user_agent       = encrypt($ua->agent);
+        $post->device_type      = $ua->device_type;
+        $post->os_name          = $ua->os_name;
+        $post->os_version       = $ua->os_version;
+        $post->browser_name     = $ua->browser_name;
+        $post->browser_version  = $ua->browser_version;
+        $post->notice           = $notice;
+        $post->subject          = strip_tags($request->subject);
+        $post->content          = htmlspecialchars($request->content);
+        $post->content_pure     = strip_tags($request->content);
+        $post->view_count       = 0;
+        $post->point            = $board->post_point;
+        $post->updated_at       = null; // 글 추가 시 updated_at 무시
+
         $post->board()->associate($board);
         $post->user()->associate($user);
 
@@ -345,17 +346,17 @@ class PostController extends Controller
             $notice = $request->notice ? true : false;
         }
 
-        $post->ip_address = encrypt($request->ip());
-        $post->user_agent = $ua->agent;
-        $post->device_type = $ua->device_type;
-        $post->os_name = $ua->os_name;
-        $post->os_version = $ua->os_version;
-        $post->browser_name = $ua->browser_name;
-        $post->browser_version = $ua->browser_version;
-        $post->notice = $notice;
-        $post->subject = strip_tags($request->subject);
-        $post->content = htmlspecialchars($request->content);
-        $post->content_pure = strip_tags($request->content);
+        $post->ip_address       = encrypt($request->ip());
+        $post->user_agent       = encrypt($ua->agent);
+        $post->device_type      = $ua->device_type;
+        $post->os_name          = $ua->os_name;
+        $post->os_version       = $ua->os_version;
+        $post->browser_name     = $ua->browser_name;
+        $post->browser_version  = $ua->browser_version;
+        $post->notice           = $notice;
+        $post->subject          = strip_tags($request->subject);
+        $post->content          = htmlspecialchars($request->content);
+        $post->content_pure     = strip_tags($request->content);
 
         $updated = $post->save();
 

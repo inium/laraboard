@@ -191,17 +191,18 @@ class CommentController extends Controller
 
         $comment = new Comment();
 
-        $comment->ip_address = encrypt($request->ip());
-        $comment->user_agent = $ua->agent;
-        $comment->device_type = $ua->device_type;
-        $comment->os_name = $ua->os_name;
-        $comment->os_version = $ua->os_version;
-        $comment->browser_name = $ua->browser_name;
+        $comment->ip_address      = encrypt($request->ip());
+        $comment->user_agent      = encrypt($ua->agent);
+        $comment->device_type     = $ua->device_type;
+        $comment->os_name         = $ua->os_name;
+        $comment->os_version      = $ua->os_version;
+        $comment->browser_name    = $ua->browser_name;
         $comment->browser_version = $ua->browser_version;
-        $comment->content = htmlspecialchars($request->content);
-        $comment->content_pure = strip_tags($request->content);
-        $comment->point = $board->comment_point;
-        $comment->updated_at = null; // 글 추가 시 updated_at 무시
+        $comment->content         = htmlspecialchars($request->content);
+        $comment->content_pure    = strip_tags($request->content);
+        $comment->point           = $board->comment_point;
+        $comment->updated_at      = null; // 글 추가 시 updated_at 무시
+
         $comment->board()->associate($board);
         $comment->post()->associate($post);
         $comment->user()->associate($user);
@@ -236,15 +237,15 @@ class CommentController extends Controller
 
         $comment = Comment::find($commentId);
 
-        $comment->ip_address = encrypt($request->ip());
-        $comment->user_agent = $ua->agent;
-        $comment->device_type = $ua->device_type;
-        $comment->os_name = $ua->os_name;
-        $comment->os_version = $ua->os_version;
-        $comment->browser_name = $ua->browser_name;
+        $comment->ip_address      = encrypt($request->ip());
+        $comment->user_agent      = encrypt($ua->agent);
+        $comment->device_type     = $ua->device_type;
+        $comment->os_name         = $ua->os_name;
+        $comment->os_version      = $ua->os_version;
+        $comment->browser_name    = $ua->browser_name;
         $comment->browser_version = $ua->browser_version;
-        $comment->content = htmlspecialchars($request->content);
-        $comment->content_pure = strip_tags($request->content);
+        $comment->content         = htmlspecialchars($request->content);
+        $comment->content_pure    = strip_tags($request->content);
 
         $updated = $comment->save();
 
