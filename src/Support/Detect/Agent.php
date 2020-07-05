@@ -21,7 +21,7 @@ class Agent
      *                          - browser_version: 사용자 접속 브라우저 버전.
      *                                          없거나 분석 불가할 경우 null.
      */
-    public function parse(string $agent): object
+    public static function parse(string $agent): object
     {
         $ua = new \Jenssegers\Agent\Agent();
         $ua->setUserAgent($agent);
