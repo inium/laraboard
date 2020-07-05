@@ -6,7 +6,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factory as EloquentFactory;
-use Inium\Laraboard\Support\Detect\Agent;
 
 class LaraboardServiceProvider extends ServiceProvider
 {
@@ -19,9 +18,6 @@ class LaraboardServiceProvider extends ServiceProvider
     {
         // Load the config file and merge it (should it get published)
         $this->mergeConfigFrom(__DIR__ . '/Config/laraboard.php', 'laraboard');
-
-        // Register Facade
-        $this->app->bind('board_agent', Agent::class);
     }
 
     /**
