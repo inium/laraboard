@@ -15,7 +15,7 @@ use Inium\Laraboard\App\Board\Request\CommentRequest;
 use Inium\Laraboard\App\Middleware\CommentAccessMiddleware;
 use Inium\Laraboard\App\Middleware\CommentStoreMiddleware;
 use Inium\Laraboard\App\Middleware\CommentOwnerMiddleware;
-use Inium\Laraboard\Support\Facades\Agent;
+use Inium\Laraboard\Support\Detect\Agent;
 
 class CommentController extends Controller
 {
@@ -75,7 +75,7 @@ class CommentController extends Controller
 
          // 댓글 저장에 성공한 경우, 게시글 보기 페이지로 이동
          if ($commentId) {
-            return redirect()->route('board.post.view', [
+            return redirect()->route('board.post.show', [
                             'boardName' => $boardName,
                             'postId' => $postId
                         ]);
@@ -83,7 +83,7 @@ class CommentController extends Controller
         // 댓글 저장에 실패한 경우, 게시글 쓰기 페이지로 이동
         else {
             $errorMessage = '댓글 저장에 실패하였습니다. 다시 시도해주세요.';
-            return redirect()->route('board.post.view', [
+            return redirect()->route('board.post.show', [
                             'boardName' => $boardName,
                             'postId' => $postId
                         ])
@@ -113,7 +113,7 @@ class CommentController extends Controller
 
          // 댓글 수정에 성공한 경우, 게시글 보기 페이지로 이동
          if ($commentId) {
-            return redirect()->route('board.post.view', [
+            return redirect()->route('board.post.show', [
                             'boardName' => $boardName,
                             'postId' => $postId
                         ]);
@@ -121,7 +121,7 @@ class CommentController extends Controller
         // 댓글 수정에 실패한 경우, 게시글 쓰기 페이지로 이동
         else {
             $errorMessage = '댓글 수정에 실패하였습니다. 다시 시도해주세요.';
-            return redirect()->route('board.post.view', [
+            return redirect()->route('board.post.show', [
                             'boardName' => $boardName,
                             'postId' => $postId
                         ])
@@ -151,7 +151,7 @@ class CommentController extends Controller
             Session::flash('message', '답글이 있는 댓글은 삭제할 수 없습니다.');
             Session::flash('alert-class', 'alert-danger');
 
-            return redirect()->route('board.post.view', [
+            return redirect()->route('board.post.show', [
                 'boardName' => $boardName,
                 'postId' => $postId
             ]);
@@ -164,7 +164,7 @@ class CommentController extends Controller
         Session::flash('message', $flashMessage);
         Session::flash('alert-class', 'alert-danger');
 
-        return redirect()->route('board.post.view', [
+        return redirect()->route('board.post.show', [
             'boardName' => $boardName,
             'postId' => $postId
         ]);
