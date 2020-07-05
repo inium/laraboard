@@ -1,0 +1,38 @@
+{
+    "name": "inium/laraboard",
+    "description": "A simple board on Laravel.",
+    "type": "project",
+    "license": "MIT",
+    "keywords": ["laravel", "board"],
+    "authors": [
+        {
+            "name": "inlee",
+            "email": "einable@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^7.2.5",
+        "jenssegers/agent": "^3.0@dev"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Inium\\Laraboard\\LaraboardServiceProvider"
+            ],
+            "aliases": {
+                "LaraboardAgent": "Inium\\Laraboard\\Support\\Facades\\Agent"
+            }
+        },
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        }
+    },
+    "autoload": {
+        "classmap": [
+        ],
+        "psr-4": {
+            "Inium\\Laraboard\\": "src/"
+        }
+    }
+}
