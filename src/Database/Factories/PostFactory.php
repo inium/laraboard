@@ -5,7 +5,7 @@
 use Inium\Laraboard\App\Post;
 use Inium\Laraboard\App\Board;
 use Inium\Laraboard\App\User;
-use Inium\Laraboard\Support\Facades\Agent;
+use Inium\Laraboard\Support\Detect\Agent;
 use Inium\Laraboard\Support\Faker\RandomWysiwygFragment;
 use Faker\Generator as Faker;
 use Faker\Factory as FakerFactory;
@@ -49,5 +49,6 @@ $factory->define(Post::class, function (Faker $faker) use ($fakerKo) {
         'point'           => $board->post_point,
         'board_id'        => $board->id,
         'wrote_user_id'   => $user->id,
+        'updated_at'      => null // 추가 시 updated_at 무시
     ];
 });

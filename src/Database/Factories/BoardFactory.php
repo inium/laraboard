@@ -38,6 +38,7 @@ $factory->define(Board::class, function (Faker $faker) use ($fakerKo) {
         'min_post_write_role_id'    => $role['id'],
         'min_comment_read_role_id'  => $role['id'],
         'min_comment_write_role_id' => $role['id'],
-        'create_user_id'            => $admin->id
+        'create_user_id'            => $admin->id,
+        'updated_at'                => null // 추가 시 updated_at 무시
     ];
 });
