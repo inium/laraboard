@@ -45,7 +45,7 @@
 
         <form id="formPostModify"
               method="POST"
-              action="{{ route('board.post.modify.put', [
+              action="{{ route('board.post.update', [
                     'boardName' => $post['board']['name'],
                     'postId' => $post['id']
                 ]) }}">
@@ -92,8 +92,8 @@
 
                 {{-- 목록 버튼 --}}
                 <div>
-                    <a href="{{ route('board.postlistsearch.view', [
-                                    'boardname' => $board['name'],
+                    <a href="{{ route('board.post.index', [
+                                    'boardName' => $post['board']['name'],
                                 ]) }}" class="btn btn-primary">
                         목록
                     </a>
@@ -122,7 +122,8 @@
                 [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
                 ['bold', 'italic', 'underline', 'strike'],
                 ['blockquote', 'code-block'],
-                ['link', 'image', 'video'],
+                // ['link', 'image', 'video'],
+                ['link'],
                 [{ 'list': 'ordered'}, { 'list': 'bullet' }],
                 [{ 'indent': '-1'}, { 'indent': '+1' }],
                 [{ 'align': [] }],

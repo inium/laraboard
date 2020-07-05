@@ -45,7 +45,7 @@
 
         <form id="formPostWrite"
               method="POST"
-              action="{{ route('board.post.write.post', [
+              action="{{ route('board.post.store', [
                     'boardName' => $board['name']
                 ]) }}">
 
@@ -88,8 +88,8 @@
 
                 {{-- 목록 버튼 --}}
                 <div>
-                    <a href="{{ route('board.postlistsearch.view', [
-                                    'boardname' => $board['name'],
+                    <a href="{{ route('board.post.index', [
+                                    'boardName' => $board['name'],
                                 ]) }}" class="btn btn-primary">
                         목록
                     </a>
@@ -118,7 +118,8 @@
                 [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
                 ['bold', 'italic', 'underline', 'strike'],
                 ['blockquote', 'code-block'],
-                ['link', 'image', 'video'],
+                // ['link', 'image', 'video'],
+                ['link'],
                 [{ 'list': 'ordered'}, { 'list': 'bullet' }],
                 [{ 'indent': '-1'}, { 'indent': '+1' }],
                 [{ 'align': [] }],

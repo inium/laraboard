@@ -133,7 +133,7 @@
 
             <div>
                 @if ($role->post->canRead)
-                    <a href="{{ route('board.postListSearch.view', [
+                    <a href="{{ route('board.post.index', [
                                     'boardName' => $board['name'],
                                     'query' => $query,
                                 ]) }}" class="btn btn-primary">
@@ -189,7 +189,8 @@
                 [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
                 ['bold', 'italic', 'underline', 'strike'],
                 ['blockquote', 'code-block'],
-                ['link', 'image', 'video'],
+                // ['link', 'image', 'video'],
+                ['link'],
                 [{ 'list': 'ordered'}, { 'list': 'bullet' }],
                 [{ 'indent': '-1'}, { 'indent': '+1' }],
                 [{ 'align': [] }],
