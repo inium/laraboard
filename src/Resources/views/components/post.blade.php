@@ -95,10 +95,19 @@
                         <li class="list-inline-item">
                             작성일:
 
-                            {{-- Carbon locale to ko, diff for humans --}}
-                            @include('laraboard::components.shared.carbonDate', [
-                                'date' => $post['created_at']
-                            ])
+                            <span tabindex="0" data-toggle="tooltip" title="{{ $post['created_at'] }}">
+                                {{-- Carbon locale to ko, diff for humans --}}
+                                @include('laraboard::components.shared.carbonDate', [
+                                    'date' => $post['created_at']
+                                ])
+                            </span>
+
+                            {{-- 댓글 수정날짜 --}}
+                            @if ($post['updated_at'])
+                                <span tabindex="0" data-toggle="tooltip" title="{{ $post['updated_at'] }}">
+                                    (수정됨)
+                                </span>
+                            @endif
                         </li>
 
                         <li class="list-inline-item">
@@ -118,7 +127,7 @@
 
                             {{-- 게시글 수정 --}}
                             <li class="list-inline-item mr-0">
-                                <a href="{{ route('board.post.modify.view', [
+                                <a href="{{ route('board.post.edit', [
                                                 'boardName' => $post['board']['name'],
                                                 'postId' => $post['id']
                                             ]) }}" class="btn btn-primary">
@@ -134,7 +143,7 @@
                                     {{-- 게시글 삭제는 DELETE에서 처리 --}}
                                     <form id="formDeletePost"
                                           method="POST"
-                                          action="{{ route('board.post.delete', [
+                                          action="{{ route('board.post.destroy', [
                                                         'boardName' => $post['board']['name'],
                                                         'postId' => $post['id']
                                                     ]) }}">
