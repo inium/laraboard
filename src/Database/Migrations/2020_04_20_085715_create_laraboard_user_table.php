@@ -39,7 +39,6 @@ class CreateLaraboardUserTable extends Migration
                 $table->text('thumbnail_path')
                       ->nullable()
                       ->comment('썸네일 저장경로');
-                $table->text('introduce')->nullable()->comment('자기소개');
                 $table->timestamps();
                 $table->softDeletes();
 
