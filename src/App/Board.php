@@ -105,7 +105,7 @@ class Board extends Model
     }
 
     /**
-     * 게시판 검색한 결과를 반환한다.
+     * 게시판 게시글 제목, 게시글 내용, 댓글 내용 검색결과를 반환한다.
      *
      * @param string $query     검색어.
      * @param string $type      검색 타입.
@@ -130,9 +130,10 @@ class Board extends Model
                         //     }
                         // );
                 })
-                ->orWhereHas('user', function (Builder $q) use ($query) {
-                    $q->where('nickname', 'LIKE', "%{$query}%");
-                })
+                // ->orWhereHas('user', function (Builder $q) use ($query) {
+                //     // 작성자
+                //     $q->where('nickname', 'LIKE', "%{$query}%");
+                // })
                 // ->latest()
                 ->orderBy('id', 'DESC')
                 ->paginate($this->post_rows_per_page);
