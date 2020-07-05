@@ -40,7 +40,6 @@
                 @include ('laraboard::components.commentList', [
                     'board'    => $post['board'],
                     'postId'   => $post['id'],
-                    'comments' => $comments,
                     'role'     => $role,
                     'query'    => $query
                 ])
@@ -56,8 +55,8 @@
                 @include('laraboard::components.search', [
                     'board'      => $list['board'],
                     'search'     => $list['search'],
-                    'query'      => $list['query'],
-                    'page'       => $list['page'],
+                    'query'      => $query,
+                    'page'       => $page,
                     'markPostId' => $post['id']
                 ])
 
@@ -69,7 +68,7 @@
                     'notices'    => $list['notices'],
                     'posts'      => $list['posts'],
                     'query'      => null,
-                    'page'       => $list['page'],
+                    'page'       => $page,
                     'markPostId' => $post['id']
                 ])
 
