@@ -19,30 +19,23 @@ class BoardUserRoles
      */
     public static function roles(string $boardName): object
     {
-        try {
-            $board = Board::findByName($boardName);
-            if (!$board) {
-                throw new \Exception('Board not found', 404);
-            }
+        $board = Board::findByName($boardName);
+        abort_if(!$board, 404, 'Board not found');
 
-            $isAdmin = false;
+        $isAdmin = false;
 
-            $user = User::findByUserId(Auth::id());
-            if ($user) {
-                $isAdmin = $user->role->is_admin ? true : false;
-            }
-
-            $roles = [
-                'admin' => $isAdmin,    // 관리자 여부
-                'post' => self::postUserRoles($board, $user),   // 게시글 권한
-                'comment' => self::commentUserRoles($board, $user)  // 댓글 권한
-            ];
-
-            return (object)$roles;
+        $user = User::findByUserId(Auth::id());
+        if ($user) {
+            $isAdmin = $user->role->is_admin ? true : false;
         }
-        catch (\Exception $e) {
-            throw $e;
-        }
+
+        $roles = [
+            'admin' => $isAdmin,    // 관리자 여부
+            'post' => self::postUserRoles($board, $user),   // 게시글 권한
+            'comment' => self::commentUserRoles($board, $user)  // 댓글 권한
+        ];
+
+        return (object)$roles;
     }
 
     /**
