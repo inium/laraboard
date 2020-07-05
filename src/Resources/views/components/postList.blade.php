@@ -1,3 +1,12 @@
+@push('stylesheets')
+<style>
+.thumbnail {
+    width: 21px;
+    height: 21px;
+}
+</style>
+@endpush
+
 {{-- 게시글 목록 -------------------------------------------------------------}}
 <div class="lb-posts">
 
@@ -100,7 +109,7 @@
             {{-- 글 목록 --}}
             <div>
                 @if ($role->post->canRead)
-                    <a href="{{ route('board.postListSearch.view', [
+                    <a href="{{ route('board.post.index', [
                                     'boardName' => $board['name'],
                                     'query' => $query,
                                 ]) }}" class="btn btn-primary">
@@ -117,7 +126,7 @@
             {{-- 글 쓰기 --}}
             <div>
                 @if ($role->post->canWrite)
-                    <a href="{{ route('board.post.write.view', [
+                    <a href="{{ route('board.post.create', [
                                     'boardName' => $board['name']
                                 ]) }}" class="btn btn-primary">
                         글쓰기
@@ -131,8 +140,8 @@
         <div class="d-flex justify-content-center pt-3">
 
             @include ('laraboard::components.shared.searchForm', [
-                'action' => route('board.postListSearch.view', [
-                                    'boardName' => $board['name']
+                'action' => route('board.post.index', [
+                                        'boardName' => $board['name']
                                     ]),
                 'query' => $query
             ])

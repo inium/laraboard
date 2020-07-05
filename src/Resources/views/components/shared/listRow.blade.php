@@ -39,15 +39,6 @@ if (isset($markPostId)) {
 }
 @endphp
 
-@push('stylesheets')
-<style>
-.thumbnail {
-    width: 21px;
-    height: 21px;
-}
-</style>
-@endpush
-
 <li class="list-group-item">
 
     <div class="row">
@@ -60,12 +51,12 @@ if (isset($markPostId)) {
             @endif
 
             {{-- 게시글 보기 --}}
-            <a href="{{ route('board.post.view', [
+            <a href="{{ route('board.post.show', [
                             'boardName' => $boardName,
                             'postId' => $postId,
                             'page' => $page == 1 ? null : $page,
                             'query' => $query
-                        ])}}" @if ($marked)class="font-weight-bold"@endif>
+                        ])}}" class="highlight @if ($marked)font-weight-bold"@endif">
 
                 {{ $subject }}
 
@@ -100,10 +91,12 @@ if (isset($markPostId)) {
         {{-- 작성일 --}}
         <div class="col-1">
 
-            {{-- Carbon locale to ko, diff for humans --}}
-            @include('laraboard::components.shared.carbonDate', [
-                'date' => $createdAt
-            ])
+            <span tabindex="0" data-toggle="tooltip" title="{{ $createdAt }}">
+                {{-- Carbon locale to ko, diff for humans --}}
+                @include('laraboard::components.shared.carbonDate', [
+                    'date' => $createdAt
+                ])
+            </span>
 
         </div>
 
