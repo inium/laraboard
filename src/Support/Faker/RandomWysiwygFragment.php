@@ -24,7 +24,7 @@ class RandomWysiwygFragment
             $appendText = '<p><br></p>';
 
             // 마지막 문단엔 $appendText 추가하지 않음
-            if ($i < ($sentences - 1)) {
+            if ($i >= ($sentences - 1)) {
                 $appendText = null;
             }
 
