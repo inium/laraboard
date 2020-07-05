@@ -191,6 +191,7 @@ class CommentController extends Controller
 
         $comment = new Comment();
 
+        $comment->ip_address = encrypt($request->ip());
         $comment->user_agent = $ua->agent;
         $comment->device_type = $ua->device_type;
         $comment->os_name = $ua->os_name;
@@ -235,6 +236,7 @@ class CommentController extends Controller
 
         $comment = Comment::find($commentId);
 
+        $comment->ip_address = encrypt($request->ip());
         $comment->user_agent = $ua->agent;
         $comment->device_type = $ua->device_type;
         $comment->os_name = $ua->os_name;

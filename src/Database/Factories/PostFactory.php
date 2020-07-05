@@ -35,6 +35,7 @@ $factory->define(Post::class, function (Faker $faker) use ($fakerKo) {
     $content = RandomWysiwygFragment::generate($fakerKo, (rand() % 5) + 10);
 
     return [
+        'ip_address'      => encrypt($faker->ipv4),
         'user_agent'      => $ua->agent,
         'device_type'     => $ua->device_type,
         'os_name'         => $ua->os_name,

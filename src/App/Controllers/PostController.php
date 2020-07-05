@@ -302,6 +302,7 @@ class PostController extends Controller
 
         $post = new Post();
 
+        $post->ip_address = encrypt($request->ip());
         $post->user_agent = $ua->agent;
         $post->device_type = $ua->device_type;
         $post->os_name = $ua->os_name;
@@ -344,6 +345,7 @@ class PostController extends Controller
             $notice = $request->notice ? true : false;
         }
 
+        $post->ip_address = encrypt($request->ip());
         $post->user_agent = $ua->agent;
         $post->device_type = $ua->device_type;
         $post->os_name = $ua->os_name;

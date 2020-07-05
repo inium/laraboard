@@ -20,6 +20,9 @@ class CreateLaraboardPostTable extends Migration
             function (Blueprint $table) use ($boardTableName,
                                              $userTableName) {
                 $table->id();
+                $table->string('ip_address')
+                      ->nullable()
+                      ->comment('작성자 IP Address');
                 $table->string('user_agent')
                       ->nullable()
                       ->comment('작성자 User Agent');
