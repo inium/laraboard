@@ -16,8 +16,8 @@
  * @param int    page       페이지 번호. 기본 1.
  * -------------------------------------------------------------------------
  */
-Route::get('/board/{boardName}', 'PostListSearchController@view')
-        ->name('board.postListSearch.view');
+Route::get('/board/{boardName}', 'PostController@index')
+        ->name('board.post.index');
 
 /**
  * 게시글 보기 페이지
@@ -35,23 +35,23 @@ Route::get('/board/{boardName}', 'PostListSearchController@view')
  * @param string query      검색어.
  * -----------------------------------------------------------------------------
  */
-Route::get('/board/{boardName}/{postId}', 'PostController@view')
+Route::get('/board/{boardName}/{postId}', 'PostController@show')
         ->where('postId', '[0-9]+') // 게시글 ID는 숫자로 구성
-        ->name('board.post.view');
+        ->name('board.post.show');
 
 /**
  * 게시글 쓰기 페이지
  * 
  * -----------------------------------------------------------------------------
- * GET [/{$prefix}]/board/{boardName}/write
+ * GET [/{$prefix}]/board/{boardName}/create
  * 
  * Route params
  * @param string $prefix    Route Prefix. 환경설정(laraboard.php) 참조.
  * @param string boardName  게시판 영문 이름.
  * -----------------------------------------------------------------------------
  */
-Route::get('/board/{boardName}/write', 'PostWriteController@view')
-        ->name('board.post.write.view');
+Route::get('/board/{boardName}/create', 'PostController@create')
+        ->name('board.post.create');
 
 /**
  * 게시글 저장
@@ -71,8 +71,8 @@ Route::get('/board/{boardName}/write', 'PostWriteController@view')
  * @param string content 게시글 내용 (HTML)
  * -----------------------------------------------------------------------------
  */
-Route::post('/board/{boardName}', 'PostWriteController@post')
-        ->name('board.post.write.post');
+Route::post('/board/{boardName}', 'PostController@store')
+        ->name('board.post.store');
 
 /**
  * 게시글 수정 페이지
@@ -86,9 +86,9 @@ Route::post('/board/{boardName}', 'PostWriteController@post')
  * @param integer postId    게시글 ID
  * -----------------------------------------------------------------------------
  */
-Route::get('/board/{boardName}/modify/{postId}', 'PostModifyController@view')
+Route::get('/board/{boardName}/modify/{postId}', 'PostController@edit')
         ->where('postId', '[0-9]+') // 게시글 ID는 숫자로 구성
-        ->name('board.post.modify.view');
+        ->name('board.post.edit');
 
 /**
  * 게시글 수정
@@ -109,9 +109,9 @@ Route::get('/board/{boardName}/modify/{postId}', 'PostModifyController@view')
  * @param string content    게시글 내용 (HTML)
  * -----------------------------------------------------------------------------
  */
-Route::put('/board/{boardName}/{postId}', 'PostModifyController@put')
+Route::put('/board/{boardName}/{postId}', 'PostController@update')
         ->where('postId', '[0-9]+') // 게시글 ID는 숫자로 구성
-        ->name('board.post.modify.put');
+        ->name('board.post.update');
 
 /**
  * 게시글 삭제
@@ -125,9 +125,10 @@ Route::put('/board/{boardName}/{postId}', 'PostModifyController@put')
  * @param integer postId    게시글 ID.
  * -----------------------------------------------------------------------------
  */
-Route::delete('/board/{boardName}/{postId}', 'PostController@delete')
+Route::delete('/board/{boardName}/{postId}', 'PostController@destroy')
         ->where('postId', '[0-9]+') // 게시글 ID는 숫자로 구성
-        ->name('board.post.delete');
+        // ->name('board.post.delete');
+        ->name('board.post.destroy');
 
 
 
