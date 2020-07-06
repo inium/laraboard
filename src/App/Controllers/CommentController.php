@@ -186,22 +186,26 @@ class CommentController extends Controller
         $post = Post::find($postId);
         $user = User::findByUserId(Auth::id());
 
-        // Get User Agent
-        $ua = Agent::parse($request->server('HTTP_USER_AGENT'));
-
         $comment = new Comment();
 
-        $comment->ip_address      = encrypt($request->ip());
-        $comment->user_agent      = encrypt($ua->agent);
-        $comment->device_type     = $ua->device_type;
-        $comment->os_name         = $ua->os_name;
-        $comment->os_version      = $ua->os_version;
-        $comment->browser_name    = $ua->browser_name;
-        $comment->browser_version = $ua->browser_version;
-        $comment->content         = htmlspecialchars($request->content);
-        $comment->content_pure    = strip_tags($request->content);
-        $comment->point           = $board->comment_point;
-        $comment->updated_at      = null; // 글 추가 시 updated_at 무시
+        // 사용자 정보를 수집하는 경우
+        if (config('laraboard.board.collect_user_info')) {
+            // Get User Agent
+            $ua = Agent::parse($request->server('HTTP_USER_AGENT'));
+
+            $comment->ip_address      = encrypt($request->ip());
+            $comment->user_agent      = encrypt($ua->agent);
+            $comment->device_type     = $ua->device_type;
+            $comment->os_name         = $ua->os_name;
+            $comment->os_version      = $ua->os_version;
+            $comment->browser_name    = $ua->browser_name;
+            $comment->browser_version = $ua->browser_version;
+        }
+
+        $comment->content       = htmlspecialchars($request->content);
+        $comment->content_pure  = strip_tags($request->content);
+        $comment->point         = $board->comment_point;
+        $comment->updated_at    = null; // 글 추가 시 updated_at 무시
 
         $comment->board()->associate($board);
         $comment->post()->associate($post);
@@ -232,20 +236,24 @@ class CommentController extends Controller
                                    int $postId,
                                    int $commentId): bool
     {
-        // Get User Agent
-        $ua = Agent::parse($request->server('HTTP_USER_AGENT'));
-
         $comment = Comment::find($commentId);
 
-        $comment->ip_address      = encrypt($request->ip());
-        $comment->user_agent      = encrypt($ua->agent);
-        $comment->device_type     = $ua->device_type;
-        $comment->os_name         = $ua->os_name;
-        $comment->os_version      = $ua->os_version;
-        $comment->browser_name    = $ua->browser_name;
-        $comment->browser_version = $ua->browser_version;
-        $comment->content         = htmlspecialchars($request->content);
-        $comment->content_pure    = strip_tags($request->content);
+        // 사용자 정보를 수집하는 경우
+        if (config('laraboard.board.collect_user_info')) {
+            // Get User Agent
+            $ua = Agent::parse($request->server('HTTP_USER_AGENT'));
+
+            $comment->ip_address      = encrypt($request->ip());
+            $comment->user_agent      = encrypt($ua->agent);
+            $comment->device_type     = $ua->device_type;
+            $comment->os_name         = $ua->os_name;
+            $comment->os_version      = $ua->os_version;
+            $comment->browser_name    = $ua->browser_name;
+            $comment->browser_version = $ua->browser_version;
+        }
+
+        $comment->content       = htmlspecialchars($request->content);
+        $comment->content_pure  = strip_tags($request->content);
 
         $updated = $comment->save();
 

@@ -31,6 +31,18 @@ return [
          */
         'nickname_unique' => true,
 
+        /**
+         * 사용자 정보 수집 여부. true (수집), false (수집하지 않음)
+         * 
+         * 수집항목:
+         * - IP Address(암호화 하여 저장)
+         * - User Agent(암호화 하여 저장)
+         * - User Agent 분석 Device Type (desktop, tablet, mobile, other 중 1)
+         * - OS name, version
+         * - Browser name, version
+         */
+        'collect_user_info' => false,
+
         /*
          * 게시판 테이블 이름
          */

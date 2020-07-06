@@ -291,9 +291,6 @@ class PostController extends Controller
         $board = Board::findByName($boardName);
         $user = User::findByUserId(Auth::id());
 
-        // Get User Agent
-        $ua = Agent::parse($request->server('HTTP_USER_AGENT'));
-
         // 공지 여부는 관리자만 적용
         $notice = false;
         if ($user->role->is_admin) {
@@ -302,13 +299,20 @@ class PostController extends Controller
 
         $post = new Post();
 
-        $post->ip_address       = encrypt($request->ip());
-        $post->user_agent       = encrypt($ua->agent);
-        $post->device_type      = $ua->device_type;
-        $post->os_name          = $ua->os_name;
-        $post->os_version       = $ua->os_version;
-        $post->browser_name     = $ua->browser_name;
-        $post->browser_version  = $ua->browser_version;
+        // 사용자 정보를 수집하는 경우
+        if (config('laraboard.board.collect_user_info')) {
+            // Get User Agent
+            $ua = Agent::parse($request->server('HTTP_USER_AGENT'));
+
+            $post->ip_address       = encrypt($request->ip());
+            $post->user_agent       = encrypt($ua->agent);
+            $post->device_type      = $ua->device_type;
+            $post->os_name          = $ua->os_name;
+            $post->os_version       = $ua->os_version;
+            $post->browser_name     = $ua->browser_name;
+            $post->browser_version  = $ua->browser_version;
+        }
+
         $post->notice           = $notice;
         $post->subject          = strip_tags($request->subject);
         $post->content          = htmlspecialchars($request->content);
@@ -337,22 +341,26 @@ class PostController extends Controller
         $post = Post::find($postId);
         $user = User::findByUserId(Auth::id());
 
-        // Get User Agent
-        $ua = Agent::parse($request->server('HTTP_USER_AGENT'));
-
         // 공지 여부는 관리자만 적용
         $notice = false;
         if ($user->role->is_admin) {
             $notice = $request->notice ? true : false;
         }
 
-        $post->ip_address       = encrypt($request->ip());
-        $post->user_agent       = encrypt($ua->agent);
-        $post->device_type      = $ua->device_type;
-        $post->os_name          = $ua->os_name;
-        $post->os_version       = $ua->os_version;
-        $post->browser_name     = $ua->browser_name;
-        $post->browser_version  = $ua->browser_version;
+        // 사용자 정보를 수집하는 경우
+        if (config('laraboard.board.collect_user_info')) {
+            // Get User Agent
+            $ua = Agent::parse($request->server('HTTP_USER_AGENT'));
+
+            $post->ip_address       = encrypt($request->ip());
+            $post->user_agent       = encrypt($ua->agent);
+            $post->device_type      = $ua->device_type;
+            $post->os_name          = $ua->os_name;
+            $post->os_version       = $ua->os_version;
+            $post->browser_name     = $ua->browser_name;
+            $post->browser_version  = $ua->browser_version;
+        }
+
         $post->notice           = $notice;
         $post->subject          = strip_tags($request->subject);
         $post->content          = htmlspecialchars($request->content);
