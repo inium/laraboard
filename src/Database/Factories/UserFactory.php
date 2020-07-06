@@ -65,7 +65,6 @@ $factory->define(User::class, function (Faker $faker) {
     return [
         'nickname'           => "{$nickname}_{$hash}",
         'thumbnail_path'     => null,
-        'introduce'          => $faker->realText,
         'user_id'            => $user->id,
         'board_user_role_id' => $roleId,
         'updated_at'         => null // 추가 시 updated_at 무시
