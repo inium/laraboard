@@ -63,7 +63,6 @@ trait AuthRegisteredTrait
         $boardUser = new User();
 
         $boardUser->nickname = $nickname;
-        $boardUser->introduce = null;
         $boardUser->thumbnail_path = null;
         $boardUser->user()->associate($user);
         $boardUser->role()->associate($privilege);
