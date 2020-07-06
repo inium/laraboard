@@ -23,21 +23,20 @@ $factory->define(Board::class, function (Faker $faker) use ($fakerKo) {
         $q->where('is_admin', true);
     })->inRandomOrder()->first();
 
-    $r = Role::where('is_admin', false)->orderBy('id', 'DESC')->take(3)->get();
-    $role = Arr::random($r->toArray());
+    $role = Role::where('is_admin', false)->orderBy('id', 'DESC')->first();
 
     return [
         'name'                      => 'free',
         'name_ko'                   => '자유게시판',
         'description'               => $fakerKo->realText,
-        'post_point'                => $faker->randomElement(array(10, 15, 20)),
-        'comment_point'             => $faker->randomElement(array(1, 5)),
-        'post_rows_per_page'        => $faker->randomElement(array(20, 25, 30)),
-        'comment_rows_per_page'     => $faker->randomElement(array(20, 30, 50)),
-        'min_post_read_role_id'     => $role['id'],
-        'min_post_write_role_id'    => $role['id'],
-        'min_comment_read_role_id'  => $role['id'],
-        'min_comment_write_role_id' => $role['id'],
+        'post_point'                => 20,
+        'comment_point'             => 5,
+        'post_rows_per_page'        => 20,
+        'comment_rows_per_page'     => 100,
+        'min_post_read_role_id'     => $role->id,
+        'min_post_write_role_id'    => $role->id,
+        'min_comment_read_role_id'  => $role->id,
+        'min_comment_write_role_id' => $role->id,
         'create_user_id'            => $admin->id,
         'updated_at'                => null // 추가 시 updated_at 무시
     ];
