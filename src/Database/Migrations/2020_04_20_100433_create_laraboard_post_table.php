@@ -23,15 +23,17 @@ class CreateLaraboardPostTable extends Migration
                 $table->string('ip_address')
                       ->nullable()
                       ->comment('작성자 IP Address');
-                $table->string('user_agent')
+                $table->text('user_agent')
                       ->nullable()
                       ->comment('작성자 User Agent');
                 $table->enum('device_type', [
-                    'desktop',  // PC
-                    'tablet',   // 태블릿
-                    'mobile',   // 모바일
-                    'others'    // 그 외
-                ])->comment('작성자 Device Type.');
+                          'desktop',  // PC
+                          'tablet',   // 태블릿
+                          'mobile',   // 모바일
+                          'others'    // 그 외
+                      ])
+                      ->nullable()
+                      ->comment('작성자 Device Type.');
                 $table->string('os_name')
                       ->nullable()
                       ->comment('작성자 OS 이름');
