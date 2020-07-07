@@ -1,7 +1,7 @@
 {
     "name": "inium/laraboard",
     "description": "A simple board on Laravel.",
-    "type": "project",
+    "type": "library",
     "license": "MIT",
     "keywords": ["laravel", "board"],
     "authors": [
