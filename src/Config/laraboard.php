@@ -27,11 +27,6 @@ return [
     'board' => [
 
         /**
-         * 사용자 닉네임 중복 여부. true (중복 방지), false (중복 허용).
-         */
-        'nickname_unique' => true,
-
-        /**
          * 사용자 정보 수집 여부. true (수집), false (수집하지 않음)
          * 
          * 수집항목:

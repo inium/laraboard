@@ -26,11 +26,9 @@ trait AuthRegisteredTrait
     public function registered(Request $request, $user)
     {
         // 닉네임 생성
+        $hash = Str::random(5);
         $nickname = Str::slug($user->name, '_');
-        if (config('laraboard.board.nickname_unique', true)) {
-            $hash = Str::random(5);
-            $nickname = "{$nickname}_{$hash}";
-        }
+        $nickname = "{$nickname}_{$hash}";
 
         // 게시판 사용자 추가
         $ret = $this->addBoardUser($nickname, $user);

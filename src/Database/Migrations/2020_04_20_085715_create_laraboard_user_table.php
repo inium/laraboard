@@ -15,27 +15,20 @@ class CreateLaraboardUserTable extends Migration
     {
         $roleTableName = $this->getBoardRoleTableName();
         $authUserTableName = $this->getAuthUserTableName();
-        $nicknameUnique = $this->getNicknameUnique();
 
         // 사용자 게시판 권한 정보 저장 테이블
         Schema::create($this->getTableName(),
             function (Blueprint $table) use ($roleTableName,
-                                             $authUserTableName,
-                                             $nicknameUnique) {
+                                             $authUserTableName) {
                 $table->id();
                 $table->unsignedBigInteger('user_id')
                       ->unique()
                       ->comment('사용자 ID');
                 $table->unsignedBigInteger('board_user_role_id')
                       ->comment('게시판 사용자 권한 ID');
-
-                // 닉네임 중복 방지 여부
-                if ($nicknameUnique) {
-                    $table->string('nickname')->unique()->comment('닉네임');
-                }
-                else {
-                    $table->string('nickname')->comment('닉네임');
-                }
+                $table->string('nickname')
+                      ->unique()
+                      ->comment('닉네임');
                 $table->text('thumbnail_path')
                       ->nullable()
                       ->comment('썸네일 저장경로');
@@ -99,15 +92,5 @@ class CreateLaraboardUserTable extends Migration
         $method = $class->getMethod('getTable');
 
         return $method->invoke($obj);
-    }
-
-    /**
-     * 게시판에서 사용할 사용자 닉네임이 unique인지 아닌지 여부를 반환한다.
-     *
-     * @return boolean
-     */
-    private function getNicknameUnique()
-    {
-        return config('laraboard.board.nickname_unique', 'users');
     }
 }
