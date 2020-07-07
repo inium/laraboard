@@ -40,6 +40,9 @@ class LaraboardServiceProvider extends ServiceProvider
         // Set publish files
         if ($this->app->runningInConsole()) {
             $this->bootForConsole();
+            $this->commands([
+                \Inium\Laraboard\App\Console\Commands\BoardCreate::class
+            ]);
         }
     }
 
