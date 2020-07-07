@@ -31,9 +31,9 @@ Laravel 게시판 패키지 입니다.
 
 사용한 Resource는 아래와 같습니다.
 
-| 항목      | 설명                                                         | 비고                             |
-| --------- | ------------------------------------------------------------ | -------------------------------- |
-| Thumbnail | [iconfinder](https://www.iconfinder.com/icons/4696674/account_avatar_male_people_person_profile_user_icon)의 이미지의 색상을 Gray로 변경한 후 base64 문자열로 변환하여 사용 | LICENSE: Free for commercial use |
+| 항목      | 설명                                                         | 비고                                                         |
+| --------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Thumbnail | [iconfinder](https://www.iconfinder.com/icons/4696674/account_avatar_male_people_person_profile_user_icon)의 이미지의 색상을 Gray로 변경한 후 base64 문자열로 변환하여 사용 | LICENSE: Free for commercial use<br />프로젝트 Root에 Thumbnail 이미지 저장 |
 
 ## 사용방법
 
