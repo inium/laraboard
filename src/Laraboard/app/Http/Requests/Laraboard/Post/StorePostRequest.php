@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Laraboard\Post;
 
-use Inium\Laraboard\Support\Requests\LaraboardFormRequest;
+use App\Http\Requests\Laraboard\LaraboardFormRequest;
 
 class StorePostRequest extends LaraboardFormRequest
 {

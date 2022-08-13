@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Laraboard\Comment;
 
-use Inium\Laraboard\Support\Requests\LaraboardFormRequest;
+use App\Http\Requests\Laraboard\LaraboardFormRequest;
 
 class StoreCommentRequest extends LaraboardFormRequest
 {
