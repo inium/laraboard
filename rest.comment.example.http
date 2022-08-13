@@ -1,0 +1,139 @@
+###
+# 댓글 조회, 검색
+# 
+# - 검색어가 있을 경우 검색된 댓글 목록 반환 / 없을 경우 댓글 목록 반환
+# ------------------------------------------------------------------------------
+# GET /api/v1/board/{boardName}/post/{postId}/comment?parent={parent}&page={page}&query={query} HTTP/1.1
+# Content-Type: application/json
+# Accept: application/json
+# ------------------------------------------------------------------------------
+#
+# @param string boardName   게시판 이름
+# @param int postId         게시글 ID
+# @param int|null parent    부모 댓글 ID (기본값 null)
+# @param int page           페이지 번호(기본값 1) / 페이지당 Row수는 board table에 정의
+# @param string query       검색어 (기본값 null)
+#
+GET http://localhost:12000/api/v1/board/board2080406406/post/105/comment HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+
+###
+# ID에 해당하는 댓글 조회
+# ------------------------------------------------------------------------------
+# GET /api/v1/board/{boardName}/post/{postId}/comment/{commentId} HTTP/1.1
+# Content-Type: application/json
+# Accept: application/json
+# ------------------------------------------------------------------------------
+#
+# @param string boardName   게시판 이름
+# @param int postId         게시글 ID
+# @param int commentId      댓글 ID
+#
+GET http://localhost:12000/api/v1/board/board2080406406/post/105/comment/668 HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+
+###
+# 댓글 등록
+#
+# - XSS Protection 적용되어 댓글 등록
+# - 등록된 사용자만(users 테이블 모든 사용자만) 댓글 추가를 할 수 있음
+# - 사용자 확인을 위해 HTTP 기본 인증(Basic Auth) 사용
+#   - CommentController - constructor - middleware 에서 인증 확인
+#   - Basic Auth의 email:password 를 base64인코딩하여 사용
+#     ex) Authorization: Basic base64Encode("laraboard@example.net:password")
+#      => Authorization: Basic bGFyYWJvYXJkQGV4YW1wbGUubmV0OnBhc3N3b3Jk
+# ------------------------------------------------------------------------------
+# POST /api/v1/board/{boardName}/post/{postId}/comment HTTP/1.1
+# Content-Type: application/json
+# Accept: application/json
+# Authorization: Basic base64Encode(email:password)
+#
+# {
+#   content: {content}
+#   parent_comment_id: {parent_comment_id}
+# }
+# ------------------------------------------------------------------------------
+#
+# @param string boardName       게시판 이름
+# @param int postId             게시글 ID
+# @param string content         댓글 본문
+# @param int parent_comment_id  부모 댓글 ID (기본값 null), 없으면 일반 댓글
+#
+# @see https://laravel.kr/docs/9.x/authentication#HTTP%20%EA%B8%B0%EB%B3%B8%20%EC%9D%B8%EC%A6%9D
+#
+POST http://localhost:12000/api/v1/board/board2080406406/post/105/comment HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Basic bGFyYWJvYXJkQGV4YW1wbGUubmV0OnBhc3N3b3Jk
+
+{
+    "content": "<p>asdfasdf</p><br><p>가나다라</p>",
+    "parent_comment_id": null
+}
+
+###
+# 댓글 수정
+#
+# - XSS Protection 적용되어 댓글 수정
+# - 본인 댓글(users 테이블 등록된 본인 사용자)만 수정 할 수 있음
+# - 본인 확인을 위해 HTTP 기본 인증(Basic Auth) 사용
+#   - CommentController - constructor - middleware 에서 인증 확인
+#   - Basic Auth의 email:password 를 base64인코딩하여 사용
+#     ex) Authorization: Basic base64Encode("laraboard@example.net:password")
+#      => Authorization: Basic bGFyYWJvYXJkQGV4YW1wbGUubmV0OnBhc3N3b3Jk
+# ------------------------------------------------------------------------------
+# PUT /api/v1/board/{boardName}/post/{postId}/comment/{commentId} HTTP/1.1
+# Content-Type: application/json
+# Accept: application/json
+# Authorization: Basic base64Encode(email:password)
+#
+# {
+#   content: {content}
+# }
+# ------------------------------------------------------------------------------
+#
+# @param string boardName   게시판 이름
+# @param int postId         게시글 ID
+# @param int commentId      댓글 ID
+# @param string content     댓글 본문
+#
+# @see https://laravel.kr/docs/9.x/authentication#HTTP%20%EA%B8%B0%EB%B3%B8%20%EC%9D%B8%EC%A6%9D
+#
+PUT http://localhost:12000/api/v1/board/board2080406406/post/105/comment/668 HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Basic bGFyYWJvYXJkQGV4YW1wbGUubmV0OnBhc3N3b3Jk
+
+{
+    "content": "<p>2222asdfasdf</p><br><p>가나다라</p>"
+}
+
+###
+# 댓글 삭제
+#
+# - 부모 댓글이 존재할 경우 삭제 불가
+# - 본인 댓글(users 테이블 등록된 본인 사용자)만 삭제 할 수 있음
+# - 본인 확인을 위해 HTTP 기본 인증(Basic Auth) 사용
+#   - CommentController - constructor - middleware 에서 인증 확인
+#   - Basic Auth의 email:password 를 base64인코딩하여 사용
+#     ex) Authorization: Basic base64Encode("laraboard@example.net:password")
+#      => Authorization: Basic bGFyYWJvYXJkQGV4YW1wbGUubmV0OnBhc3N3b3Jk
+# ------------------------------------------------------------------------------
+# DELETE /api/v1/board/{boardName}/post/{postId}/comment/{commentId} HTTP/1.1
+# Content-Type: application/json
+# Accept: application/json
+# Authorization: Basic base64Encode(email:password)
+# ------------------------------------------------------------------------------
+#
+# @param string boardName   게시판 이름
+# @param int postId         게시글 ID
+# @param int commentId      댓글 ID
+# 
+# @see https://laravel.kr/docs/9.x/authentication#HTTP%20%EA%B8%B0%EB%B3%B8%20%EC%9D%B8%EC%A6%9D
+#
+DELETE http://localhost:12000/api/v1/board/aaaboard2080406406/post/105/comment/86 HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Basic bGFyYWJvYXJkQGV4YW1wbGUubmV0OnBhc3N3b3Jk
