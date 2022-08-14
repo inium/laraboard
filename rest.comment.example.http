@@ -15,6 +15,9 @@
 # @param string query       검색어 (기본값 null)
 #
 GET http://localhost:12000/api/v1/board/free/post/105/comment HTTP/1.1
+# GET http://localhost:12000/api/v1/board/free/post/105/comment?page=1 HTTP/1.1
+# GET http://localhost:12000/api/v1/board/free/post/105/comment?page=1&query=학교 HTTP/1.1
+# GET http://localhost:12000/api/v1/board/free/post/105/comment?parent=23 HTTP/1.1
 Content-Type: application/json
 Accept: application/json
 

@@ -14,7 +14,11 @@
 # @param int page           페이지 번호(기본값 1) / 페이지당 Row수는 board table에 정의
 # @param string query       검색어 (기본값 null)
 # 
-GET http://localhost:12000/api/v1/board/free/post?page=1&notice=1 HTTP/1.1
+GET http://localhost:12000/api/v1/board/free/post HTTP/1.1
+# GET http://localhost:12000/api/v1/board/free/post?page=1 HTTP/1.1
+# GET http://localhost:12000/api/v1/board/free/post?page=1&query=학교 HTTP/1.1
+# GET http://localhost:12000/api/v1/board/free/post?notice=1 HTTP/1.1
+# GET http://localhost:12000/api/v1/board/free/post?notice=1&page=1&query=학교 HTTP/1.1
 Content-Type: application/json
 Accept: application/json
 
@@ -29,7 +33,7 @@ Accept: application/json
 # @param string boardName   게시판 이름
 # @param int postId         게시글 ID 
 #
-GET http://localhost:12000/api/v1/free/board2080406406/post/106 HTTP/1.1
+GET http://localhost:12000/api/v1/board/free/post/106 HTTP/1.1
 Content-Type: application/json
 Accept: application/json
 
