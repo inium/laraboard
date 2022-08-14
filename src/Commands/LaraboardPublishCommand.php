@@ -59,6 +59,9 @@ class LaraboardPublishCommand extends Command
         $this->publish();
         $this->appendRoute();
 
+        // route 적용을 위한 optimize 호출 (config clear , route clear)
+        $this->call("optimize");
+
         return 0;
     }
 
