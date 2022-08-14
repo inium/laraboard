@@ -19,13 +19,6 @@ use App\Http\Requests\Laraboard\Comment\UpdateCommentRequest;
 class CommentController extends Controller
 {
     /**
-     * 댓글 정보 조회 Route 이름
-     *
-     * @var string
-     */
-    private string $showRouteName = "v1.board.post.comment.show";
-
-    /**
      * Constructor
      */
     public function __construct()
@@ -144,11 +137,14 @@ class CommentController extends Controller
 
             // 성공: 201 Created
             return response()->noContent(Response::HTTP_CREATED, [
-                "Location" => route($this->showRouteName, [
-                    "boardName" => $post->board->name,
-                    "postId" => $post->id,
-                    "commentId" => $comment->id,
-                ]),
+                "Location" => action(
+                    [CommentController::class, "show"],
+                    [
+                        "boardName" => $post->board->name,
+                        "postId" => $post->id,
+                        "commentId" => $comment->id,
+                    ]
+                ),
             ]);
         } catch (ModelNotFoundException $e) {
             return $this->json("Not Found", Response::HTTP_NOT_FOUND);

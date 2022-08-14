@@ -19,13 +19,6 @@ use App\Http\Requests\Laraboard\Post\UpdatePostRequest;
 class PostController extends Controller
 {
     /**
-     * 게시판 정보 조회 Route 이름
-     *
-     * @var string
-     */
-    private string $showRouteName = "v1.board.post.show";
-
-    /**
      * Constructor
      */
     public function __construct()
@@ -129,10 +122,13 @@ class PostController extends Controller
 
             // 성공: 201 Created
             return response()->noContent(Response::HTTP_CREATED, [
-                "Location" => route($this->showRouteName, [
-                    "boardName" => $board->name,
-                    "postId" => $post->id,
-                ]),
+                "Location" => action(
+                    [PostController::class, "show"],
+                    [
+                        "boardName" => $board->name,
+                        "postId" => $post->id,
+                    ]
+                ),
             ]);
         } catch (ValidationException $e) {
             $err = $e->errors();
