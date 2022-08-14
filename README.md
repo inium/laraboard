@@ -31,7 +31,7 @@ API 형태로 Laravel 9.x / PHP 8.x 기반으로 제작되었습니다. 게시�
 
 ### 사용자 정보 인증
 
-> 주의: Laravel의 HTTP 기본 인증은 email:password 문자열을 base64 인코딩하여 사용하기 때문에 보안에 취약하니 본 패키지 사용 시 반드시 변경하여 사용하시는 것을 권장합니다.
+> **<span style="color:red">주의: Laravel의 HTTP 기본 인증은 email:password 문자열을 base64 인코딩하여 사용하기 때문에 보안에 취약하니 본 패키지 사용 시 반드시 변경하여 사용하시는 것을 권장합니다.</span>**
 
 본 패키지는 구현의 편의를 위해 [HTTP 기본 인증](https://laravel.kr/docs/9.x/authentication#HTTP%20%EA%B8%B0%EB%B3%B8%20%EC%9D%B8%EC%A6%9D)을 이용하였습니다.
 
