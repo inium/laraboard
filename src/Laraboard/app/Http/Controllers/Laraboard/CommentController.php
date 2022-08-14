@@ -70,7 +70,7 @@ class CommentController extends Controller
                 ->paginate($post->board->comments_per_page);
 
             // 댓글 목록 + 페이지네이션 반환
-            return $this->json([
+            return response()->json([
                 "items" => $coll->items(),
                 "total" => $coll->total(),
                 "current_page" => $coll->currentPage(),
@@ -78,9 +78,9 @@ class CommentController extends Controller
                 "per_page" => $coll->perPage(),
             ]);
         } catch (ModelNotFoundException $e) {
-            return $this->json($e->getMessage(), $e->status);
+            return $this->error($e->getMessage(), $e->status);
         } catch (ValidationException $e) {
-            return $this->json($e->errors(), $e->status);
+            return $this->error($e->errors(), $e->status);
         }
     }
 
@@ -147,7 +147,7 @@ class CommentController extends Controller
                 ),
             ]);
         } catch (ModelNotFoundException $e) {
-            return $this->json("Not Found", Response::HTTP_NOT_FOUND);
+            return $this->error("Not Found", Response::HTTP_NOT_FOUND);
         }
     }
 
@@ -176,9 +176,9 @@ class CommentController extends Controller
                 ->whereHas("post", fn($q) => $q->where("id", $postId))
                 ->findOrFail($commentId);
 
-            return $this->json($comment);
+            return response()->json($comment);
         } catch (ModelNotFoundException $e) {
-            return $this->json("Not Found", Response::HTTP_NOT_FOUND);
+            return $this->error("Not Found", Response::HTTP_NOT_FOUND);
         }
     }
 
@@ -237,11 +237,11 @@ class CommentController extends Controller
             ]);
 
             // 업데이트 성공: 200 OK
-            return $this->json($affectedRows);
+            return response()->json(["updated" => $affectedRows]);
         } catch (ModelNotFoundException $e) {
-            return $this->json("Not Found", Response::HTTP_NOT_FOUND);
+            return $this->error("Not Found", Response::HTTP_NOT_FOUND);
         } catch (UnauthorizedException $e) {
-            return $this->json($e->getMessage(), Response::HTTP_UNAUTHORIZED);
+            return $this->error($e->getMessage(), Response::HTTP_UNAUTHORIZED);
         }
     }
 
@@ -284,11 +284,11 @@ class CommentController extends Controller
             // 삭제 성공: 204 No Content 반환
             return response()->noContent(Response::HTTP_NO_CONTENT);
         } catch (ModelNotFoundException $e) {
-            return $this->json("Not Found", Response::HTTP_NOT_FOUND);
+            return $this->error("Not Found", Response::HTTP_NOT_FOUND);
         } catch (UnauthorizedException $e) {
-            return $this->json($e->getMessage(), Response::HTTP_UNAUTHORIZED);
+            return $this->error($e->getMessage(), Response::HTTP_UNAUTHORIZED);
         } catch (HttpException $e) {
-            return $this->json($e->getMessage(), $e->getStatusCode());
+            return $this->error($e->getMessage(), $e->getStatusCode());
         }
     }
 
@@ -299,7 +299,7 @@ class CommentController extends Controller
      * @param integer $statusCode   상태 코드
      * @return \Illuminate\Http\Response
      */
-    private function json($data, int $statusCode = 200)
+    private function error($data, int $statusCode = 200)
     {
         $body = $data;
         if (!is_array($data)) {

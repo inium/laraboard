@@ -62,7 +62,7 @@ class PostController extends Controller
                 ->paginate($board->posts_per_page);
 
             // 게시글 목록 + 페이지네이션 반환
-            return $this->json([
+            return response()->json([
                 "items" => $coll->items(),
                 "total" => $coll->total(),
                 "current_page" => $coll->currentPage(),
@@ -71,9 +71,9 @@ class PostController extends Controller
             ]);
         } catch (ValidationException $e) {
             $err = $e->errors();
-            return $this->json($err, Response::HTTP_UNPROCESSABLE_ENTITY);
+            return $this->error($err, Response::HTTP_UNPROCESSABLE_ENTITY);
         } catch (ModelNotFoundException $e) {
-            return $this->json("Not Found", Response::HTTP_NOT_FOUND);
+            return $this->error("Not Found", Response::HTTP_NOT_FOUND);
         }
     }
 
@@ -132,7 +132,7 @@ class PostController extends Controller
             ]);
         } catch (ValidationException $e) {
             $err = $e->errors();
-            return $this->json($err, Response::HTTP_UNPROCESSABLE_ENTITY);
+            return $this->error($err, Response::HTTP_UNPROCESSABLE_ENTITY);
         }
     }
 
@@ -163,9 +163,9 @@ class PostController extends Controller
             $post->save();
             $post->timestamps = true; // update_at 사용 복구
 
-            return $this->json($post);
+            return response()->json($post);
         } catch (ModelNotFoundException $e) {
-            return $this->json("Not Found", Response::HTTP_NOT_FOUND);
+            return $this->error("Not Found", Response::HTTP_NOT_FOUND);
         }
     }
 
@@ -225,11 +225,11 @@ class PostController extends Controller
             ]);
 
             // 업데이트 성공: 200 OK
-            return $this->json(["updated" => $affected]);
+            return response()->json(["updated" => $affected]);
         } catch (ModelNotFoundException $e) {
-            return $this->json("Not Found", Response::HTTP_NOT_FOUND);
+            return $this->error("Not Found", Response::HTTP_NOT_FOUND);
         } catch (UnauthorizedException $e) {
-            return $this->json($e->getMessage(), Response::HTTP_UNAUTHORIZED);
+            return $this->error($e->getMessage(), Response::HTTP_UNAUTHORIZED);
         }
     }
 
@@ -275,22 +275,22 @@ class PostController extends Controller
             // 삭제 성공: 204 No Content 반환
             return response()->noContent();
         } catch (ModelNotFoundException $e) {
-            return $this->json("Not Found", Response::HTTP_NOT_FOUND);
+            return $this->error("Not Found", Response::HTTP_NOT_FOUND);
         } catch (UnauthorizedException $e) {
-            return $this->json($e->getMessage(), Response::HTTP_UNAUTHORIZED);
+            return $this->error($e->getMessage(), Response::HTTP_UNAUTHORIZED);
         } catch (HttpException $e) {
-            return $this->json($e->getMessage(), $e->getStatusCode());
+            return $this->error($e->getMessage(), $e->getStatusCode());
         }
     }
 
     /**
-     * Response 결과를 반환한다.
+     * Response error 결과를 반환한다.
      *
      * @param string|array $data    반환할 데이터
      * @param integer $statusCode   상태 코드
      * @return \Illuminate\Http\Response
      */
-    private function json($data, int $statusCode = 200)
+    private function error($data, int $statusCode = 200)
     {
         $body = $data;
         if (!is_array($data)) {
