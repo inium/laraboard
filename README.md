@@ -23,11 +23,11 @@ API 형태로 Laravel 9.x / PHP 8.x 기반으로 제작되었습니다. 게시�
 | ---- | ---- | ---- |
 | IP | 접속한 사용자의 IP Address | 암호화 하여 저장 |
 | User Agent | 접속한 사용자의 User Agent 문자열 | 암호화 하여 저장 |
-| Device Type | 접속한 사용자가 사용한 기기 형태 | desktop, tablet, mobile, others 중 1<br> [Agent.php](/"/src/Support/Detect/Agent.php") 참조|
-| OS Name | 접속한 사용자의 OS 이름 | [Agent.php]("/src/Support/Detect/Agent.php") 참조 / 확인불가 시 null |
-| OS Version | 접속한 사용자의 OS 버전 | [Agent.php]("/src/Support/Detect/Agent.php") 참조 / 확인불가 시 null  |
-| Browser Name | 접속한 사용자의 Browser 이름 | [Agent.php]("/src/Support/Detect/Agent.php") 참조 / 확인불가 시 null  |
-| Browser Name | 접속한 사용자의 Browser 버전 | [Agent.php]("/src/Support/Detect/Agent.php") 참조 / 확인불가 시 null  |
+| Device Type | 접속한 사용자가 사용한 기기 형태 | desktop, tablet, mobile, others 중 1<br> [Agent.php](src/Support/Detect/Agent.php) 참조|
+| OS Name | 접속한 사용자의 OS 이름 | [Agent.php](src/Support/Detect/Agent.php) 참조 / 확인불가 시 null |
+| OS Version | 접속한 사용자의 OS 버전 | [Agent.php](src/Support/Detect/Agent.php) 참조 / 확인불가 시 null  |
+| Browser Name | 접속한 사용자의 Browser 이름 | [Agent.php](src/Support/Detect/Agent.php) 참조 / 확인불가 시 null  |
+| Browser Name | 접속한 사용자의 Browser 버전 | [Agent.php](src/Support/Detect/Agent.php) 참조 / 확인불가 시 null  |
 
 ### 사용자 정보 인증
 
@@ -45,7 +45,7 @@ API 형태로 Laravel 9.x / PHP 8.x 기반으로 제작되었습니다. 게시�
 ### Strip Tag: 게시글 / 댓글 저장
 
 - 게시글, 댓글 본문 저장 시 strip tag를 적용하며 XSS Protection을 적용하였습니다.
-- 허용할 tag는 [`config/laraboad.php`]("src/Laraboard/config/laraboard.php")의 `allow_post_content_tags`, `allow_comment_content_tags` 설정할 수 있습니다.
+- 허용할 tag는 [`config/laraboad.php`](src/Laraboard/config/laraboard.php)의 `allow_post_content_tags`, `allow_comment_content_tags` 설정할 수 있습니다.
 
 ### API 명세
 
