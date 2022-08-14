@@ -1,0 +1,147 @@
+###
+# 게시글 조회, 검색
+# 
+# - 등록일 최신순으로 게시글 반환
+# - 검색어가 있을 경우 검색된 게시글 목록 반환 
+# ------------------------------------------------------------------------------ 
+# GET /api/v1/board/{boardName}/post?page={page}&notice={notice}&query={query} HTTP/1.1
+# Content-Type: application/json
+# Accept: application/json
+# ------------------------------------------------------------------------------ 
+# 
+# @param string boardName   게시판 이름
+# @param int notice         공지사항 여부 (기본값 0: 일반글, 1: 공지사항)
+# @param int page           페이지 번호(기본값 1) / 페이지당 Row수는 board table에 정의
+# @param string query       검색어 (기본값 null)
+# 
+GET http://localhost:12000/api/v1/board/free/post HTTP/1.1
+# GET http://localhost:12000/api/v1/board/free/post?page=1 HTTP/1.1
+# GET http://localhost:12000/api/v1/board/free/post?page=1&query=학교 HTTP/1.1
+# GET http://localhost:12000/api/v1/board/free/post?notice=1 HTTP/1.1
+# GET http://localhost:12000/api/v1/board/free/post?notice=1&page=1&query=학교 HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+
+###
+# ID에 해당하는 게시글 조회
+# ------------------------------------------------------------------------------ 
+# GET /api/v1/board/{boardName}/post/{postId} HTTP/1.1
+# Content-Type: application/json
+# Accept: application/json
+# ------------------------------------------------------------------------------ 
+#
+# @param string boardName   게시판 이름
+# @param int postId         게시글 ID 
+#
+GET http://localhost:12000/api/v1/board/free/post/106 HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+
+###
+# 게시글 등록
+# 
+# - XSS Protection 적용되어 제목 및 게시글 등록
+# - 등록된 사용자만(users 테이블 모든 사용자만) 게시글 추가를 할 수 있음
+# - 사용자 확인을 위해 HTTP 기본 인증(Basic Auth) 사용
+#   - CommentController - constructor - middleware 에서 인증 확인
+# - email:password 를 base64인코딩하여 사용
+#   - ex) Authorization: Basic base64Encode("laraboard@example.net:password")
+#      => Authorization: Basic bGFyYWJvYXJkQGV4YW1wbGUubmV0OnBhc3N3b3Jk
+# ------------------------------------------------------------------------------ 
+# POST /api/v1/board/{boardName}/post HTTP/1.1
+# Content-Type: application/json
+# Accept: application/json
+# Authorization: Basic base64Encode(email:password)
+#
+# {
+#     "subject": {subject},
+#     "content": {content},
+#     "notice": {notice}
+# }
+# ------------------------------------------------------------------------------ 
+#
+# @param string boardName   게시판 이름
+# @param string subject     게시글 제목
+# @param string content     게시글 본문
+# @param int notice         공지글 여부(1: 공지글, 0: 일반글 - 기본값)
+#
+# @see https://laravel.kr/docs/9.x/authentication#HTTP%20%EA%B8%B0%EB%B3%B8%20%EC%9D%B8%EC%A6%9D
+#
+POST http://localhost:12000/api/v1/board/free/post HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Basic bGFyYWJvYXJkQGV4YW1wbGUubmV0OnBhc3N3b3Jk
+
+{
+    "subject": "<p>테스트 게시글 입니다.<script>alert('qwer')</script></p>",
+    "content": "<p>테스트 게시글 입니다.</p>",
+    "notice": 0
+}
+
+###
+# 게시글 수정
+#
+# - XSS Protection 적용되어 제목 및 게시글 수정
+# - 본인 글(users 테이블 등록된 본인 사용자)만 수정 할 수 있음
+# - 사용자 확인을 위해 HTTP 기본 인증(Basic Auth) 사용
+#   - CommentController - constructor - middleware 에서 인증 확인
+#   - Basic Auth의 email:password 를 base64인코딩하여 사용
+#     ex) Authorization: Basic base64Encode("laraboard@example.net:password")
+#      => Authorization: Basic bGFyYWJvYXJkQGV4YW1wbGUubmV0OnBhc3N3b3Jk
+# ------------------------------------------------------------------------------
+# PUT /api/v1/board/{boardName}/post/{postId} HTTP/1.1
+# Content-Type: application/json
+# Accept: application/json
+# Authorization: Basic base64Encode(email:password)
+#
+# {
+#     "subject": {subject},
+#     "content": {content},
+#     "notice": {notice}
+# }
+# ------------------------------------------------------------------------------
+#
+# @param string boardName   게시판 이름
+# @param int postId         게시글 ID
+# @param string subject     게시글 제목
+# @param string content     게시글 본문
+# @param int notice         공지글 여부(1: 공지글, 0: 일반글 - 기본값)
+#
+# @see https://laravel.kr/docs/9.x/authentication#HTTP%20%EA%B8%B0%EB%B3%B8%20%EC%9D%B8%EC%A6%9D
+#
+PUT http://localhost:12000/api/v1/board/free/post/105 HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Basic bGFyYWJvYXJkQGV4YW1wbGUubmV0OnBhc3N3b3Jk
+
+{
+    "subject": "<p>ccaa223테s3s스트 게시글 입니다.<script>alert('qwe33r')</script></p>",
+    "content": "<p>ccaa223테t3t스트 게시글 입니다.</p>"
+}
+
+###
+# 게시글 삭제
+# 
+# - 댓글이 존재할 경우 삭제 불가
+# - 본인 글(users 테이블 등록된 본인 사용자)만 삭제 할 수 있음
+# - 사용자 확인을 위해 HTTP 기본 인증(Basic Auth) 사용
+#   - CommentController - constructor - middleware 에서 인증 확인
+#   - Basic Auth의 email:password 를 base64인코딩하여 사용
+#     ex) Authorization: Basic base64Encode("laraboard@example.net:password")
+#      => Authorization: Basic bGFyYWJvYXJkQGV4YW1wbGUubmV0OnBhc3N3b3Jk
+# ------------------------------------------------------------------------------
+# DELETE /api/v1/board/{boardName}/post/{postId} HTTP/1.1
+# Content-Type: application/json
+# Accept: application/json
+# Authorization: Basic base64Encode(email:password)
+# ------------------------------------------------------------------------------
+#
+# @param string boardName   게시판 이름
+# @param int postId         게시글 ID
+#
+# @see https://laravel.kr/docs/9.x/authentication#HTTP%20%EA%B8%B0%EB%B3%B8%20%EC%9D%B8%EC%A6%9D
+#
+DELETE http://localhost:12000/api/v1/board/free/post/106 HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Basic bGFyYWJvYXJkQGV4YW1wbGUubmV0OnBhc3N3b3Jk

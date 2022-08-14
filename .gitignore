@@ -11,3 +11,5 @@ composer.phar
 
 # End of https://www.gitignore.io/api/composer
 node_modules
+
+.DS_Store

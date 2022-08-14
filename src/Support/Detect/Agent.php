@@ -21,8 +21,19 @@ class Agent
      *                          - browser_version: 사용자 접속 브라우저 버전.
      *                                          없거나 분석 불가할 경우 null.
      */
-    public static function parse(string $agent): object
+    public static function parse(string $agent = null): object
     {
+        if (is_null($agent)) {
+            return (object) [
+                "agent" => null,
+                "device_type" => null,
+                "os_name" => null,
+                "os_version" => null,
+                "browser_name" => null,
+                "browser_version" => null,
+            ];
+        }
+
         $ua = new \Jenssegers\Agent\Agent();
         $ua->setUserAgent($agent);
 
@@ -30,19 +41,24 @@ class Agent
         $browser = $ua->browser();
 
         // User Agent로부터 사용자의 접속 기기 형태를 분석한다.
-        $deviceType = 'others';
-        if      ($ua->isDesktop())    {   $deviceType = 'desktop';    }
-        else if ($ua->isTablet())     {   $deviceType = 'tablet';     }
-        else if ($ua->isMobile())     {   $deviceType = 'mobile';     }
-        else                          {   $deviceType = 'others';     }
+        $deviceType = "others";
+        if ($ua->isDesktop()) {
+            $deviceType = "desktop";
+        } elseif ($ua->isTablet()) {
+            $deviceType = "tablet";
+        } elseif ($ua->isMobile()) {
+            $deviceType = "mobile";
+        } else {
+            $deviceType = "others";
+        }
 
-        return (object)[
-            'agent' => $agent,
-            'device_type' => $deviceType,
-            'os_name' => $platform ?: null,
-            'os_version' => $ua->version($platform) ?: null,
-            'browser_name' => $browser ?: null,
-            'browser_version' => $ua->version($browser) ?: null
+        return (object) [
+            "agent" => $agent,
+            "device_type" => $deviceType,
+            "os_name" => $platform ?: null,
+            "os_version" => $ua->version($platform) ?: null,
+            "browser_name" => $browser ?: null,
+            "browser_version" => $ua->version($browser) ?: null,
         ];
     }
 }
