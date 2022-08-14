@@ -1,178 +1,136 @@
 # laraboard
 
-Laravel 게시판 패키지 입니다.
+Laravel 게시판 스캐폴딩(Scaffolding) 패키지 입니다.
 
-커뮤니티 등의 게시판 형태로 Laravel 7.x 를 기반으로 제작되었습니다. 게시판 게시글, 2 Depth 댓글을 지원하며 로그인, 회원가입은 Laravel의 인증 스캐폴딩(Auth Scaffolding)을 이용합니다.
+API 형태로 사용하기 위해 Laravel 9.x / PHP 8.x 기반으로 제작하였습니다. 게시판 게시글, 2 Depth 댓글을 지원하며 로그인, 회원가입은 Laravel에서 기본으로 제공하는 인증 스캐폴딩(Auth Scaffolding)을 이용합니다.
+
+API로 제작하였기 때문에 view 파일은 구현하지 않았습니다.
 
 ## 구성
 
 본 게시판 패키지는 아래의 항목으로 구성되어 있습니다.
 
-| 항목                            | 내용                                                         | 비고                                                         |
-| ------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 게시판                          | 게시판별 게시글 / 댓글 작성시 부여할 포인트 설정<br />게시판별 사용자의 게시글 / 댓글의 읽기, 쓰기 역할(Role) 설정<br />페이지당 보여질 게시글 수 / 댓글 수 설정 | 데이터베이스에서 직접 설정                                   |
-| 게시글 / 댓글                   | 게시글 / 댓글의 목록, 글 읽기, 쓰기, 수정, 삭제<br />게시글 / 댓글 작성 시 게시판에 설정된 포인트 추가 | 삭제 제한<br />- [Soft delete](https://laravel.kr/docs/7.x/eloquent#%EC%86%8C%ED%94%84%ED%8A%B8%20%EC%82%AD%EC%A0%9C%ED%95%98%EA%B8%B0) 적용<br />- 게시글에 댓글 있을시 삭제 불가<br />- 댓글에 답글(대댓글) 있을 시 삭제 불가 |
-| 콘텐츠 검색                     | 게시판별 게시글 제목 / 내용, 댓글 내용 통합 검색             |                                                              |
-| 게시판 사용자 정보 저장         | 회원가입 시 게시판 사용자 정보 저장                          | Laravel의 인증 스캐폴딩의 User 수정하지 않음                 |
-| 사용자 역할(Role)               | 게시판 사용자 역할(Role) 정보 저장<br />- 사용자 역할 정보는 게시판별 게시글 읽기/쓰기, 댓글 읽기/쓰기에 사용 | 데이터베이스에서 직접 설정                                   |
-| 작성자 통계정보 수집 (Optional) | 게시글 / 댓글 작성자의 IP Address, User Agent 수집. <br />- User Agent를 분석하여 접속기기, 접속한 OS 이름/버전, 접속한 Browser 이름/버전 정보 저장<br />- 기본설정은 수집하지 않음 | 통계정보 수집 시 IP Address, User Agent 정보는 암호화 하여 저장 |
-| Test Data                       | 테스트용 Database Factory, Seeder 제공                       | 게시판 1개(자유게시판), 게시글 50개, 댓글 300개              |
-## 의존성
+| 항목 | 내용 | 비고 |
+| --- | --- | --- |
+| 게시판<br>(board) | - 게시판 게시글과 댓글 작성시 부여할 포인트 설정<br> - 페이지당 보여질 게시글 수 / 댓글 수 설정 | 게시판 테이블에서 직접 설정 |
+| 게시글<br>(post) | - 게시판별 게시글 목록, 검색, 조회, 추가, 수정, 삭제<br> - 게시글 제목 / 본문 검색<br> - 게시글 조회 시 조회수 1 증가<br> - 게시글 추가 시 게시판에서 설정된 포인트 부여<br> - 게시글 추가, 수정, 삭제 시 작성자 정보 저장 (Optional)<br> - 게시글 추가, 수정, 삭제 시 작성자 인증 확인<br> - 게시글에 댓글이 존재할 시 삭제 불가 | - 게시글 추가 시 검색용으로 [Strip tag](https://www.php.net/manual/en/function.strip-tags.php)된 게시글 본문 별도 저장<br> - 게시글 삭제 시 [Soft Delete](https://laravel.kr/docs/9.x/eloquent#%EC%86%8C%ED%94%84%ED%8A%B8%20%EC%82%AD%EC%A0%9C%ED%95%98%EA%B8%B0) 적용 |
+| 댓글<br>(comment) | - 게시글 댓글 목록, 검색, 조회, 추가, 수정, 삭제<br> - 댓글 본문 검색<br> - 댓글 추가 시 게시판에 설정된 포인트 부여<br> - 댓글 추가, 수정, 삭제 시 작성자 정보 저장 (Optional)<br> - 댓글 추가, 수정, 삭제 시 작성자 인증 확인<br> - 댓글에 댓글 (대댓글) 존재 시 해당 댓글 삭제 불가 | - 댓글 추가 시 검색용으로 [Strip tag](https://www.php.net/manual/en/function.strip-tags.php)된 게시글 본문 별도 저장<br> - 댓글 삭제 시 [Soft Delete](https://laravel.kr/docs/9.x/eloquent#%EC%86%8C%ED%94%84%ED%8A%B8%20%EC%82%AD%EC%A0%9C%ED%95%98%EA%B8%B0) 적용 |
+| 데이터베이스<br>(database) | - 게시판, 게시글, 댓글 테이블(migration)<br> - 게시판, 게시글 댓글 테스트 데이터 (factory, seeder) <br>| - 게시글 200개 (일반글 )+ 5개(공지사항) 생성 <br> - 댓글 100개 + 100개 댓글별 1~8개 사이의 자식 댓글 생성 |
 
-본 게시판 패키지는 Laravel 7.x와 MySQL:5.6 (MariaDB:10.4.13) 에서 구현 및 테스트 되었습니다.
+### 작성자 정보 저장 (Optional)
 
-또한 본 게시판 패키지에서는 아래의 패키지들을 추가로 사용합니다.
+[`config/laraboad.php`](src/Laraboard/config/laraboard.php)의 `collect_user_info` 항목을 true로 설정할 경우 아래의 정보를 게시글 및 댓글 작성 시 같이 저장합니다.
 
-| 항목             | 패키지                                                       | 설명                                                         | 비고                                                      |
-| ---------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | --------------------------------------------------------- |
-| Frontend Library | [Bootstrap](https://getbootstrap.com/)                       | 웹 사이트 Layout에 사용                                      | CDN 추가하여 사용                                         |
-| WYSIWYG          | [Quill.js](https://quilljs.com)                              | 게시판, 댓글 작성 및 수정 시 사용                            | CDN 추가하여 사용                                         |
-| Agent Detect     | [jenssegers/agent](https://packagist.org/packages/jenssegers/agent) | 사용자 IP Address, User Agent, OS 이름/버전, 접속 Browser 이름/버전 분석 | `composer` 설치 (본 패키지 설치 시 자동으로 같이 설치됨). |
+| 항목 | 내용 | 비고 |
+| --- | --- | --- |
+| IP | 접속한 사용자의 IP Address | 암호화 하여 저장 |
+| User Agent | 접속한 사용자의 User Agent 문자열 | 암호화 하여 저장 |
+| Device Type | 접속한 사용자가 사용한 기기 형태 | desktop, tablet, mobile, others 중 1<br> [Agent.php](src/Support/Detect/Agent.php) 참조|
+| OS Name | 접속한 사용자의 OS 이름 | [Agent.php](src/Support/Detect/Agent.php) 참조 / 확인불가 시 null |
+| OS Version | 접속한 사용자의 OS 버전 | [Agent.php](src/Support/Detect/Agent.php) 참조 / 확인불가 시 null  |
+| Browser Name | 접속한 사용자의 Browser 이름 | [Agent.php](src/Support/Detect/Agent.php) 참조 / 확인불가 시 null  |
+| Browser Name | 접속한 사용자의 Browser 버전 | [Agent.php](src/Support/Detect/Agent.php) 참조 / 확인불가 시 null  |
 
-사용한 Resource는 아래와 같습니다.
+### 사용자 정보 인증
 
-| 항목      | 설명                                                         | 비고                                                         |
-| --------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| Thumbnail | [iconfinder](https://www.iconfinder.com/icons/4696674/account_avatar_male_people_person_profile_user_icon)의 이미지의 색상을 Gray로 변경한 후 base64 문자열로 변환하여 사용 | LICENSE: Free for commercial use<br />프로젝트 Root에 Thumbnail 이미지 저장 |
+> **주의: Laravel의 HTTP 기본 인증은 email:password 문자열을 base64 인코딩하여 사용하기 때문에 보안에 취약하니 본 패키지 사용 시 반드시 변경하여 사용하시는 것을 권장합니다.**
+
+본 패키지는 구현의 편의를 위해 [HTTP 기본 인증 (Basic Auth)](https://laravel.kr/docs/9.x/authentication#HTTP%20%EA%B8%B0%EB%B3%B8%20%EC%9D%B8%EC%A6%9D)을 이용하였습니다.
+
+사용자 인증이 적용되는 범위는 아래와 같습니다.
+
+| 항목 | 인증범위 | 비고 |
+| --- | --- | --- |
+| 게시글<br>(post) | 등록(POST), 수정(PUT), 삭제(DELETE) | HTTP 기본 인증 (Basic Auth) 적용 |
+| 댓글<br>(comment) | 등록(POST), 수정(PUT), 삭제(DELETE) | HTTP 기본 인증 (Basic Auth) 적용 |
+
+### Strip Tag: 게시글 / 댓글 저장
+
+게시글, 댓글 본문 저장 시 strip tag를 적용하며 XSS Protection을 적용하였습니다.
+
+허용할 tag는 [`config/laraboad.php`](src/Laraboard/config/laraboard.php)의 `allow_post_content_tags`, `allow_comment_content_tags` 에서 설정할 수 있습니다.
+
+## Dependencies
+
+본 패키지는 아래의 의존성을 가지고 개발되었습니다.
+
+| 항목 | 패키지 | 버전 | 설명 | 비고 |
+| --- | --- | --- | --- | --- |
+| Framework | Laravel | 9.x | - | - |
+| Language | PHP | 8.x | - | - |
+| External Pcakge | [jenssegers/agent](https://packagist.org/packages/jenssegers/agent) | 3.0@dev | 사용자 IP Address, User Agent, OS 이름/버전, 접속 Browser 이름/버전 분석 | `composer` 설치 (본 패키지 설치 시 자동으로 같이 설치) |
 
 ## 사용방법
 
-### 필수항목
+패키지 사용 방법은 아래와 같습니다.
+### 1. Package install
 
-아래의 항목들은 반드시 실행되어야 하며 사전에 Laravel [인증 스캐폴딩(Auth Scaffolding)](https://laravel.kr/docs/7.x/authentication#introduction)이 프로젝트에 추가되어 있어야 합니다.
-
-#### 1. Package install
-
-Laravel 7.x가 설치된 프로젝트 디렉터리 내에서 `composer` 명령어를 이용해 설치합니다.
+아래와 같이 Laravel 9.x가 설치된 프로젝트 디렉터리 내에서 `composer` 명령어를 이용해 설치합니다.
 
 ```bash
 composer require inium/laraboard
 ```
 
-#### 2.  Laravel 프로젝트에 게시판 필수 파일 publish
+### 2. Publish files & Append routes
 
-`vendor:publish` 명령어를 이용해 게시판 필수 파일들을 publish 합니다. 
-
-```bash
-php artisan vendor:publish --tag=laraboard.essentials
-```
-
-publish 되는 파일은 아래와 같습니다.
-
-- 게시판 설정파일: `config/laraboard.php` 로 생성됩니다.
-- 데이터베이스 Migrations: `database/migrations` 파일에 게시판 데이터베이스 Schema 가 정의된 파일들이 복사됩니다.
-
-#### 3. 게시판 테이블 마이그레이션
-
-`/database/migrations` 디렉터리 내에 publish된 게시판 Table을 마이그레이션(migration) 합니다.
+아래 명령어를 이용해 Laraboard의 파일들을 Publish 하고 route를 routes/api.php에 append 합니다
 
 ```bash
-php artisan migrate
+php artisan laraboard:publish
 ```
 
-#### 4. 게시판 사용자 추가 trait 삽입
+명령어를 실행하면 아래의 경로에 Laraboard 파일들을 생성합니다.
 
-본 게시판 패키지는 Laravel의 인증(Auth) 기능을 이용합니다. 그래서 회원가입 시 인증 스캐폴딩(Auth Scaffolding)으로 생성된 Laravel 프로젝트 내 `/app/Http/Controllers/Auth/RegisterController.php`에 아래와 같이 게시판 사용자로 등록하는 `AuthRegisteredTrait`의 추가가 필요합니다.
+| 항목 | Path | 설명 | 비고 |
+| --- | --- | --- | ---|
+| Controller | App\Http\Controllers\Laraboard | Laraboard 컨트롤러||
+| Models | App\Http\Models\Laraboard | Laraboard 모델 | Publish |
+| Requests | App\Http\Requests\Laraboard | Laraboard Request <br> - Validation 수행 | Publish |
+| Config | config/laraboard.php | Laraboard 환경설정 파일 | Publish |
+| Database <br> Migrations | database/migrations/laraboard | Laraboard 데이터베이스 테이블 정의 | Publish |
+| Database <br> Factories | Database\Factories | Laraboard  데이터베이스 팩토리 | Publish |
+| Database <br> Seeders | Database\Seeders\Laraboard | Laraboard 데이터베이스 Seed | Publish |
+| Route | routes/api.php | Laraboard API route를 routes/api.php에 append | Append |
+
+- 비고 > Publish: 패키지 내 정의된 Laraboard 코드를 프로젝트에 배포합니다.
+- 비고 > Append: 패키지 내 정의된 Laraboard 코드를 다른 코드에 붙입니다.
+
+Laraboard API Route는 중복 복사 방지를 위해 랜덤한 문자열을 주석으로 추가하여 routes/api.php에 붙여넣습니다. 랜덤 문자열을 삭제 후 `php artisan laraboard:publish` 명령을 실행하면 Laraboard API Route가 routes/api.php에 중복되어 붙여넣어집니다. 사용되는 랜덤 문자열은 아래와 같습니다.
 
 ```php
-use Inium\Laraboard\Support\Auth\AuthRegisteredTrait; // 코드 추가
-
-// RegisterController에 코드 추가
-use AuthRegisteredTrait {
-  AuthRegisteredTrait::registered insteadof RegistersUsers;
-}
+/*
+|--------------------------------------------------------------------------
+| Laraboard API Routes
+|
+| DO NOT DELETE BELOW RANDOM STRING FOR AVOID DUPLICATION
+| SBiEoIwKajrdqngeEjZQz1RhAGS4mLbZ5hm5xNivTR5BWLHNjh
+|--------------------------------------------------------------------------
+*/
 ```
 
-`AuthRegisteredTrait`은 회원가입 완료 후 해당 사용자를 게시판 사용자로 추가하는 코드입니다 (게시판 사용자는 별도의 Table에 저장). 이 코드는 `RegistersUsers` trait 의 `registered` 메소드를 대체합니다. 닉네임 중복방지 차원에서 {사용자이름_5자리해시코드} 로 구성된 닉네임을 자동으로 생성하여 저장합니다.
+### 3. Database migration
 
-*cf. `registered` 메소드는  회원가입 시 사용자 추가가 완료되면 호출되는 메소드입니다.*
-
-#### 5. 게시판 생성 및 접속 확인
-
-본 게시판 패키지는 아래와 같이 명령어를 통해 게시판을 생성할 수 있습니다.
+아래 명령어를 이용해 Laraboard 테이블 정보를 migration 합니다.
 
 ```bash
-php artisan laraboard:board-create {boardName}
+php artisan migrate --path=database/migrations/laraboard
 ```
 
-boardName은 게시판 이름이고 영문이며 unique 속성을 갖습니다. 본 명령어는 기본적인 게시판만을 생성하기 때문에 세부적인 정보는 사용자가 데이터베이스에서 직접 수정을 해야 합니다.
+### 4. (Optional) 테스트 데이터 생성
 
-게시판 생성이 완료되면 Console 에 게시판 생성 완료 메시지와 함께 게시판 상대 경로를 출력합니다. 예시는 아래와 같습니다.
+테스트를 위한 데이터가 필요할 경우 아래 명령어를 이용해 테스트 데이터를 Laraboard 테이블에 추가할 수 있습니다.
 
 ```bash
-php artisan laraboard:board-create testboard
-Board "testboard" is created. Now can use /board/testboard.
+php artisan db:seed --class="Database\\Seeders\\Laraboard\\LaraboardSeeder" 
 ```
 
-### 선택항목
+* 위 명령어 실행 시 많은 데이터를 추가하기 때문에 오랜 시간이 소요됩니다.
 
-#### 1 . 테스트 데이터 추가
-
-본 게시판 패키지는 게시판 테스트 데이터가 구현되어 있습니다. 아래의 명렁어로 테스트 데이터를 추가 할 수 있습니다 (약간의 시간이 소요됩니다).
-
-```bash
-php artisan db:seed --class=Inium\\Laraboard\\Database\\Seeds\\BoardSeeder
-```
-
-- 테스트 데이터는 라라벨의 인증 스캐폴딩으로 생성된 `users` 테이블의 데이터도 함께 생성됩니다. 생성 시 인증 스캐폴딩으로 만들어진 `/database/factories/UserFactory.php` 내 정의된 factory를 이용합니다.
-
-테스트 데이터 추가가 완료되면 free 라는 이름을 가진 자유게시판과 해당 게시판의 공지사항, 게시글, 댓글이 생성됩니다. 생성 완료 후 ( `config/laraboard.php`  의 설정을 하지 않은 경우) `/board/free` URL 접속하면 자유게시판의 게시글 목록이 출력되어 확인 가능합니다.
-
-#### 2. 사용자 역할(Role)만 추가
-
-게시판 사용자 역할만을 추가할 시 아래의 명령어로 추가할 수 있습니다.
-
-```bash
-php artisan db:seed --class=Inium\\Laraboard\\Database\\Seeds\\BoardRoleSeeder
-```
-
-#### 3. View 파일 Publish
-
-본 게시판 패키지는 blade 템플릿을 이용해 기본적인 Layout만 구현되어 있습니다. 게시판 기능의 Layout을 수정하기 위해선 아래 명령어를 이용해 View 파일을 publish 한 후 직접 수정을 해야 합니다.
-
-```bash
-php artisan vendor:publish --tag=laraboard.resources
-```
-
-위의 명령어는 소스코드의 View 와 관련된 모든 리소스 파일들을 Laravel 프로젝트의 `/resources/views/vendor/laraboard` 디렉터리에 생성합니다.
-
-## 주요사항
-
-### 사용자와 역할(Roles)
-
-#### 사용자
-
-본 게시판 패키지의 회원가입과 사용자 정보는 Laravel의 [인증 스캐폴딩(Auth Scaffolding)](https://laravel.kr/docs/7.x/authentication#introduction)을 이용하며 게시판 사용자 정보를 인증 스캐폴딩의 사용자 정보(User)와 같이 저장합니다. 게시판 사용자 정보는 {닉네임, 썸네일 경로, 스캐폴딩의 사용자(User) ID, 사용자 역할(Role) ID} 로 구성되어 있습니다.
-
-Laravel 인증 스캐폴딩의 `RegisterController`에 개발자가 게시판 사용자 등록 Trait을 추가하여 회원가입과 동시에 게시판 사용자 등록을 할 수 있습니다. Laravel의 회원가입 스캐폴딩은 별도로 닉네임을 입력하지 않기 때문에 본 게시판 패키지에서는 사용자 이름을 사용하도록 하였으며 중복을 허용하지 않기 때문에 5자리 해시코드를 추가하여 {사용자이름_해시코드5자리} 형태로 생성합니다.
-
-게시판 사용자의 회원 정보 수정 기능은 구현되어 있지 않습니다.
-
-#### 역할(Role)
-
-본 게시판 패키지의 역할(Role)은 게시판 사용자의 접근 권한입니다. 접근 권한, 즉 역할은 게시글 읽기 / 쓰기, 댓글 읽기 / 쓰기가 가능한지의 여부를 판별하는데 사용합니다. 역할 정보는 {역할 ID, 역할 이름, 역할 설명, 관리자 여부}로 구성되어 있으며 접근권한 ID가 낮을수록 많은 접근을 허용합니다. 
-
-역할 예시는 아래와 같습니다 (댓글도 동일).
-
-- 사용자 역할 ID는 11, 게시판 A의 게시글 읽기 역할 ID가 10, 쓰기 역할 ID가 8일 경우: 게시글 읽기, 쓰기 불가능
-- 사용자 역할 ID는 10, 게시판 A의 게시글 읽기 역할 ID가 10, 쓰기 역할 ID가 8일 경우: 게시글 읽기 가능, 쓰기 불가능
-- 사용자 역할 ID는 9, 게시판 A의 게시글 읽기 역할 ID가 10, 쓰기 역할 ID가 8일 경우: 게시글 읽기 가능, 쓰기 불가능
-- 사용자 역할 ID는 8, 게시판 A의 게시글 읽기 역할 ID가 10, 쓰기 역할 ID가 8일 경우: 게시글 읽기 가능, 쓰기 가능
-- 사용자 역할 ID는 7, 게시판 A의 게시글 읽기 역할 ID가 10, 쓰기 역할 ID가 8일 경우: 게시글 읽기 가능, 쓰기 가능
-
-관리자 여부는 게시글 작성 시 공지글 작성 여부 판별에 사용합니다.
-
-### 게시글 / 댓글
-
-본 게시판 패키지의 게시글과 댓글의 동작과정은 게시판의 게시글 읽기 / 쓰기, 댓글 읽기 / 쓰기 역할(Role)에 따릅니다. 단 게시글 / 댓글의 수정, 삭제는 본인만 가능합니다.
-
-관리자는 공지 글의 작성이 가능합니다. 
-
-댓글은 2 Depth 만을 지원합니다.
+## 기타
 
 ### Timezone
 
-본 게시판 패키지의 Timezone은 Laravel 프로젝트의 설정파일인 `config/app.php`에 지정된 Timezone을 이용합니다.
+본 게시판 패키지의 Timezone은 Laravel 프로젝트의 설정파일인 `config/app.php`에 지정된 Timezone을 이용합니다. 기본 Timezone은 UTC 입니다.
 
 ### 파일 업로드
 
@@ -182,69 +140,12 @@ Laravel 인증 스캐폴딩의 `RegisterController`에 개발자가 게시판 �
 
 본 게시판 패키지의 관리 페이지는 구현되어 있지 않습니다.
 
-## 설정
+## API 명세
 
-게시판 설정 파일은 게시판 필수 파일 publish 완료 후 생성되는 `/config/laraboard.php` 에 정의되어 있으며 route와 board 설정으로 구성되어 있습니다. 각 설정 항목은 아래와 같습니다.
+본 패키지의 게시글, 댓글 API에 대한 사용 방법은 아래 내용을 참조 바랍니다.
 
-```php
-/**
- * 게시판 라우트 설정
- */
-'route' => [
-
-  /**
-   * 미들웨어에서 사용할 라우트 리스트
-   */
-  'middleware' => [
-    'web'
-  ],
-
-  /**
-   * 게시판 라우트 prefix. prefix가 'im' 일 경우, /im/board 형태로 생성.
-   */
-  'prefix' => ''
-],
-
-/**
- * 게시판 설정
- */
-'board' => [
-
-  /**
-   * 사용자 정보 수집 여부. true (수집), false (수집하지 않음)
-   * 
-   * 수집항목:
-   * - IP Address(암호화 하여 저장)
-   * - User Agent(암호화 하여 저장)
-   * - User Agent 분석 Device Type (desktop, tablet, mobile, other 중 1)
-   * - OS name, version
-   * - Browser name, version
-   */
-  'collect_user_info' => false,
-
-  /*
-   * 게시판 테이블 이름
-   */
-  'table_name' => [
-
-    // 게시판 사용자 권한 테이블 이름
-    'role' => 'lb_board_user_roles',
-
-    // 게시판 사용자 테이블 이름
-    'user' => 'lb_board_users',
-
-    // 게시판 테이블 이름
-    'board' => 'lb_boards',
-
-    // 게시글 테이블 이름
-    'post' => 'lb_board_posts',
-
-    // 댓글 테이블 이름
-    'comment' => 'lb_board_post_comments'
-
-  ]
-]
-```
+- [게시글 API 명세](rest.comment.example.http)
+- [댓글 API 명세](rest.comment.example.http)
 
 ## License
 

@@ -7,12 +7,12 @@
     "authors": [
         {
             "name": "inlee",
-            "email": "einable@gmail.com"
+            "email": "jamesinlee@gmail.com"
         }
     ],
     "minimum-stability": "dev",
     "require": {
-        "php": "^7.2.5",
+        "php": "^8.1",
         "jenssegers/agent": "^3.0@dev"
     },
     "extra": {
@@ -25,7 +25,7 @@
             }
         },
         "branch-alias": {
-            "dev-master": "0.1-dev"
+            "dev-main": "0.2.0-dev"
         }
     },
     "autoload": {
