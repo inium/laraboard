@@ -2,9 +2,9 @@
 
 Laravel 게시판 스캐폴딩(Scaffolding) 패키지 입니다.
 
-API 형태로 사용하기 위해 Laravel 9.x / PHP 8.x 기반으로 제작하였습니다. 게시판 게시글, 2 Depth 댓글을 지원하며 로그인, 회원가입은 Laravel에서 기본으로 제공하는 인증 스캐폴딩(Auth Scaffolding)을 이용합니다.
+API 형태로 사용하기 위해 Laravel 9.x / PHP 8.x 기반으로 제작하였습니다. 게시판 게시글, 2 Depth 댓글을 지원하며 회원 정보는 Laravel에서 기본으로 제공하는 인증 스캐폴딩(Auth Scaffolding)인 users를 이용합니다.
 
-API로 제작하였기 때문에 view 파일은 구현하지 않았습니다.
+- API 형태로 제작하였기 때문에 view 파일은 존재하지 않습니다.
 
 ## 구성
 
