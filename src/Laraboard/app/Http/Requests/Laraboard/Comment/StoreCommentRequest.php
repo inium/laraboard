@@ -25,7 +25,7 @@ class StoreCommentRequest extends LaraboardFormRequest
     {
         return [
             "content" => "required|string", // 댓글 본문
-            "parent_comment_id" => "sometimes|numeric|min:1", // 부모 댓글
+            "parent_comment_id" => "nullable|sometimes|numeric|min:1", // 부모 댓글
         ];
     }
 
