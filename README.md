@@ -9,13 +9,13 @@ API 형태로 Laravel 9.x / PHP 8.x 기반으로 제작되었습니다. 게시�
 본 게시판 패키지는 아래의 항목으로 구성되어 있습니다.
 
 | 항목 | 내용 | 비고 |
-| ------- | ------------------------------------- | --- |
+| --- | --- | --- |
 | 게시판<br>(board) | 게시판 게시글과 댓글 작성시 부여할 포인트 설정<br> 페이지당 보여질 게시글 수 / 댓글 수 설정 | 게시판 테이블에서 직접 설정 |
-| 게시글<br>(post) | 게시판별 게시글 목록, 검색, 조회, 추가, 수정, 삭제<br> 게시글 제목 / 본문 검색<br> 게시글 조회 시 조회수 1 증가<br> 게시글 추가 시 게시판에서 설정된 포인트 부여<br> 게시글 추가, 수정, 삭제 시 작성자 정보 저장 (Optional)<br> 게시글 추가, 수정, 삭제 시 작성자 인증 확인<br> 게시글에 댓글이 존재할 시 삭제 불가 | 작성자 정보는 암호화된 Ip Address, User Agent와 User Agent 기반으로 분석한 사용자 정보(Device, OS, Browser) 저장 (Optional)<br> 게시글 추가 시 검색용으로 [Strip tag](https://www.php.net/manual/en/function.strip-tags.php)된 게시글 본문 별도 저장<br> 게시글 삭제 시 [Soft Delete](https://laravel.kr/docs/9.x/eloquent#%EC%86%8C%ED%94%84%ED%8A%B8%20%EC%82%AD%EC%A0%9C%ED%95%98%EA%B8%B0) 적용 |
-| 댓글<br>(comment) | 게시글 댓글 목록, 검색, 조회, 추가, 수정, 삭제<br> 댓글 본문 검색<br> 댓글 추가 시 게시판에 설정된 포인트 부여<br> 댓글 추가, 수정, 삭제 시 작성자 정보 저장 (Optional)<br> 댓글 추가, 수정, 삭제 시 작성자 인증 확인<br> 댓글에 댓글 (대댓글) 존재 시 해당 댓글 삭제 불가 | 작성자 정보는 암호화된 Ip Address, User Agent와 User Agent 기반으로 분석한 사용자 정보(Device, OS, Browser) 저장 (Optional)<br> 댓글 추가 시 검색용으로 [Strip tag](https://www.php.net/manual/en/function.strip-tags.php)된 게시글 본문 별도 저장<br> 댓글 삭제 시 [Soft Delete](https://laravel.kr/docs/9.x/eloquent#%EC%86%8C%ED%94%84%ED%8A%B8%20%EC%82%AD%EC%A0%9C%ED%95%98%EA%B8%B0) 적용 |
+| 게시글<br>(post) | 게시판별 게시글 목록, 검색, 조회, 추가, 수정, 삭제<br> 게시글 제목 / 본문 검색<br> 게시글 조회 시 조회수 1 증가<br> 게시글 추가 시 게시판에서 설정된 포인트 부여<br> 게시글 추가, 수정, 삭제 시 작성자 정보 저장 (Optional)<br> 게시글 추가, 수정, 삭제 시 작성자 인증 확인<br> 게시글에 댓글이 존재할 시 삭제 불가 | 게시글 추가 시 검색용으로 [Strip tag](https://www.php.net/manual/en/function.strip-tags.php)된 게시글 본문 별도 저장<br> 게시글 삭제 시 [Soft Delete](https://laravel.kr/docs/9.x/eloquent#%EC%86%8C%ED%94%84%ED%8A%B8%20%EC%82%AD%EC%A0%9C%ED%95%98%EA%B8%B0) 적용 |
+| 댓글<br>(comment) | 게시글 댓글 목록, 검색, 조회, 추가, 수정, 삭제<br> 댓글 본문 검색<br> 댓글 추가 시 게시판에 설정된 포인트 부여<br> 댓글 추가, 수정, 삭제 시 작성자 정보 저장 (Optional)<br> 댓글 추가, 수정, 삭제 시 작성자 인증 확인<br> 댓글에 댓글 (대댓글) 존재 시 해당 댓글 삭제 불가 | 댓글 추가 시 검색용으로 [Strip tag](https://www.php.net/manual/en/function.strip-tags.php)된 게시글 본문 별도 저장<br> 댓글 삭제 시 [Soft Delete](https://laravel.kr/docs/9.x/eloquent#%EC%86%8C%ED%94%84%ED%8A%B8%20%EC%82%AD%EC%A0%9C%ED%95%98%EA%B8%B0) 적용 |
 | 데이터베이스<br>(database) | 게시판, 게시글, 댓글 테이블(migration) <br> 게시판, 게시글 댓글 테스트 데이터 (factory, seeder) <br>| 게시글 200개 (일반글 )+ 5개(공지사항) 생성 <br> 댓글 100개 + 100개 댓글별 1~8개 사이의 자식 댓글 생성 |
 
-### 사용자 정보 저장
+### 작성자 정보 저장 (Optional)
 
 `config/laraboard.php`의 `collect_user_info` 항목을 true로 설정할 경우 아래의 정보를 게시글 및 댓글 작성 시 같이 저장합니다.
 
