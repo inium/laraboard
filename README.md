@@ -2,7 +2,9 @@
 
 Laravel 게시판 스캐폴딩(Scaffolding) 패키지 입니다.
 
-API 형태로 Laravel 9.x / PHP 8.x 기반으로 제작되었습니다. 게시판 게시글, 2 Depth 댓글을 지원하며 로그인, 회원가입은 Laravel에서 기본으로 제공하는 인증 스캐폴딩(Auth Scaffolding)을 이용합니다.
+API 형태로 사용하기 위해 Laravel 9.x / PHP 8.x 기반으로 제작하였습니다. 게시판 게시글, 2 Depth 댓글을 지원하며 로그인, 회원가입은 Laravel에서 기본으로 제공하는 인증 스캐폴딩(Auth Scaffolding)을 이용합니다.
+
+API로 제작하였기 때문에 view 파일은 구현하지 않았습니다.
 
 ## 구성
 
@@ -17,7 +19,7 @@ API 형태로 Laravel 9.x / PHP 8.x 기반으로 제작되었습니다. 게시�
 
 ### 작성자 정보 저장 (Optional)
 
-`config/laraboard.php`의 `collect_user_info` 항목을 true로 설정할 경우 아래의 정보를 게시글 및 댓글 작성 시 같이 저장합니다.
+[`config/laraboad.php`](src/Laraboard/config/laraboard.php)의 `collect_user_info` 항목을 true로 설정할 경우 아래의 정보를 게시글 및 댓글 작성 시 같이 저장합니다.
 
 | 항목 | 내용 | 비고 |
 | --- | --- | --- |
@@ -31,39 +33,119 @@ API 형태로 Laravel 9.x / PHP 8.x 기반으로 제작되었습니다. 게시�
 
 ### 사용자 정보 인증
 
-> **<span style="color:red">주의: Laravel의 HTTP 기본 인증은 email:password 문자열을 base64 인코딩하여 사용하기 때문에 보안에 취약하니 본 패키지 사용 시 반드시 변경하여 사용하시는 것을 권장합니다.</span>**
+> **주의: Laravel의 HTTP 기본 인증은 email:password 문자열을 base64 인코딩하여 사용하기 때문에 보안에 취약하니 본 패키지 사용 시 반드시 변경하여 사용하시는 것을 권장합니다.**
 
-본 패키지는 구현의 편의를 위해 [HTTP 기본 인증](https://laravel.kr/docs/9.x/authentication#HTTP%20%EA%B8%B0%EB%B3%B8%20%EC%9D%B8%EC%A6%9D)을 이용하였습니다.
+본 패키지는 구현의 편의를 위해 [HTTP 기본 인증 (Basic Auth)](https://laravel.kr/docs/9.x/authentication#HTTP%20%EA%B8%B0%EB%B3%B8%20%EC%9D%B8%EC%A6%9D)을 이용하였습니다.
 
 사용자 인증이 적용되는 범위는 아래와 같습니다.
 
 | 항목 | 인증범위 | 비고 |
 | --- | --- | --- |
-| 게시글<br>(post) | 등록(POST), 수정(PUT), 삭제(DELETE) |  |
-| 댓글<br>(comment) | 등록(POST), 수정(PUT), 삭제(DELETE) |  |
+| 게시글<br>(post) | 등록(POST), 수정(PUT), 삭제(DELETE) | HTTP 기본 인증 (Basic Auth) 적용 |
+| 댓글<br>(comment) | 등록(POST), 수정(PUT), 삭제(DELETE) | HTTP 기본 인증 (Basic Auth) 적용 |
 
 ### Strip Tag: 게시글 / 댓글 저장
 
-- 게시글, 댓글 본문 저장 시 strip tag를 적용하며 XSS Protection을 적용하였습니다.
-- 허용할 tag는 [`config/laraboad.php`](src/Laraboard/config/laraboard.php)의 `allow_post_content_tags`, `allow_comment_content_tags` 설정할 수 있습니다.
+게시글, 댓글 본문 저장 시 strip tag를 적용하며 XSS Protection을 적용하였습니다.
 
-### API 명세
+허용할 tag는 [`config/laraboad.php`](src/Laraboard/config/laraboard.php)의 `allow_post_content_tags`, `allow_comment_content_tags` 에서 설정할 수 있습니다.
 
-본 패키지의 게시글, 댓글에 대한 명세는 [게시글 API](rest.comment.example.http), [댓글 API](rest.comment.example.http) 참조 바랍니다.
+## Dependencies
 
-## 의존성
-
-본 게시판 패키지는 Laravel 9.x / PHP 8.x 에서 구현 및 테스트 하였습니다.
-
-또한 본 게시판 패키지에서는 아래의 패키지들을 추가로 사용합니다.
+본 패키지는 아래의 의존성을 가지고 개발되었습니다.
 
 | 항목 | 패키지 | 버전 | 설명 | 비고 |
 | --- | --- | --- | --- | --- |
-| Agent Detect | 3.0@dev | [jenssegers/agent](https://packagist.org/packages/jenssegers/agent) | 사용자 IP Address, User Agent, OS 이름/버전, 접속 Browser 이름/버전 분석 | `composer` 설치 (본 패키지 설치 시 자동으로 같이 설치됨). |
+| Framework | Laravel | 9.x | - | - |
+| Language | PHP | 8.x | - | - |
+| External Pcakge | [jenssegers/agent](https://packagist.org/packages/jenssegers/agent) | 3.0@dev | 사용자 IP Address, User Agent, OS 이름/버전, 접속 Browser 이름/버전 분석 | `composer` 설치 (본 패키지 설치 시 자동으로 같이 설치) |
 
 ## 사용방법
 
-TBD 
+패키지 사용 방법은 아래와 같습니다.
+### 1. Package install
+
+아래와 같이 Laravel 9.x가 설치된 프로젝트 디렉터리 내에서 `composer` 명령어를 이용해 설치합니다.
+
+```bash
+composer require inium/laraboard
+```
+
+### 2. Publish files & Append routes
+
+아래 명령어를 이용해 Laraboard의 파일들을 Publish 하고 route를 routes/api.php에 append 합니다
+
+```bash
+php artisan laraboard:publish
+```
+
+명령어를 실행하면 아래의 경로에 Laraboard 파일들을 생성합니다.
+
+| 항목 | Path | 설명 | 비고 |
+| --- | --- | --- | ---|
+| Controller | App\Http\Controllers\Laraboard | Laraboard 컨트롤러||
+| Models | App\Http\Models\Laraboard | Laraboard 모델 | Publish |
+| Requests | App\Http\Requests\Laraboard | Laraboard Request <br> - Validation 수행 | Publish |
+| Config | config/laraboard.php | Laraboard 환경설정 파일 | Publish |
+| Database <br> Migrations | database/migrations/laraboard | Laraboard 데이터베이스 테이블 정의 | Publish |
+| Database <br> Factories | Database\Factories | Laraboard  데이터베이스 팩토리 | Publish |
+| Database <br> Seeders | Database\Seeders\Laraboard | Laraboard 데이터베이스 Seed | Publish |
+| Route | routes/api.php | Laraboard API route를 routes/api.php에 append | Append |
+
+- 비고 > Publish: 패키지 내 정의된 Laraboard 코드를 프로젝트에 배포합니다.
+- 비고 > Append: 패키지 내 정의된 Laraboard 코드를 다른 코드에 붙입니다.
+
+Laraboard API Route는 중복 복사 방지를 위해 랜덤한 문자열을 주석으로 추가하여 routes/api.php에 붙여넣습니다. 랜덤 문자열을 삭제 후 `php artisan laraboard:publish` 명령을 실행하면 Laraboard API Route가 routes/api.php에 중복되어 붙여넣어집니다. 사용되는 랜덤 문자열은 아래와 같습니다.
+
+```php
+/*
+|--------------------------------------------------------------------------
+| Laraboard API Routes
+|
+| DO NOT DELETE BELOW RANDOM STRING FOR AVOID DUPLICATION
+| SBiEoIwKajrdqngeEjZQz1RhAGS4mLbZ5hm5xNivTR5BWLHNjh
+|--------------------------------------------------------------------------
+*/
+```
+
+### 3. Database migration
+
+아래 명령어를 이용해 Laraboard 테이블 정보를 migration 합니다.
+
+```bash
+php artisan migrate --path=database/migrations/laraboard
+```
+
+### 4. (Optional) 테스트 데이터 생성
+
+테스트를 위한 데이터가 필요할 경우 아래 명령어를 이용해 테스트 데이터를 Laraboard 테이블에 추가할 수 있습니다.
+
+```bash
+php artisan db:seed --class="Database\\Seeders\\Laraboard\\LaraboardSeeder" 
+```
+
+* 위 명령어 실행 시 많은 데이터를 추가하기 때문에 오랜 시간이 소요됩니다.
+
+## 기타
+
+### Timezone
+
+본 게시판 패키지의 Timezone은 Laravel 프로젝트의 설정파일인 `config/app.php`에 지정된 Timezone을 이용합니다. 기본 Timezone은 UTC 입니다.
+
+### 파일 업로드
+
+본 게시판 패키지는 별도의 파일 업로드 기능이 구현되어 있지 않습니다.
+
+### 관리
+
+본 게시판 패키지의 관리 페이지는 구현되어 있지 않습니다.
+
+## API 명세
+
+본 패키지의 게시글, 댓글 API에 대한 사용 방법은 아래 내용을 참조 바랍니다.
+
+- [게시글 API 명세](rest.comment.example.http)
+- [댓글 API 명세](rest.comment.example.http)
 
 ## License
 
