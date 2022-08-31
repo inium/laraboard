@@ -106,7 +106,7 @@ class LaraboardPublishCommand extends Command
 
         // migrations
         $this->publishItem(
-            __DIR__ . "/../Laraboard/database/migrations/Laraboard",
+            __DIR__ . "/../Laraboard/database/migrations/laraboard",
             database_path("migrations/laraboard")
         );
 
