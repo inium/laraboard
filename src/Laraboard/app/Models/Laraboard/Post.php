@@ -73,7 +73,7 @@ class Post extends Model
     /**
      * 게시글의 댓글 정보를 가져오기 위한 관계 정의
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function comments()
     {
