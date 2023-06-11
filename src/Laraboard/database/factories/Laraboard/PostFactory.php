@@ -69,15 +69,30 @@ class PostFactory extends Factory
     }
 
     /**
-     * 공지 게시글을 뱐환한다.
+     * 공지 게시글을 설정한다.
      *
-     * @return void
+     * @return static
      */
-    public function notice()
+    public function notice(): static
     {
         return $this->state(
             fn(array $attributes) => [
                 "notice" => 1,
+            ]
+        );
+    }
+
+    /**
+     * 게시판 정보를 설정한다.
+     *
+     * @param Board $board  게시판
+     * @return static
+     */
+    public function board(Board $board): static
+    {
+        return $this->state(
+            fn(array $attributes) => [
+                "board_id" => $board,
             ]
         );
     }

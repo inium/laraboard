@@ -23,16 +23,16 @@ class PostController extends Controller
      */
     public function __construct()
     {
-        // Authorization: Basic bGFyYWJvYXJkQGV4YW1wbGUubmV0OnBhc3N3b3Jk
+        // ex) Authorization: Basic bGFyYWJvYXJkQGV4YW1wbGUubmV0OnBhc3N3b3Jk
         $this->middleware("auth.basic")->only(["store", "update", "destroy"]);
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @param  \App\Http\Requests\Laraboard\ListPostRequest  $request
+     * @param  \App\Http\Requests\Laraboard\Post\ListPostRequest  $request
      * @param  string $boardName    게시판 이름
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(ListPostRequest $request, string $boardName)
     {
@@ -80,7 +80,7 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\Laraboard\StorePostRequest  $request
+     * @param  \App\Http\Requests\Laraboard\Post\StorePostRequest  $request
      * @param  string $boardName    게시판 이름
      * @return \Illuminate\Http\Response
      */
@@ -141,7 +141,7 @@ class PostController extends Controller
      *
      * @param  string  $boardName   게시판 이름
      * @param  int  $postId         게시글 ID
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(string $boardName, int $postId)
     {
@@ -172,10 +172,10 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\Laraboard\UpdatePostRequest  $request
+     * @param  \App\Http\Requests\Laraboard\Post\UpdatePostRequest  $request
      * @param  string  $boardName   게시판 이름
      * @param  int  $postId         게시글 ID
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(
         UpdatePostRequest $request,

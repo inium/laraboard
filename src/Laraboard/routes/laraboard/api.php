@@ -1,12 +1,7 @@
-
-/*
-|--------------------------------------------------------------------------
-| Laraboard API Routes
-|
-| DO NOT DELETE BELOW RANDOM STRING FOR AVOID DUPLICATION
-| {{_RANDOM_STRING_}}
-|--------------------------------------------------------------------------
-*/
+<?php
+/**
+ * Laraboard API Routes
+ */
 Route::group(["prefix" => "v1", "as" => "v1."], function () {
     Route::apiResource(
         "board.post",

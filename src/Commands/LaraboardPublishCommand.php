@@ -30,13 +30,6 @@ class LaraboardPublishCommand extends Command
     protected Filesystem $files;
 
     /**
-     * Route 중복 append 방지용 Random String
-     *
-     * @var string
-     */
-    private string $routeRandomString = "SBiEoIwKajrdqngeEjZQz1RhAGS4mLbZ5hm5xNivTR5BWLHNjh";
-
-    /**
      * Create a new command instance.
      *
      * @param  \Illuminate\Filesystem\Filesystem  $files
@@ -115,6 +108,12 @@ class LaraboardPublishCommand extends Command
             __DIR__ . "/../Laraboard/database/seeders/Laraboard",
             database_path("seeders/Laraboard")
         );
+
+        // test
+        $this->publishItem(
+            __DIR__ . "/../Laraboard/tests/Feature/Laraboard",
+            base_path("tests/Feature/Laraboard")
+        );
     }
 
     /**
@@ -124,33 +123,15 @@ class LaraboardPublishCommand extends Command
      */
     protected function appendRoute()
     {
-        $from = __DIR__ . "/../Laraboard/routes/api.stub";
+        $this->publishItem(
+            __DIR__ . "/../Laraboard/routes/laraboard/api.php",
+            base_path("routes/laraboard/api.php")
+        );
+
         $to = base_path("routes/api.php");
+        $append = "\nrequire_once __DIR__ . \"/laraboard/api.php\";";
 
-        // route string
-        $routes = file_get_contents($to);
-
-        if (strpos($routes, $this->routeRandomString) !== false) {
-            $this->components->error(
-                "Can't append route (already appended): <{$from}>"
-            );
-            return;
-        }
-
-        // 중복 생성 방지용 랜덤 문자열 추가
-        $routes = file_get_contents($from);
-        $routes = str_replace(
-            "{{_RANDOM_STRING_}}",
-            $this->routeRandomString,
-            $routes
-        );
-
-        // File::append($to, File::get($from));
-        File::append($to, $routes);
-
-        $this->components->task(
-            sprintf("Append route %s [%s] to [%s]", "api", $from, $to)
-        );
+        File::append($to, $append);
     }
 
     /**
