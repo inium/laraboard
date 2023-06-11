@@ -3,7 +3,10 @@
     "description": "A simple board on Laravel.",
     "type": "library",
     "license": "MIT",
-    "keywords": ["laravel", "board"],
+    "keywords": [
+        "laravel",
+        "board"
+    ],
     "authors": [
         {
             "name": "inlee",
@@ -19,18 +22,14 @@
         "laravel": {
             "providers": [
                 "Inium\\Laraboard\\LaraboardServiceProvider"
-            ],
-            "aliases": {
-                "LaraboardAgent": "Inium\\Laraboard\\Support\\Facades\\Agent"
-            }
+            ]
         },
         "branch-alias": {
-            "dev-main": "0.2.0-dev"
+            "dev-main": "0.2.3-dev"
         }
     },
     "autoload": {
-        "classmap": [
-        ],
+        "classmap": [],
         "psr-4": {
             "Inium\\Laraboard\\": "src/"
         }
